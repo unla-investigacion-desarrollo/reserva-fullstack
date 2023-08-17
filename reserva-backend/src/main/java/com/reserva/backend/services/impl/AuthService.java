@@ -68,6 +68,7 @@ public class AuthService implements IAuthService {
 		user.setName(request.getName());
 		user.setUsername(request.getUsername());
 		user.setEmail(request.getEmail());
+		user.setActive(true);
 		BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passEncoder.encode(request.getPassword()));
 

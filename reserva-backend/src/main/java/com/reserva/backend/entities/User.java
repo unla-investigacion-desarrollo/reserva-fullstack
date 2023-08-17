@@ -28,19 +28,21 @@ public class User {
 	private String username;
 	private String email;
 	private String password;
+	private boolean active;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Set<Role> lstRoles = new HashSet<>();
 
 	public User(long id, String name, String username, String email, String password,
-			Set<Role> lstRoles) {
+			boolean active, Set<Role> lstRoles) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.setActive(active);
 		this.lstRoles = lstRoles;
 	}
 
@@ -94,6 +96,14 @@ public class User {
 
 	public void setLstRoles(Set<Role> lstRoles) {
 		this.lstRoles = lstRoles;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }
