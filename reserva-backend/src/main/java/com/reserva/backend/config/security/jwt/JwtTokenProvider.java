@@ -1,14 +1,12 @@
 package com.reserva.backend.config.security.jwt;
 
 import java.util.Date;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.reserva.backend.entities.Role;
 import com.reserva.backend.entities.User;
 import com.reserva.backend.exceptions.ReservaException;
 
@@ -44,7 +42,7 @@ public class JwtTokenProvider {
 	public String generateToken(User user) {
 
 		String username = user.getUsername();
-		String role = getRole(user);
+		String role = user.getRole().getName();
 		Date currentDate = new Date();
 		Date expirationDate = new Date(currentDate.getTime() + jwtExpirationInMs);
 
@@ -74,15 +72,6 @@ public class JwtTokenProvider {
 		} catch (IllegalArgumentException ex) {
 			throw new ReservaException("La cadena claims JWT esta vacia", HttpStatus.BAD_REQUEST);
 		}
-	}
-
-	public String getRole(User user) {
-		Set<Role> lstUser = user.getLstRoles();
-		if (!lstUser.isEmpty()) {
-			Role role = lstUser.iterator().next();
-			return role.getNombre();
-		}
-		return null;
 	}
 
 }

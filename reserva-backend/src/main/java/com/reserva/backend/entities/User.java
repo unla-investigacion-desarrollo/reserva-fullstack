@@ -1,17 +1,11 @@
 package com.reserva.backend.entities;
 
-import java.util.Set;
-import java.util.HashSet;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -30,12 +24,12 @@ public class User {
 	private String password;
 	private boolean active;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Set<Role> lstRoles = new HashSet<>();
+	@ManyToOne
+	@JoinColumn(name = "role_id")
+	private Role role;
 
 	public User(long id, String name, String username, String email, String password,
-			boolean active, Set<Role> lstRoles) {
+			boolean active, Role role) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -43,7 +37,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.setActive(active);
-		this.lstRoles = lstRoles;
+		this.role = role;
 	}
 
 	public User() {
@@ -90,12 +84,12 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<Role> getLstRoles() {
-		return lstRoles;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setLstRoles(Set<Role> lstRoles) {
-		this.lstRoles = lstRoles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public boolean isActive() {

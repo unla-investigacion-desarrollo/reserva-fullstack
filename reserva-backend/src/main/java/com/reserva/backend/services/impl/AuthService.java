@@ -1,8 +1,6 @@
 package com.reserva.backend.services.impl;
 
-import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,7 +48,7 @@ public class AuthService implements IAuthService {
 
 		String token = jwtTokenProvider.generateToken(user);
 
-		JwtAuthResponse response = new JwtAuthResponse(user.getUsername(), getRole(user), token, "bearer");
+		JwtAuthResponse response = new JwtAuthResponse(user.getUsername(), user.getRole().getName(), token, "bearer");
 
 		return response;
 	}
@@ -72,12 +70,12 @@ public class AuthService implements IAuthService {
 		BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passEncoder.encode(request.getPassword()));
 
-		Optional<Role> verificar = roleRepository.findByNombre("ROLE_USER");
+		Optional<Role> verificar = roleRepository.findByName("ROLE_USER");
 		if (!verificar.isPresent()) {
 			throw new ReservaException(AuthConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
-		Role roles = verificar.get();
-		user.setLstRoles(Collections.singleton(roles));
+		Role role = verificar.get();
+		user.setRole(role);
 		userRepository.save(user);
 
 		return AuthConstants.SIGN_UP_SUSSCEFUL;
@@ -90,15 +88,6 @@ public class AuthService implements IAuthService {
 	public boolean validateUser(LoginDto request, User user) {
 		BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 		return passEncoder.matches(request.getPassword(), user.getPassword());
-	}
-
-	public String getRole(User user) {
-		Set<Role> lstUser = user.getLstRoles();
-		if (!lstUser.isEmpty()) {
-			Role role = lstUser.iterator().next();
-			return role.getNombre();
-		}
-		return null;
 	}
 
 }

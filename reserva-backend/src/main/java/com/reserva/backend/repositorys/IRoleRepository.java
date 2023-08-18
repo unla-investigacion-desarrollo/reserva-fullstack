@@ -8,6 +8,6 @@ import com.reserva.backend.entities.Role;
 
 public interface IRoleRepository extends JpaRepository<Role, Long> {
 	
-	public Optional<Role> findByNombre(String nombre);
+	public Optional<Role> findByName(String name);
 
 }
