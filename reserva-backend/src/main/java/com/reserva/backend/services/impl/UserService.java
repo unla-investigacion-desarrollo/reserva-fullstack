@@ -1,11 +1,16 @@
 package com.reserva.backend.services.impl;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -125,11 +130,19 @@ public class UserService implements IUserService{
 	}
 
 	@Override
-	public List<UserResponseDto> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<UserResponseDto> getAll(String name, int page, int size, String orderBy, String sortBy) {
+		try {
+			if(page < 1) page = 1; if (size < 1) size = 999999;
+			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
+			Page<User> pageUser = userRepository.findByNameContaining(name, pageable);
+			List<UserResponseDto> response = new ArrayList<>();
+			for(User u : pageUser.getContent()) {
+				response.add(modelMapper.map(u, UserResponseDto.class));
+			}
+			return response;
+		}catch(Exception e) {
+			throw new ReservaException("no se pudieron listar los usuarios", HttpStatus.EXPECTATION_FAILED);
+		}
 	}
-	
-	
 
 }

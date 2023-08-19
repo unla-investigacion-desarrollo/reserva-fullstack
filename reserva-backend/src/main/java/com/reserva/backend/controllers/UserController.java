@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reserva.backend.dto.UserRequestDto;
@@ -82,6 +83,19 @@ public class UserController {
 	@PatchMapping("/restore/{id}")
 	public ResponseEntity<?> restore(@PathVariable("id") long id) {
 		return ResponseEntity.ok(new CustomResponse<>(userService.restore(id), null));
+	}
+	
+	@Operation(summary = "trae a todos los usarios y se implementa pageable")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
+			@ApiResponse(responseCode = "417", description = "no se pudieron listar los usuarios", content = @Content) })
+	@GetMapping
+	public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "") String name,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "size", defaultValue = "999999") int size,
+			@RequestParam(value = "orderBy", defaultValue = "asc") String orderBy,
+			@RequestParam(value = "sortBy", defaultValue = "id") String soryBy) {
+		return ResponseEntity.ok(new CustomResponse<>(userService.getAll(name, page, size, orderBy, soryBy), null));
 	}
 
 }

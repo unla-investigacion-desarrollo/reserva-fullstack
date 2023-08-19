@@ -13,6 +13,6 @@ public interface IUserService {
 	public String update(long id, UserUpdateDto request);
 	public String delete(long id);
 	public String restore(long id);
-	public List<UserResponseDto> getAll();
+	public List<UserResponseDto> getAll(String name, int page, int size, String orderBy, String sortBy);
 
 }
