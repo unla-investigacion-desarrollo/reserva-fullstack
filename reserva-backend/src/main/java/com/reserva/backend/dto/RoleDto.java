@@ -1,5 +1,5 @@
 package com.reserva.backend.dto;
 
-public class TestDto {
+public class RoleDto {
 
 }
