@@ -43,7 +43,7 @@ public class AuthService implements IAuthService {
 				});
 
 		if (!validateUser(request, user)) {
-			throw new ReservaException(AuthConstants.USERNAME_OR_EMAIL_NOT_EXIST, HttpStatus.UNAUTHORIZED);
+			throw new ReservaException(AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, HttpStatus.UNAUTHORIZED);
 		}
 
 		String token = jwtTokenProvider.generateToken(user);
