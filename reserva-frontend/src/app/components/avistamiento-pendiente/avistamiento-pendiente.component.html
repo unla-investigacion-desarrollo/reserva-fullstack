@@ -1,0 +1,18 @@
+<div class="content">
+    <table class="table" id="table" style="width: 50%;">
+        <tr>
+          <th scope="col">Avistamiento</th>
+          <th scope="col">Numero</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Ubicación</th>
+          <th scope="col">Fecha</th>
+        </tr>
+        <tr *ngFor="let avist of avistamientos">
+          <td>{{avist.animal}}</td>
+          <td>{{avist.number}}</td>
+          <td>{{avist.user}}</td>
+          <td>{{avist.location}}</td>
+          <td>{{avist.avistDate}}</td>
+        </tr>
+      </table>
+</div>
