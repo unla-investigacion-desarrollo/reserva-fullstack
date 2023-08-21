@@ -135,6 +135,9 @@ public class AuthService implements IAuthService {
 			throw new ReservaException(AuthConstants.TOKEN_INVALID, HttpStatus.FORBIDDEN);
 		}
 		User user = token.getUser();
+		if(!request.getPassword().equals(request.getPassword2())) {
+			throw new ReservaException(AuthConstants.PASSWORD_NOT_MATCH, HttpStatus.BAD_REQUEST);
+		}
 		BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passEncoder.encode(request.getPassword()));
 		tokenVerificationRepository.save(token);

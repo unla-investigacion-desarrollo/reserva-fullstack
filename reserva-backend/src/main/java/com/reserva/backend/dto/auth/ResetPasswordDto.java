@@ -10,12 +10,16 @@ public class ResetPasswordDto {
 	@NotBlank(message = "la contraseña no debe estar vacia")
 	@Size(max = 250, message = "la contraseña no debe tener más de {max} caracteres")
 	private String password;
+	@NotBlank(message = "la contraseña no debe estar vacia")
+	@Size(max = 250, message = "la contraseña no debe tener más de {max} caracteres")
+	private String password2;
 
 	
-	public ResetPasswordDto(String token, String password) {
+	public ResetPasswordDto(String token, String password, String password2) {
 		super();
 		this.token = token;
 		this.password = password;
+		this.password2 = password2;
 	}
 
 	public ResetPasswordDto() {
@@ -36,6 +40,14 @@ public class ResetPasswordDto {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getPassword2() {
+		return password2;
+	}
+
+	public void setPassword2(String password2) {
+		this.password2 = password2;
 	}
 	
 }

@@ -14,6 +14,7 @@ public class AuthConstants {
 	public static final String EMAIL_SEND_ERROR = "error al enviar el email";
 	public static final String EMAIL_SEND_OK = "Las instrucciones para cambiar la contraseña han sido enviadas al email";
 	public static final String PASSWORD_HAS_BEEN_CHANGED = "la contraseña ha sido actualizada correctamente";
+	public static final String PASSWORD_NOT_MATCH = "las contraseñas no coinciden";
 	public static final String TOKEN_INVALID = "token invalido";
 	public static final String TOKEN_BAD_REQUEST = "no existe una peticion con ese token";
 
