@@ -67,7 +67,6 @@ public class EmailInfoDto {
 	}
 
 	public EmailInfoDto(String to, String subject, String body) {
-		this.from = "youremail@gmail.com";
 		this.to = to;
 		this.subject = subject;
 		this.body = body;

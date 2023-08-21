@@ -1,5 +1,6 @@
 package com.reserva.backend.dto.auth;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -14,7 +15,7 @@ public class RegisterDto {
 	@Size(max = 250, message = "el username no debe tener más de {max} caracteres")
 	private String username;
 	@NotBlank(message = "el email no debe estar vacio")
-	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "El email no es valido")
+	@Email
 	@Size(max = 250, message = "el email no debe tener más de {max} caracteres")
 	private String email;
 	@NotBlank(message = "la contraseña no debe estar vacia")
