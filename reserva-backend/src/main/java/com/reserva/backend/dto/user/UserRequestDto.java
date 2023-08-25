@@ -1,10 +1,10 @@
-package com.reserva.backend.dto;
+package com.reserva.backend.dto.user;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class UserUpdateDto {
+public class UserRequestDto {
 	
 	private long id;
 	@NotBlank(message = "el nombre no debe estar vacio")
@@ -18,22 +18,26 @@ public class UserUpdateDto {
 	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "El email no es valido")
 	@Size(max = 250, message = "el email no debe tener más de {max} caracteres")
 	private String email;
+	@NotBlank(message = "la contraseña no debe estar vacia")
+	@Size(max = 250, message = "la contraseña no debe tener más de {max} caracteres")
+	private String password;
 	private boolean active;
 	@NotBlank(message = "no se puede asignar un rol vacio")
 	@Pattern(regexp = "ROLE_USER|ROLE_PERSONAL_RESERVA", message = "Solo existen los roles 'ROLE_USER' y 'ROLE_PERSONAL_RESERVA'")
 	private String role;
 	
-	public UserUpdateDto(String name, String username, String email, boolean active, String role, long id) {
+	public UserRequestDto(String name, String username, String email, String password, boolean active, String role, long id) {
 		super();
 		this.name = name;
 		this.username = username;
 		this.email = email;
+		this.password = password;
 		this.active = active;
 		this.role = role;
 		this.id = id;
 	}
 
-	public UserUpdateDto() {
+	public UserRequestDto() {
 		super();
 	}
 
@@ -75,6 +79,14 @@ public class UserUpdateDto {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public long getId() {

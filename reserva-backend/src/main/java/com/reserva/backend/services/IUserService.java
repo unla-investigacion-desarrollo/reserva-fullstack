@@ -2,9 +2,9 @@ package com.reserva.backend.services;
 
 import java.util.List;
 
-import com.reserva.backend.dto.UserRequestDto;
-import com.reserva.backend.dto.UserResponseDto;
-import com.reserva.backend.dto.UserUpdateDto;
+import com.reserva.backend.dto.user.UserRequestDto;
+import com.reserva.backend.dto.user.UserResponseDto;
+import com.reserva.backend.dto.user.UserUpdateDto;
 
 public interface IUserService {
 	

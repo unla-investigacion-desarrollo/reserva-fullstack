@@ -1,4 +1,4 @@
-package com.reserva.backend.dto;
+package com.reserva.backend.dto.user;
 
 public class UserResponseDto {
 	

@@ -15,9 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.reserva.backend.dto.UserRequestDto;
-import com.reserva.backend.dto.UserResponseDto;
-import com.reserva.backend.dto.UserUpdateDto;
+import com.reserva.backend.dto.user.UserRequestDto;
+import com.reserva.backend.dto.user.UserResponseDto;
+import com.reserva.backend.dto.user.UserUpdateDto;
 import com.reserva.backend.repositorys.IRoleRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IUserService;
