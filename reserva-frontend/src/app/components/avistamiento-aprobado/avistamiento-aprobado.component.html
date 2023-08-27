@@ -1,27 +1,26 @@
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
-<p>avistamiento-aprobado works!</p>
+<div class="content">
+    <table class="table" id="table" style="width: 50%;">
+        <tr>
+          <th scope="col">Avistamiento</th>
+          <th scope="col">Numero</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Ubicación</th>
+          <th scope="col">Fecha</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+
+        </tr>
+        <tr *ngFor="let avist of avistamientos">
+          <td>{{avist.especie}}</td>
+          <td>{{avist.number}}</td>
+          <td>{{avist.user}}</td>
+          <td>{{avist.location}}</td>
+          <td>{{avist.avistDate}}</td>
+          <td><span class="glyphicon glyphicon-camera" style="font-size: 25px;float: left;"></span></td>
+          <td><span class="glyphicon glyphicon-trash" style="font-size: 25px;float: left;"></span></td>
+          <td><span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: left;"></span></td>
+
+        </tr>
+      </table>
+</div>

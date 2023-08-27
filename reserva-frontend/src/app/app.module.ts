@@ -6,19 +6,38 @@ import { AvistamientoPendienteComponent } from './components/avistamiento-pendie
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home/home.component';
 import { AvistamientoAprobadoComponent } from './components/avistamiento-aprobado/avistamiento-aprobado.component';
+import { AvistamientoReprobadoComponent } from './components/avistamiento-reprobado/avistamiento-reprobado.component';
+import { EditAvistamientoComponent } from './components/edit-avistamiento/edit-avistamiento.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatDialogModule, MatDialogRef} from '@angular/material/dialog'; 
+import {MatButtonModule} from '@angular/material/button';
+import { DialogComponentComponent } from './components/dialog-component/dialog-component.component';
+import { DialogService } from './services/dialog-service.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     AvistamientoPendienteComponent,
     HomeComponent,
-    AvistamientoAprobadoComponent
+    AvistamientoAprobadoComponent,
+    AvistamientoReprobadoComponent,
+    EditAvistamientoComponent,
+    DialogComponentComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatDialogModule, 
+    MatButtonModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: MatDialogRef,
+      useValue: {}
+    },
+    DialogService
+ ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

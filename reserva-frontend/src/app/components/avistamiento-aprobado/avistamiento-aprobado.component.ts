@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AvistamientoService } from '../../services/avistamiento.service';
 
 @Component({
   selector: 'app-avistamiento-aprobado',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AvistamientoAprobadoComponent {
 
+  avistamientos: string;
+
+  constructor(private avistamientoService: AvistamientoService) {}
+
+  ngOnInit(): void {
+    this.avistamientos = JSON.parse(this.avistamientoService.getAvistamientosAprobados());
+  }
 }

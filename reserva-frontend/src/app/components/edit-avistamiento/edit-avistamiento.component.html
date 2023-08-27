@@ -1,0 +1,36 @@
+<div class="content">
+      <div class="container">
+        <div class="row">
+            <h1>{{avistamiento.especie}}</h1>
+        </div>
+        <div class="row">
+            <a>{{avistamiento.subespecie}}</a>
+        </div>
+        <div class="row">
+          <div class="col">
+            {{avistamiento.familia}}
+          </div>
+          <div class="col">
+            {{avistamiento.tipo}}
+          </div>
+          <div class="col">
+            {{avistamiento.location}}
+          </div>
+        </div>
+      </div>
+      <div class="center">
+        <div><h1>Descripción</h1>
+        <span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: right;" ></span></div>
+      </div>
+      <div class="center">
+        {{avistamiento.descripcion}}
+      </div>
+      <div class="center">
+        <div style="text-align: center;">
+            <button type="button" style="font-size: 24px;" class="btn btn-light" (click)="Aprobar()">Aprobar</button>
+            <button type="button" style="font-size: 24px; background-color: #6b7f1b;" class="btn btn-success" (click)="Rechazar()">Rechazar</button>
+        </div>
+      </div>
+      
+  </div>
+  
