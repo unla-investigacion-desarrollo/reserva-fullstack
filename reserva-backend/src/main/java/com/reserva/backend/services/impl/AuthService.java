@@ -44,6 +44,8 @@ public class AuthService implements IAuthService {
 	
 	@Autowired
 	private IEmailInfoService emailInfoService;
+	
+	private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 
 	@Override
 	public JwtAuthResponse signin(LoginDto request) {
@@ -81,7 +83,7 @@ public class AuthService implements IAuthService {
 		user.setUsername(request.getUsername());
 		user.setEmail(request.getEmail());
 		user.setActive(true);
-		BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
+
 		user.setPassword(passEncoder.encode(request.getPassword()));
 
 		Optional<Role> verificar = roleRepository.findByName("ROLE_USER");
@@ -138,7 +140,6 @@ public class AuthService implements IAuthService {
 		if(!request.getPassword().equals(request.getPassword2())) {
 			throw new ReservaException(AuthConstants.PASSWORD_NOT_MATCH, HttpStatus.BAD_REQUEST);
 		}
-		BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passEncoder.encode(request.getPassword()));
 		tokenVerificationRepository.save(token);
 		return AuthConstants.PASSWORD_HAS_BEEN_CHANGED;
@@ -149,7 +150,6 @@ public class AuthService implements IAuthService {
 	}
 
 	public boolean validateUser(LoginDto request, User user) {
-		BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 		return passEncoder.matches(request.getPassword(), user.getPassword());
 	}
 
