@@ -51,11 +51,7 @@ public class AuthService implements IAuthService {
 	public JwtAuthResponse signin(LoginDto request) {
 		User user = userRepository.findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
 				.orElseThrow(() -> {
-					if (isEmail(request.getUsernameOrEmail())) {
-						return new ReservaException(AuthConstants.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND);
-					} else {
-						return new ReservaException(AuthConstants.USERNAME_NOT_FOUND, HttpStatus.NOT_FOUND);
-					}
+					throw new ReservaException(AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, HttpStatus.UNAUTHORIZED);
 				});
 
 		if (!validateUser(request, user)) {

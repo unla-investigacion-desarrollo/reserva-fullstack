@@ -32,8 +32,6 @@ public class AuthController {
 	@Operation(summary = "realiza el inicio de sesion de un usuario previamente registrado en la base de datos")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = AuthConstants.SIGN_IN_SUSSCEFUL, content = @Content),
-			@ApiResponse(responseCode = "404", description = AuthConstants.EMAIL_NOT_FOUND + " | "
-					+ AuthConstants.USERNAME_NOT_FOUND, content = @Content),
 			@ApiResponse(responseCode = "500", description = AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, content = @Content) })
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginDto request){
