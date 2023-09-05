@@ -12,6 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class TokenVerification {
 
@@ -32,50 +39,6 @@ public class TokenVerification {
 		this.token = generateToken();
 		this.createdAt = new Date();
 		this.expiratedAt = getEpirationTime(10);
-		this.user = user;
-	}
-
-	public TokenVerification() {
-		super();
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Date getExpiratedAt() {
-		return expiratedAt;
-	}
-
-	public void setExpiratedAt(Date expiratedAt) {
-		this.expiratedAt = expiratedAt;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
 		this.user = user;
 	}
 	

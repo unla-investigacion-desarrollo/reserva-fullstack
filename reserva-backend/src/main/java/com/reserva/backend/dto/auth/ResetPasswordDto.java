@@ -3,6 +3,15 @@ package com.reserva.backend.dto.auth;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResetPasswordDto {
 	
 	@NotBlank(message = "el token no debe estar vacio")
@@ -12,42 +21,6 @@ public class ResetPasswordDto {
 	private String password;
 	@NotBlank(message = "la contraseña no debe estar vacia")
 	@Size(max = 250, message = "la contraseña no debe tener más de {max} caracteres")
-	private String password2;
+	private String passwordRepeat;
 
-	
-	public ResetPasswordDto(String token, String password, String password2) {
-		super();
-		this.token = token;
-		this.password = password;
-		this.password2 = password2;
-	}
-
-	public ResetPasswordDto() {
-		super();
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public String getPassword2() {
-		return password2;
-	}
-
-	public void setPassword2(String password2) {
-		this.password2 = password2;
-	}
-	
 }

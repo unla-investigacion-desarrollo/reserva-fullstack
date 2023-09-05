@@ -4,6 +4,15 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ForgotPasswordDto {
 	
 	@NotBlank(message = "email no debe estar vacio")
@@ -11,21 +20,4 @@ public class ForgotPasswordDto {
 	@Size(max = 250, message = "el email no debe tener más de {max} caracteres")
 	private String email;
 
-	public ForgotPasswordDto(String email) {
-		super();
-		this.email = email;
-	}
-
-	public ForgotPasswordDto() {
-		super();
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
 }

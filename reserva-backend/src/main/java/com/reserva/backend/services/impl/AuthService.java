@@ -133,7 +133,7 @@ public class AuthService implements IAuthService {
 			throw new ReservaException(AuthConstants.TOKEN_INVALID, HttpStatus.FORBIDDEN);
 		}
 		User user = token.getUser();
-		if(!request.getPassword().equals(request.getPassword2())) {
+		if(!request.getPassword().equals(request.getPasswordRepeat())) {
 			throw new ReservaException(AuthConstants.PASSWORD_NOT_MATCH, HttpStatus.BAD_REQUEST);
 		}
 		user.setPassword(passEncoder.encode(request.getPassword()));

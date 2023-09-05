@@ -4,9 +4,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRequestDto {
 	
-	private long id;
 	@NotBlank(message = "el nombre no debe estar vacio")
 	@Size(max = 250, message = "el nombre no debe tener más de {max} caracteres")
 	private String name;
@@ -25,76 +33,5 @@ public class UserRequestDto {
 	@NotBlank(message = "no se puede asignar un rol vacio")
 	@Pattern(regexp = "ROLE_USER|ROLE_PERSONAL_RESERVA", message = "Solo existen los roles 'ROLE_USER' y 'ROLE_PERSONAL_RESERVA'")
 	private String role;
-	
-	public UserRequestDto(String name, String username, String email, String password, boolean active, String role, long id) {
-		super();
-		this.name = name;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.active = active;
-		this.role = role;
-		this.id = id;
-	}
-
-	public UserRequestDto() {
-		super();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 }
