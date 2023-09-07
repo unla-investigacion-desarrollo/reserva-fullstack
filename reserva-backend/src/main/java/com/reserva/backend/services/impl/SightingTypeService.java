@@ -26,29 +26,31 @@ import com.reserva.backend.exceptions.ReservaException;
 public class SightingTypeService implements ISightingTypeService{
 	
 	@Autowired
-	private ISightingTypeRepository tipoAvistamientoRepository;
+	private ISightingTypeRepository sightingTypeRepository;
 	
 	private ModelMapper modelMapper = new ModelMapper();
 
 	@Override
 	public SightingTypeResponseDto create(SightingTypeRequestDto request) {
-		if(tipoAvistamientoRepository.existsByName(request.getName())) {
+		if(sightingTypeRepository.existsByName(request.getName())) {
 			throw new ReservaException("Ya existe un tipo_avistamiento con ese nombre", HttpStatus.BAD_REQUEST);
 		}
 		try {
 			SightingType tipo = modelMapper.map(request, SightingType.class);
 			tipo.setActive(true);
-			tipoAvistamientoRepository.save(tipo);
+			tipo.setName(request.getName());
+			tipo.setCategory(request.getCategory());
+			sightingTypeRepository.save(tipo);
 			SightingTypeResponseDto response = modelMapper.map(tipo, SightingTypeResponseDto.class);
 			return response;
-		}catch(MappingException  e) {
+		}catch(MappingException e) {
 			throw new ReservaException("algo salió mal en el mapeo", HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
 	@Override
 	public SightingTypeResponseDto getById(long id) {
-		Optional<SightingType> tipo = tipoAvistamientoRepository.findById(id);
+		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
 		}
@@ -58,7 +60,7 @@ public class SightingTypeService implements ISightingTypeService{
 
 	@Override
 	public String update(long id) {
-		Optional<SightingType> tipo = tipoAvistamientoRepository.findById(id);
+		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
 		}
@@ -70,7 +72,7 @@ public class SightingTypeService implements ISightingTypeService{
 
 	@Override
 	public String delete(long id) {
-		Optional<SightingType> tipo = tipoAvistamientoRepository.findById(id);
+		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
 		}
@@ -78,13 +80,13 @@ public class SightingTypeService implements ISightingTypeService{
 			throw new ReservaException("tipo_avistamiento ya se encuentra dado de baja", HttpStatus.BAD_REQUEST);
 		}
 		tipo.get().setActive(false);
-		tipoAvistamientoRepository.save(tipo.get());
+		sightingTypeRepository.save(tipo.get());
 		return "tipo_avistamiento dado de baja";
 	}
 
 	@Override
 	public String restore(long id) {
-		Optional<SightingType> tipo = tipoAvistamientoRepository.findById(id);
+		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
 		}
@@ -92,7 +94,7 @@ public class SightingTypeService implements ISightingTypeService{
 			throw new ReservaException("tipo_avistamiento ya se encuentra dado de alta", HttpStatus.BAD_REQUEST);
 		}
 		tipo.get().setActive(true);
-		tipoAvistamientoRepository.save(tipo.get());
+		sightingTypeRepository.save(tipo.get());
 		return "tipo_avistamiento dado de alta";
 	}
 
@@ -103,9 +105,9 @@ public class SightingTypeService implements ISightingTypeService{
 			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
 			Page<SightingType> pageTipo;
 			if(StringUtils.isEmpty(name)) {
-				pageTipo = tipoAvistamientoRepository.findByNameContaining(name, pageable);
+				pageTipo = sightingTypeRepository.findByNameContaining(name, pageable);
 			}else {
-				pageTipo = tipoAvistamientoRepository.findByCategory(category, pageable);
+				pageTipo = sightingTypeRepository.findByCategory(category, pageable);
 			}
 			List<SightingTypeResponseDto> response = new ArrayList<>();
 			for(SightingType t : pageTipo.getContent()) {

@@ -15,13 +15,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SightingTypeRequestDto {
 	
-	private long id;
 	@NotBlank(message = "el nombre no debe estar vacio")
 	@Size(max = 250, message = "el nombre no debe tener más de {max} caracteres")
 	private String name;
 	@NotBlank(message = "no se puede una categoria vacia")
 	@Pattern(regexp = "Flora|Fauna", message = "Solo existen dos categorias 'Flora' y 'Fauna'")
 	private String category;
-	//private boolean active;
 
 }
