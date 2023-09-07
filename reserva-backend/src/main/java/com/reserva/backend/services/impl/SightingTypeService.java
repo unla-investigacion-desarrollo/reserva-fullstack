@@ -15,31 +15,31 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.reserva.backend.dto.TipoAvistamientoRequestDto;
-import com.reserva.backend.dto.TipoAvistamientoResponseDto;
-import com.reserva.backend.entities.TipoAvistamiento;
-import com.reserva.backend.repositorys.ITipoAvistamientoRepository;
-import com.reserva.backend.services.ITipoAvistamientoService;
+import com.reserva.backend.dto.SightingTypeRequestDto;
+import com.reserva.backend.dto.SightingTypeResponseDto;
+import com.reserva.backend.entities.SightingType;
+import com.reserva.backend.repositorys.ISightingTypeRepository;
+import com.reserva.backend.services.ISightingTypeService;
 import com.reserva.backend.exceptions.ReservaException;
 
 @Service
-public class TipoAvistamientoService implements ITipoAvistamientoService{
+public class SightingTypeService implements ISightingTypeService{
 	
 	@Autowired
-	private ITipoAvistamientoRepository tipoAvistamientoRepository;
+	private ISightingTypeRepository tipoAvistamientoRepository;
 	
 	private ModelMapper modelMapper = new ModelMapper();
 
 	@Override
-	public TipoAvistamientoResponseDto create(TipoAvistamientoRequestDto request) {
+	public SightingTypeResponseDto create(SightingTypeRequestDto request) {
 		if(tipoAvistamientoRepository.existsByName(request.getName())) {
 			throw new ReservaException("Ya existe un tipo_avistamiento con ese nombre", HttpStatus.BAD_REQUEST);
 		}
 		try {
-			TipoAvistamiento tipo = modelMapper.map(request, TipoAvistamiento.class);
+			SightingType tipo = modelMapper.map(request, SightingType.class);
 			tipo.setActive(true);
 			tipoAvistamientoRepository.save(tipo);
-			TipoAvistamientoResponseDto response = modelMapper.map(tipo, TipoAvistamientoResponseDto.class);
+			SightingTypeResponseDto response = modelMapper.map(tipo, SightingTypeResponseDto.class);
 			return response;
 		}catch(MappingException  e) {
 			throw new ReservaException("algo salió mal en el mapeo", HttpStatus.EXPECTATION_FAILED);
@@ -47,18 +47,18 @@ public class TipoAvistamientoService implements ITipoAvistamientoService{
 	}
 
 	@Override
-	public TipoAvistamientoResponseDto getById(long id) {
-		Optional<TipoAvistamiento> tipo = tipoAvistamientoRepository.findById(id);
+	public SightingTypeResponseDto getById(long id) {
+		Optional<SightingType> tipo = tipoAvistamientoRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
 		}
-		TipoAvistamientoResponseDto response = modelMapper.map(tipo.get(), TipoAvistamientoResponseDto.class);
+		SightingTypeResponseDto response = modelMapper.map(tipo.get(), SightingTypeResponseDto.class);
 		return response;
 	}
 
 	@Override
 	public String update(long id) {
-		Optional<TipoAvistamiento> tipo = tipoAvistamientoRepository.findById(id);
+		Optional<SightingType> tipo = tipoAvistamientoRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
 		}
@@ -70,7 +70,7 @@ public class TipoAvistamientoService implements ITipoAvistamientoService{
 
 	@Override
 	public String delete(long id) {
-		Optional<TipoAvistamiento> tipo = tipoAvistamientoRepository.findById(id);
+		Optional<SightingType> tipo = tipoAvistamientoRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
 		}
@@ -84,7 +84,7 @@ public class TipoAvistamientoService implements ITipoAvistamientoService{
 
 	@Override
 	public String restore(long id) {
-		Optional<TipoAvistamiento> tipo = tipoAvistamientoRepository.findById(id);
+		Optional<SightingType> tipo = tipoAvistamientoRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
 		}
@@ -97,19 +97,19 @@ public class TipoAvistamientoService implements ITipoAvistamientoService{
 	}
 
 	@Override
-	public List<TipoAvistamientoResponseDto> getAll(String name, String category, int page, int size, String orderBy, String sortBy) {
+	public List<SightingTypeResponseDto> getAll(String name, String category, int page, int size, String orderBy, String sortBy) {
 		try {
 			if(page < 1) page = 1; if(size < 1) size = 999999;
 			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
-			Page<TipoAvistamiento> pageTipo;
+			Page<SightingType> pageTipo;
 			if(StringUtils.isEmpty(name)) {
 				pageTipo = tipoAvistamientoRepository.findByNameContaining(name, pageable);
 			}else {
 				pageTipo = tipoAvistamientoRepository.findByCategory(category, pageable);
 			}
-			List<TipoAvistamientoResponseDto> response = new ArrayList<>();
-			for(TipoAvistamiento t : pageTipo.getContent()) {
-				response.add(modelMapper.map(t, TipoAvistamientoResponseDto.class));
+			List<SightingTypeResponseDto> response = new ArrayList<>();
+			for(SightingType t : pageTipo.getContent()) {
+				response.add(modelMapper.map(t, SightingTypeResponseDto.class));
 			}
 			return response;
 			}catch(Exception e) {

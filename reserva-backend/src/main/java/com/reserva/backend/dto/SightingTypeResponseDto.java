@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TipoAvistamientoResponseDto {
+public class SightingTypeResponseDto {
 
 	private String name;
 	private String category;

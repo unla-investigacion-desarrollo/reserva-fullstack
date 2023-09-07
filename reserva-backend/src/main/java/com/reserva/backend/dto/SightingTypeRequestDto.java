@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TipoAvistamientoRequestDto {
+public class SightingTypeRequestDto {
 	
 	private long id;
 	@NotBlank(message = "el nombre no debe estar vacio")
@@ -22,6 +22,6 @@ public class TipoAvistamientoRequestDto {
 	@NotBlank(message = "no se puede una categoria vacia")
 	@Pattern(regexp = "Flora|Fauna", message = "Solo existen dos categorias 'Flora' y 'Fauna'")
 	private String category;
-	private boolean active;
+	//private boolean active;
 
 }

@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class TipoAvistamiento {
+public class SightingType {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
