@@ -24,6 +24,7 @@ import com.reserva.backend.services.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
@@ -34,18 +35,18 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
-	@Operation(summary = "realiza el alta manual de un usuario o personal de la reserva")
+	@Operation(summary = "realiza el alta manual de un usuario o personal de la reserva", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "usuario creado correctamente", content = @Content),
 			@ApiResponse(responseCode = "400", description = "email o username existentes", content = @Content),
 			@ApiResponse(responseCode = "404", description = "no existe un rol con ese nombre", content = @Content),
 			@ApiResponse(responseCode = "417", description = "algo salió mal en el mapeo", content = @Content) })
-	@PostMapping("/new-user")
+	@PostMapping("/create")
 	public ResponseEntity<?> create(@Valid @RequestBody UserRequestDto request) {
 		return ResponseEntity.ok(new CustomResponse<>(userService.create(request), null));
 	}
 
-	@Operation(summary = "trae un usuario por su id")
+	@Operation(summary = "trae un usuario por su id", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
 			@ApiResponse(responseCode = "404", description = "no se encontro ningun usuario con ese id", content = @Content) })
@@ -54,7 +55,7 @@ public class UserController {
 		return ResponseEntity.ok(new CustomResponse<>(userService.getById(id), null));
 	}
 
-	@Operation(summary = "actualiza un usuario activo")
+	@Operation(summary = "actualiza un usuario activo", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "usuario actualizado correctamente", content = @Content),
 			@ApiResponse(responseCode = "400", description = "email o username existentes o usuario inactivo", content = @Content),
@@ -65,7 +66,7 @@ public class UserController {
 		return ResponseEntity.ok(new CustomResponse<>(userService.update(id, request), null));
 	}
 
-	@Operation(summary = "realiza el borrado logico de un usuario")
+	@Operation(summary = "realiza el borrado logico de un usuario", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "usuario dado de baja correctamente", content = @Content),
 			@ApiResponse(responseCode = "400", description = "el usuario ya se encuentra dado de baja", content = @Content),
@@ -75,7 +76,7 @@ public class UserController {
 		return ResponseEntity.ok(new CustomResponse<>(userService.delete(id), null));
 	}
 
-	@Operation(summary = "realiza el alta logico de un usuario")
+	@Operation(summary = "realiza el alta logico de un usuario", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "usuario dado de alta correctamente", content = @Content),
 			@ApiResponse(responseCode = "400", description = "el usuario ya se encuentra dado de alta", content = @Content),
@@ -85,7 +86,7 @@ public class UserController {
 		return ResponseEntity.ok(new CustomResponse<>(userService.restore(id), null));
 	}
 	
-	@Operation(summary = "trae a todos los usarios y se implementa pageable")
+	@Operation(summary = "trae a todos los usarios y se implementa pageable", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
 			@ApiResponse(responseCode = "417", description = "no se pudieron listar los usuarios", content = @Content) })

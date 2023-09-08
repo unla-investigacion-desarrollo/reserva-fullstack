@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/api/sighting/type")
@@ -32,7 +33,7 @@ public class SightingTypeController {
     @Autowired
     private ISightingTypeService sightingTypeService;
 
-    @Operation(summary = "realiza la creacion de los tipos de avistamiento ej Aves, Arboles etc")
+    @Operation(summary = "realiza la creacion de los tipos de avistamiento ej Aves, Arboles etc", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "Ya existe un tipo_avistamiento con ese nombre", content = @Content(mediaType = "application/json")),
@@ -54,7 +55,7 @@ public class SightingTypeController {
         return ResponseEntity.ok(sightingTypeService.getById(id));
     }
 
-    @Operation(summary = "realiza la edicion de los tipos de avistamiento")
+    @Operation(summary = "realiza la edicion de los tipos de avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content),
             @ApiResponse(responseCode = "400", description = "tipo_avistamiento no se encuentra activo", content = @Content),
@@ -66,7 +67,7 @@ public class SightingTypeController {
         return ResponseEntity.ok(sightingTypeService.update(id));
     }
 
-    @Operation(summary = "realiza el borrado logico de los tipos de avistamiento")
+    @Operation(summary = "realiza el borrado logico de los tipos de avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content),
             @ApiResponse(responseCode = "400", description = "tipo_avistamiento ya se encuentra dado de baja", content = @Content),
@@ -78,7 +79,7 @@ public class SightingTypeController {
         return ResponseEntity.ok(sightingTypeService.delete(id));
     }
 
-    @Operation(summary = "realiza el alta logico de los tipos de avistamiento borrado")
+    @Operation(summary = "realiza el alta logico de los tipos de avistamiento borrado", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content),
             @ApiResponse(responseCode = "400", description = "tipo_avistamiento ya se encuentra dado de alta", content = @Content),
