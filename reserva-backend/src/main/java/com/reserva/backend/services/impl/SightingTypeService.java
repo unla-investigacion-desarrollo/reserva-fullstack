@@ -59,7 +59,7 @@ public class SightingTypeService implements ISightingTypeService{
 	}
 
 	@Override
-	public String update(long id) {
+	public String update(long id, SightingTypeRequestDto request) {
 		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
@@ -67,7 +67,11 @@ public class SightingTypeService implements ISightingTypeService{
 		if(!tipo.get().isActive()) {
 			throw new ReservaException("tipo_avistamiento no se encuentra activo", HttpStatus.BAD_REQUEST);
 		}
-		return null;
+		SightingType update = tipo.get();
+		update.setName(request.getName());
+		update.setCategory(request.getCategory());
+		sightingTypeRepository.save(update);
+		return "tipo_avistamiento actualizado correctamente";
 	}
 
 	@Override

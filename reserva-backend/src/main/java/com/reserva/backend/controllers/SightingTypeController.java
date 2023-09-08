@@ -63,8 +63,8 @@ public class SightingTypeController {
     })
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
-    public ResponseEntity<?> update(@Valid @PathVariable("id") long id) {
-        return ResponseEntity.ok(sightingTypeService.update(id));
+    public ResponseEntity<?> update(@PathVariable("id") long id, @Valid @RequestBody SightingTypeRequestDto request) {
+        return ResponseEntity.ok(sightingTypeService.update(id, request));
     }
 
     @Operation(summary = "realiza el borrado logico de los tipos de avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
