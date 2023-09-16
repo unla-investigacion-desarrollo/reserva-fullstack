@@ -57,7 +57,7 @@ public class AuthController {
 	})
 	@PostMapping("/forgot-password")
 	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto request){
-		return ResponseEntity.ok(new CustomResponse<>(authService.ForgotPassword(request), null));
+		return ResponseEntity.ok(new CustomResponse<>(authService.forgotPassword(request), null));
 	}
 	
 	@Operation(summary = "realiza el cambio de contraseña mas la verificacion del token")

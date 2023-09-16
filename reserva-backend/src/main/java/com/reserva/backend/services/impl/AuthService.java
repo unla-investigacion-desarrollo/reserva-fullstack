@@ -94,7 +94,7 @@ public class AuthService implements IAuthService {
 	}
 
 	@Override
-	public String ForgotPassword(ForgotPasswordDto request) {
+	public String forgotPassword(ForgotPasswordDto request) {
 		Optional<User> user = userRepository.findByEmail(request.getEmail());
 		if(!user.isPresent()) {
 			throw new ReservaException(AuthConstants.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND);

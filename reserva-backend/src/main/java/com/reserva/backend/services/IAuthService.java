@@ -12,7 +12,7 @@ public interface IAuthService {
 
 	public String signup(RegisterDto request);
 	
-	public String ForgotPassword(ForgotPasswordDto request);
+	public String forgotPassword(ForgotPasswordDto request);
 	
 	public String resetPassword(ResetPasswordDto request);
 	
