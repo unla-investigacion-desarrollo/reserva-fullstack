@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping("/api/sighting/type")
+@RequestMapping("/sighting/type")
 public class SightingTypeController {
 
     @Autowired

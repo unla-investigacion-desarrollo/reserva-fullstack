@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
 public class UserController {
 

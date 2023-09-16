@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/account")
 public class AuthController {
 	
 	@Autowired
@@ -55,7 +55,7 @@ public class AuthController {
 			@ApiResponse(responseCode = "404", description = AuthConstants.EMAIL_NOT_FOUND,  content = @Content),
 			@ApiResponse(responseCode = "500", description = AuthConstants.EMAIL_SEND_ERROR, content = @Content)
 	})
-	@PostMapping("/forgot-password")
+	@PostMapping("/recovery")
 	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto request){
 		return ResponseEntity.ok(new CustomResponse<>(authService.forgotPassword(request), null));
 	}

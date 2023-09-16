@@ -14,7 +14,7 @@ import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.services.ISightingService;
 
 @RestController
-@RequestMapping("/api/sighting")
+@RequestMapping("/sighting")
 public class SightingController {
     
     @Autowired
