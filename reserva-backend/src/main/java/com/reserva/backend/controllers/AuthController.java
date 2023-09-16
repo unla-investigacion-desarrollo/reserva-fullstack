@@ -14,7 +14,6 @@ import com.reserva.backend.dto.auth.ForgotPasswordDto;
 import com.reserva.backend.dto.auth.LoginDto;
 import com.reserva.backend.dto.auth.RegisterDto;
 import com.reserva.backend.dto.auth.ResetPasswordDto;
-import com.reserva.backend.exceptions.CustomResponse;
 import com.reserva.backend.services.IAuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +34,7 @@ public class AuthController {
 			@ApiResponse(responseCode = "500", description = AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, content = @Content) })
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginDto request){
-		return ResponseEntity.ok(new CustomResponse<>(authService.signin(request), null));
+		return ResponseEntity.ok(authService.signin(request));
 	}
 	
 	@Operation(summary = "realiza el registro de un usuario nuevo, sin estar previamente registrado en la base de datos")
@@ -46,7 +45,7 @@ public class AuthController {
 					+ AuthConstants.EMAIL_ALREADY_EXIST, content = @Content) })
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterDto request){
-		return ResponseEntity.ok(new CustomResponse<>(authService.signup(request), null));
+		return ResponseEntity.ok(authService.signup(request));
 	}
 	
 	@Operation(summary = "realiza el envio de una solicitud de recuperacion de contraseña al email")
@@ -57,7 +56,7 @@ public class AuthController {
 	})
 	@PostMapping("/recovery")
 	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto request){
-		return ResponseEntity.ok(new CustomResponse<>(authService.forgotPassword(request), null));
+		return ResponseEntity.ok(authService.forgotPassword(request));
 	}
 	
 	@Operation(summary = "realiza el cambio de contraseña mas la verificacion del token")
@@ -68,7 +67,7 @@ public class AuthController {
 	})
 	@PostMapping("/reset-password")
 	public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto request){
-		return ResponseEntity.ok(new CustomResponse<>(authService.resetPassword(request), null));
+		return ResponseEntity.ok(authService.resetPassword(request));
 	}
 
 }

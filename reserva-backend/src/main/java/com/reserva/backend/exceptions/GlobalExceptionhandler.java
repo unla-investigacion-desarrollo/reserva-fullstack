@@ -31,12 +31,6 @@ public class GlobalExceptionhandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<ErrorDetails> resourceNotFound(ResourceNotFoundException exception, WebRequest request) {
-		ErrorDetails error = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-	}
-
 	@ExceptionHandler(ReservaException.class)
 	public ResponseEntity<ErrorDetails> reservaException(ReservaException exception, WebRequest request) {
 		ErrorDetails error = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
@@ -47,12 +41,6 @@ public class GlobalExceptionhandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<ErrorDetails> globalException(Exception exception, WebRequest request) {
 		ErrorDetails error = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-
-	@ExceptionHandler(UnauthorizedException.class)
-	public ResponseEntity<ErrorDetails> unauthorizedException(UnauthorizedException exception, WebRequest request) {
-		ErrorDetails error = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 
 }
