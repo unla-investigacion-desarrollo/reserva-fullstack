@@ -3,12 +3,15 @@ package com.reserva.backend.services.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.reserva.backend.dto.SightingRequestDto;
+import com.reserva.backend.dto.SightingResponseDto;
 import com.reserva.backend.entities.Field;
 import com.reserva.backend.entities.Sighting;
 import com.reserva.backend.entities.SightingType;
@@ -30,6 +33,8 @@ public class SightingService implements ISightingService {
 
     @Autowired
     private ISightingTypeRepository sightingTypeRepository;
+
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public boolean create(SightingRequestDto request) {
@@ -68,6 +73,17 @@ public class SightingService implements ISightingService {
             return false;
         }
     }
+
+    @Override
+    public SightingResponseDto getById(long id) {
+        Optional<Sighting> sighting = sightingRepository.findById(id);
+        if(!sighting.isPresent()){
+            throw new ReservaException("no hay ningun avistamiento con id: "+id, HttpStatus.NOT_FOUND);
+        }
+        SightingResponseDto response = modelMapper.map(sighting.get(), SightingResponseDto.class);
+        return response;
+    }
+    
 
 
     
