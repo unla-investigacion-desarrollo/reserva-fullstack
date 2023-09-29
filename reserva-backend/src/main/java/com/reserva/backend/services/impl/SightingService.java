@@ -8,6 +8,10 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -90,6 +94,31 @@ public class SightingService implements ISightingService {
         List<Sighting> sightings = sightingRepository.findByUserId(id);
         return sightings.stream().map(sighting -> modelMapper.map(sighting, SightingResponseDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SightingResponseDto> getAll(String status, String type, int page, int size, String orderBy,
+            String sortBy) {
+        try{
+            if(page < 1 ) page = 1; if(size < 1) size = 999999;
+            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(
+                orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
+                Page<Sighting> pageTipo;
+                if(!status.isEmpty()){
+                    pageTipo = sightingRepository.findByStatus(status, pageable);
+                }else if(!type.isEmpty()){
+                    pageTipo = sightingRepository.findByType(type, pageable);
+                }else{
+                    pageTipo = sightingRepository.findAll(pageable);
+                }
+                List<SightingResponseDto> response = new ArrayList<>();
+                for(Sighting t : pageTipo.getContent()){
+                    response.add(modelMapper.map(t, SightingResponseDto.class));
+                }
+                return response;
+        }catch(Exception e){
+            throw new ReservaException("No se pudieron listar los avistamientos", HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
 }
