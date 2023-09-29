@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.reserva.backend.constants.SightingConstants;
 import com.reserva.backend.dto.SightingTypeRequestDto;
 import com.reserva.backend.dto.SightingTypeResponseDto;
 import com.reserva.backend.entities.SightingType;
@@ -32,7 +33,7 @@ public class SightingTypeService implements ISightingTypeService{
 	@Override
 	public SightingTypeResponseDto create(SightingTypeRequestDto request) {
 		if(sightingTypeRepository.existsByName(request.getName())) {
-			throw new ReservaException("Ya existe un tipo_avistamiento con ese nombre", HttpStatus.BAD_REQUEST);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
 		try {
 			SightingType tipo = modelMapper.map(request, SightingType.class);
@@ -41,7 +42,7 @@ public class SightingTypeService implements ISightingTypeService{
 			SightingTypeResponseDto response = modelMapper.map(tipo, SightingTypeResponseDto.class);
 			return response;
 		}catch(MappingException e) {
-			throw new ReservaException("algo salió mal en el mapeo", HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(SightingConstants.MAPPING_WRONG, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
@@ -49,7 +50,7 @@ public class SightingTypeService implements ISightingTypeService{
 	public SightingTypeResponseDto getById(long id) {
 		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
-			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
 		SightingTypeResponseDto response = modelMapper.map(tipo.get(), SightingTypeResponseDto.class);
 		return response;
@@ -59,44 +60,44 @@ public class SightingTypeService implements ISightingTypeService{
 	public String update(long id, SightingTypeRequestDto request) {
 		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
-			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
 		if(!tipo.get().isActive()) {
-			throw new ReservaException("tipo_avistamiento no se encuentra activo", HttpStatus.BAD_REQUEST);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.BAD_REQUEST);
 		}
 		SightingType update = tipo.get();
 		update.setName(request.getName());
 		update.setCategory(request.getCategory());
 		sightingTypeRepository.save(update);
-		return "tipo_avistamiento actualizado correctamente";
+		return SightingConstants.SIGHTINGTYPE_UPDATE_SUCCESSFUL;
 	}
 
 	@Override
 	public String delete(long id) {
 		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
-			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
 		if(!tipo.get().isActive()) {
-			throw new ReservaException("tipo_avistamiento ya se encuentra dado de baja", HttpStatus.BAD_REQUEST);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.BAD_REQUEST);
 		}
 		tipo.get().setActive(false);
 		sightingTypeRepository.save(tipo.get());
-		return "tipo_avistamiento dado de baja";
+		return SightingConstants.SIGHTINGTYPE_DELETE_SUCCESSFUL;
 	}
 
 	@Override
 	public String restore(long id) {
 		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
-			throw new ReservaException("no hay ningun tipo_avistamiento con id: "+id, HttpStatus.NOT_FOUND);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
 		if(tipo.get().isActive()) {
-			throw new ReservaException("tipo_avistamiento ya se encuentra dado de alta", HttpStatus.BAD_REQUEST);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_IS_ACTIVE, HttpStatus.BAD_REQUEST);
 		}
 		tipo.get().setActive(true);
 		sightingTypeRepository.save(tipo.get());
-		return "tipo_avistamiento dado de alta";
+		return SightingConstants.SIGHTINGTYPE_IS_ACTIVE;
 	}
 
 	@Override
@@ -118,7 +119,7 @@ public class SightingTypeService implements ISightingTypeService{
 			}
 			return response;
 			}catch(Exception e) {
-			throw new ReservaException("No se pudieron listar los tipo_avistamiento", HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
