@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,10 +105,12 @@ public class SightingTypeService implements ISightingTypeService{
 			if(page < 1) page = 1; if(size < 1) size = 999999;
 			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
 			Page<SightingType> pageTipo;
-			if(StringUtils.isEmpty(name)) {
+			if(!name.isEmpty()) {
 				pageTipo = sightingTypeRepository.findByNameContaining(name, pageable);
-			}else {
+			}else if(!category.isEmpty()){
 				pageTipo = sightingTypeRepository.findByCategory(category, pageable);
+			}else{
+				pageTipo = sightingTypeRepository.findAll(pageable);
 			}
 			List<SightingTypeResponseDto> response = new ArrayList<>();
 			for(SightingType t : pageTipo.getContent()) {
