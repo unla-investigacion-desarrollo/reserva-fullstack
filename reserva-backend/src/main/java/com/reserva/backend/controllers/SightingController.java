@@ -32,4 +32,9 @@ public class SightingController {
         return ResponseEntity.ok(sightingService.getById(id));
     }
 
+    @GetMapping("/getByUser/{userId}")
+    public ResponseEntity<?> getByUserId(@PathVariable(name = "userId") long userId){
+        return ResponseEntity.ok(sightingService.getByUserId(userId));
+    }
+
 }

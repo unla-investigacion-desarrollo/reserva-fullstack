@@ -7,8 +7,8 @@ import com.reserva.backend.entities.User;
 
 public interface ITokenVerificationRepository extends JpaRepository<TokenVerification, Long>{
 	
-	TokenVerification findByToken(String token);
+	public TokenVerification findByToken(String token);
 	
-	TokenVerification findByUser(User user);
+	public TokenVerification findByUser(User user);
 
 }

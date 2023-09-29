@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,14 +78,18 @@ public class SightingService implements ISightingService {
     @Override
     public SightingResponseDto getById(long id) {
         Optional<Sighting> sighting = sightingRepository.findById(id);
-        if(!sighting.isPresent()){
-            throw new ReservaException("no hay ningun avistamiento con id: "+id, HttpStatus.NOT_FOUND);
+        if (!sighting.isPresent()) {
+            throw new ReservaException("no hay ningun avistamiento con id: " + id, HttpStatus.NOT_FOUND);
         }
         SightingResponseDto response = modelMapper.map(sighting.get(), SightingResponseDto.class);
         return response;
     }
-    
 
+    @Override
+    public List<SightingResponseDto> getByUserId(long id) {
+        List<Sighting> sightings = sightingRepository.findByUserId(id);
+        return sightings.stream().map(sighting -> modelMapper.map(sighting, SightingResponseDto.class))
+                .collect(Collectors.toList());
+    }
 
-    
 }
