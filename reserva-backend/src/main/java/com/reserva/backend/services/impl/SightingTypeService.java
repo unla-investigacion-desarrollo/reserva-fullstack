@@ -38,8 +38,6 @@ public class SightingTypeService implements ISightingTypeService{
 		try {
 			SightingType tipo = modelMapper.map(request, SightingType.class);
 			tipo.setActive(true);
-			tipo.setName(request.getName());
-			tipo.setCategory(request.getCategory());
 			sightingTypeRepository.save(tipo);
 			SightingTypeResponseDto response = modelMapper.map(tipo, SightingTypeResponseDto.class);
 			return response;

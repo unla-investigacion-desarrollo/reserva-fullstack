@@ -35,7 +35,7 @@ public class SightingTypeController {
 
     @Operation(summary = "realiza la creacion de los tipos de avistamiento ej Aves, Arboles etc", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "201", description = "ok", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "Ya existe un tipo_avistamiento con ese nombre", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "algo sali\u00F3 mal en el mapeo", content = @Content(mediaType = "application/json"))
     })

@@ -1,5 +1,7 @@
 package com.reserva.backend.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -25,5 +27,6 @@ public class SightingRequestDto {
     private double longitude;
     @NotBlank(message = "el tipo es obligatorio")
     private String type;
+    private List<FieldRequestDto> fields;
     
 }

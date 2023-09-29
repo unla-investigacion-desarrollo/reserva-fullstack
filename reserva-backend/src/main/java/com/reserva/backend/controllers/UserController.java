@@ -3,6 +3,7 @@ package com.reserva.backend.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +43,7 @@ public class UserController {
 			@ApiResponse(responseCode = "417", description = "algo salió mal en el mapeo", content = @Content) })
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@Valid @RequestBody UserRequestDto request) {
-		return ResponseEntity.ok(userService.create(request));
+		return new ResponseEntity<>(userService.create(request), HttpStatus.CREATED);
 	}
 
 	@Operation(summary = "trae un usuario por su id", security = @SecurityRequirement(name = "bearerAuth"))
