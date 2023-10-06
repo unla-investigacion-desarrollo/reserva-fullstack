@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
+import com.reserva.backend.dto.UpdateStatusDto;
 import com.reserva.backend.entities.Field;
 import com.reserva.backend.entities.Sighting;
 import com.reserva.backend.entities.SightingType;
@@ -50,6 +51,7 @@ public class SightingService implements ISightingService {
         sighting.setScientificName(request.getScientificName());
         sighting.setLatitude(request.getLatitude());
         sighting.setLongitude(request.getLongitude());
+        sighting.setActive(true);
         SightingType tipo = sightingTypeRepository.findByName(request.getType());
         if (tipo == null) {
             throw new ReservaException("El Tipo_Avistamiento no es valido", HttpStatus.BAD_REQUEST);
@@ -119,6 +121,16 @@ public class SightingService implements ISightingService {
         }catch(Exception e){
             throw new ReservaException("No se pudieron listar los avistamientos", HttpStatus.EXPECTATION_FAILED);
         }
+    }
+
+    @Override
+    public String updateStatus(UpdateStatusDto request) {
+        User user = userRepository.findById(request.getApprovedById()).orElseThrow(() -> new ReservaException("No existe un usuario con ese id", HttpStatus.NOT_FOUND));
+        Sighting sighting = sightingRepository.findById(request.getIdSighting()).orElseThrow(() -> new ReservaException("No existe un avistamiento con ese id", HttpStatus.NOT_FOUND));
+        sighting.setStatus(request.getStatus());
+        sighting.setApprovedBy(user);
+        sightingRepository.save(sighting);
+        return "Avistamiento con id "+sighting.getId()+" fue "+sighting.getStatus();
     }
 
 }

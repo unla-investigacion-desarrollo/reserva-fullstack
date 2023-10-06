@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reserva.backend.dto.SightingRequestDto;
+import com.reserva.backend.dto.UpdateStatusDto;
 import com.reserva.backend.services.ISightingService;
 
 @RestController
@@ -46,6 +48,12 @@ public class SightingController {
 			@RequestParam(value = "orderBy", defaultValue = "asc") String orderBy,
 			@RequestParam(value = "sortBy", defaultValue = "id") String sortBy){
         return ResponseEntity.ok(sightingService.getAll(status, type, page, size, orderBy, sortBy));
+    }
+
+    @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
+    @PostMapping("/status")
+    public ResponseEntity<?> updateStatus(@RequestBody UpdateStatusDto request){
+        return ResponseEntity.ok(sightingService.updateStatus(request));
     }
 
 }
