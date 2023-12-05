@@ -34,6 +34,7 @@ public class Sighting {
     private String status;
     private double latitude;
     private double longitude;
+    private boolean active;
 
     @ManyToOne
     @JoinColumn(name = "sightingType_id")
