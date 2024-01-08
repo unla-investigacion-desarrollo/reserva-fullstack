@@ -12,8 +12,10 @@ public interface ISightingTypeRepository extends JpaRepository<SightingType, Lon
 
 	public boolean existsByName(String name);
 	
-	public Page<SightingType> findByNameContaining(String name, Pageable pageable);
+	public Page<SightingType> findByNameContainingAndActive(String name, boolean active, Pageable pageable);
 	
-	public Page<SightingType> findByCategory(String category, Pageable pageable);
+	public Page<SightingType> findByCategoryAndActive(String category, boolean active, Pageable pageable);
+
+	public Page<SightingType> findByActive(boolean active, Pageable pageable);
 
 }

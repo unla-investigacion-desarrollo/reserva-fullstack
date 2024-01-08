@@ -107,11 +107,11 @@ public class SightingTypeService implements ISightingTypeService{
 			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
 			Page<SightingType> pageTipo;
 			if(!name.isEmpty()) {
-				pageTipo = sightingTypeRepository.findByNameContaining(name, pageable);
+				pageTipo = sightingTypeRepository.findByNameContainingAndActive(name, true, pageable);
 			}else if(!category.isEmpty()){
-				pageTipo = sightingTypeRepository.findByCategory(category, pageable);
+				pageTipo = sightingTypeRepository.findByCategoryAndActive(category, true, pageable);
 			}else{
-				pageTipo = sightingTypeRepository.findAll(pageable);
+				pageTipo = sightingTypeRepository.findByActive(true, pageable);
 			}
 			List<SightingTypeResponseDto> response = new ArrayList<>();
 			for(SightingType t : pageTipo.getContent()) {
