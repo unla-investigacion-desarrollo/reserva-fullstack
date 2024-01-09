@@ -53,7 +53,7 @@ public class SightingService implements ISightingService {
         sighting.setLongitude(request.getLongitude());
         sighting.setActive(true);
         SightingType tipo = sightingTypeRepository.findByName(request.getType());
-        if (tipo == null) {
+        if (tipo == null || !tipo.isActive()) {
             throw new ReservaException("El Tipo_Avistamiento no es valido", HttpStatus.BAD_REQUEST);
         }
         sighting.setType(tipo);
