@@ -84,7 +84,7 @@ public class SightingService implements ISightingService {
     @Override
     public SightingResponseDto getById(long id) {
         Optional<Sighting> sighting = sightingRepository.findById(id);
-        if (!sighting.isPresent()) {
+        if (!sighting.isPresent() || !sighting.get().isActive()) {
             throw new ReservaException("no hay ningun avistamiento con id: " + id, HttpStatus.NOT_FOUND);
         }
         SightingResponseDto response = modelMapper.map(sighting.get(), SightingResponseDto.class);
@@ -111,7 +111,7 @@ public class SightingService implements ISightingService {
                 }else if(!type.isEmpty()){
                     pageTipo = sightingRepository.findByType(type, pageable);
                 }else{
-                    pageTipo = sightingRepository.findAll(pageable);
+                    pageTipo = sightingRepository.findByActive(true, pageable);
                 }
                 List<SightingResponseDto> response = new ArrayList<>();
                 for(Sighting t : pageTipo.getContent()){

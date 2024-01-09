@@ -14,10 +14,12 @@ public interface ISightingRepository extends JpaRepository<Sighting, Long>{
 
     public Page<Sighting> findByStatus(String status, Pageable pageable);
 
-    @Query(value = "SELECT * FROM sighting s WHERE s.created_by_id =:id", nativeQuery = true)
+    @Query(value = "SELECT * FROM sighting s WHERE s.created_by_id =:id AND s.active =TRUE", nativeQuery = true)
     public List<Sighting> findByUserId(@Param("id") long id);
     
-    @Query(value = "SELECT * FROM sighting s INNER JOIN sighting_type t ON s.sighting_type_id = t.id WHERE t.name =:type", nativeQuery = true)
+    @Query(value = "SELECT * FROM sighting s INNER JOIN sighting_type t ON s.sighting_type_id = t.id WHERE t.name =:type AND s.active =TRUE", nativeQuery = true)
     public Page<Sighting> findByType(@Param("type") String type, Pageable pageable);
+
+    public Page<Sighting> findByActive(boolean active, Pageable pageable);
     
 }
