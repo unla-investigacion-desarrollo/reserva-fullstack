@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+#fase de pruebas - por el momento se ignoran las imagenes
+/images/
