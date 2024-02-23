@@ -14,7 +14,7 @@ public class SightingResponseDto {
 
     private long id;
     private String name;
-    private String ScientificName;
+    private String scientificName;
     private Date createdAt;
     private double latitude;
     private double longitude;

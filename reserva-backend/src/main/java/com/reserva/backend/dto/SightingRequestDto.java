@@ -22,7 +22,7 @@ public class SightingRequestDto {
     private String name;
     @NotBlank(message = "el nombre cientifico no debe estar vacio")
 	@Size(max = 250, message = "el nombre cientifico no debe tener más de {max} caracteres")
-    private String ScientificName;
+    private String scientificName;
     private double latitude;
     private double longitude;
     @NotBlank(message = "el tipo es obligatorio")
