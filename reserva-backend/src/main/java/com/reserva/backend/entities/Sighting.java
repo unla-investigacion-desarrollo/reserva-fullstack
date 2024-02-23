@@ -46,8 +46,11 @@ public class Sighting {
     @JoinColumn(name = "approvedBy_id")
     private User approvedBy;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sighting", cascade = CascadeType.ALL)
     @JoinColumn(name = "sighting_id")
     private List<Field> fields;
+
+    @OneToMany(mappedBy = "sighting", cascade = CascadeType.ALL)
+    private List<Image> images;
   
 }
