@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.reserva.backend.dto.user.UserResponseDto;
+import com.reserva.backend.entities.Image;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class SightingResponseDto {
     private SightingTypeResponseDto type;
     private UserResponseDto createdBy;
     private List<FieldRequestDto> fields;
+    private List<Image> images;
 
     
 }

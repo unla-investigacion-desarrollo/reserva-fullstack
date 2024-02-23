@@ -19,12 +19,12 @@ import com.reserva.backend.exceptions.ReservaException;
 @EnableConfigurationProperties(StorageProperties.class)
 public class ReservaBackendApplication {
 
+	@Autowired
+	private StorageProperties storageProperties;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ReservaBackendApplication.class, args);
 	}
-
-	@Autowired
-	private StorageProperties storageProperties;
 
 	@PostConstruct
 	private void initializeStorage() {
