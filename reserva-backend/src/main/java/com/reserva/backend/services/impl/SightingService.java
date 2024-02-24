@@ -14,11 +14,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.reserva.backend.dto.FieldRequestDto;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
 import com.reserva.backend.dto.UpdateStatusDto;
 import com.reserva.backend.entities.Field;
+import com.reserva.backend.entities.Image;
 import com.reserva.backend.entities.Sighting;
 import com.reserva.backend.entities.SightingType;
 import com.reserva.backend.entities.User;
@@ -27,6 +30,7 @@ import com.reserva.backend.repositorys.ISightingRepository;
 import com.reserva.backend.repositorys.ISightingTypeRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.ISightingService;
+import com.reserva.backend.services.IStorageService;
 
 @Service
 public class SightingService implements ISightingService {
@@ -42,38 +46,50 @@ public class SightingService implements ISightingService {
 
     private ModelMapper modelMapper = new ModelMapper();
 
+    @Autowired
+    private IStorageService storageService;
+
     @Override
-    public boolean create(SightingRequestDto request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ReservaException("el usuario no fue encontrado", HttpStatus.NOT_FOUND));
-        Sighting sighting = new Sighting();
-        sighting.setName(request.getName());
-        sighting.setScientificName(request.getScientificName());
-        sighting.setLatitude(request.getLatitude());
-        sighting.setLongitude(request.getLongitude());
-        sighting.setActive(true);
-        SightingType tipo = sightingTypeRepository.findByName(request.getType());
-        if (tipo == null || !tipo.isActive()) {
-            throw new ReservaException("El Tipo_Avistamiento no es valido", HttpStatus.BAD_REQUEST);
-        }
-        sighting.setType(tipo);
-        if (user.getRole().getName().equals("ROLE_PERSONAL_RESERVA")) {
-            sighting.setStatus("APROBADO");
-            sighting.setApprovedBy(user);
-        } else {
-            sighting.setStatus("PENDIENTE");
-        }
-        sighting.setCreatedAt(new Date());
-        sighting.setCreatedBy(user);
-        List<Field> fields = new ArrayList<>();
-        for (int i = 0; i < request.getFields().size(); i++) {
-            Field field = new Field();
-            field.setTitle(request.getFields().get(i).getTitle());
-            field.setDescription(request.getFields().get(i).getTitle());
-            fields.add(field);
-        }
-        sighting.setFields(fields);
+    public boolean create(SightingRequestDto request, List<MultipartFile> files) {
         try {
+            User user = userRepository.findById(request.getUserId())
+                    .orElseThrow(() -> new ReservaException("el usuario no fue encontrado", HttpStatus.NOT_FOUND));
+            Sighting sighting = new Sighting();
+            sighting.setName(request.getName());
+            sighting.setScientificName(request.getScientificName());
+            sighting.setLatitude(request.getLatitude());
+            sighting.setLongitude(request.getLongitude());
+            sighting.setActive(true);
+            SightingType tipo = sightingTypeRepository.findByName(request.getType());
+            if (tipo == null || !tipo.isActive()) {
+                throw new ReservaException("El Tipo_Avistamiento no es valido", HttpStatus.BAD_REQUEST);
+            }
+            sighting.setType(tipo);
+            if (user.getRole().getName().equals("ROLE_PERSONAL_RESERVA")) {
+                sighting.setStatus("APROBADO");
+                sighting.setApprovedBy(user);
+            } else {
+                sighting.setStatus("PENDIENTE");
+            }
+            sighting.setCreatedAt(new Date());
+            sighting.setCreatedBy(user);
+            List<Field> fields = new ArrayList<>();
+            for (FieldRequestDto f : request.getFields()) {
+                Field field = new Field();
+                field.setTitle(f.getTitle());
+                field.setDescription(f.getDescription());
+                fields.add(field);
+            }
+            sighting.setFields(fields);
+            List<Image> images = new ArrayList<>();
+            for (MultipartFile m : files) {
+                String url = storageService.saveImage(m, request.getName());
+                Image image = new Image();
+                image.setUrl(url);
+                image.setSighting(sighting);
+                images.add(image);
+            }
+            sighting.setImages(images);
             sightingRepository.save(sighting);
             return true;
         } catch (Exception e) {

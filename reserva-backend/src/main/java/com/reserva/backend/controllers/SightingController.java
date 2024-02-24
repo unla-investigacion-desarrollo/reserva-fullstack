@@ -1,5 +1,7 @@
 package com.reserva.backend.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.UpdateStatusDto;
@@ -38,8 +42,11 @@ public class SightingController {
             @ApiResponse(responseCode = "404", description = "el usuario no fue encontrado", content = @Content)
         })
     @PostMapping("/create")
-    public ResponseEntity<?> create(@Valid @RequestBody SightingRequestDto request){
-        return new ResponseEntity<>(sightingService.create(request), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@Valid @RequestBody SightingRequestDto request, @RequestPart List<MultipartFile> files){
+        if(files.size() > 3){
+            return new ResponseEntity<>("No se puede subir mas de 3 imagenes por avistamiento", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(sightingService.create(request, files), HttpStatus.CREATED);
     }
 
     @Operation(summary = "trae el avistamiento dado su id")
