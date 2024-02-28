@@ -2,6 +2,7 @@ package com.reserva.backend.services.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,6 +10,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,6 +62,21 @@ public class StorageService implements IStorageService {
     @Override
     public Path getPath(String url) {
         return storageLocation.resolve(url);
+    }
+
+    @Override
+    public Resource getImage(String url) {
+        try{
+            Path path = getPath(url);
+            Resource resource = new UrlResource(path.toUri());
+            if(resource.exists() || resource.isReadable()){
+                return resource;
+            }else{
+                throw new ReservaException("No se pudo encontrar la imagen" + url, HttpStatus.NOT_FOUND);
+            }
+        } catch (MalformedURLException e) {
+            throw new ReservaException("No se pudo encontrar la imagen" + url, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
