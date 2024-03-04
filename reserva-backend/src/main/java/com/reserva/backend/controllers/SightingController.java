@@ -42,7 +42,7 @@ public class SightingController {
             @ApiResponse(responseCode = "404", description = "el usuario no fue encontrado", content = @Content)
         })
     @PostMapping("/create")
-    public ResponseEntity<?> create(@Valid @RequestBody SightingRequestDto request, @RequestPart List<MultipartFile> files){
+    public ResponseEntity<?> create(@Valid @RequestPart SightingRequestDto request, @RequestPart List<MultipartFile> files){
         if(files.size() > 3){
             return new ResponseEntity<>("No se puede subir mas de 3 imagenes por avistamiento", HttpStatus.BAD_REQUEST);
         }

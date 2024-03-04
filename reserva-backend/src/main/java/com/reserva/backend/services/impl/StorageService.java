@@ -48,7 +48,7 @@ public class StorageService implements IStorageService {
             }
             // Esto se puede cambiar en caso de se quiera guardar la ruta absoluta con
             // storageLocation.resolve(Paths.get(uniqueFileName)).normalize().toAbsolutePath();
-            String nameImage = UUID.randomUUID().toString() + "_" + image.getOriginalFilename() + "_" + name;
+            String nameImage = UUID.randomUUID().toString() + "_" + name + "_" + image.getOriginalFilename();
             Path path = getPath(nameImage);
             try (InputStream inputStream = image.getInputStream()) {
                 Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
