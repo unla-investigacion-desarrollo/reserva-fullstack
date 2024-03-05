@@ -37,7 +37,7 @@ public class StorageService implements IStorageService {
     }
 
     @Override
-    public String saveImage(MultipartFile image, String name) {
+    public String saveImage(MultipartFile image) {
         try {
             if (image.isEmpty()) {
                 throw new ReservaException("Es necesario subir al menos una imagen por cada avistamiento",
@@ -48,7 +48,9 @@ public class StorageService implements IStorageService {
             }
             // Esto se puede cambiar en caso de se quiera guardar la ruta absoluta con
             // storageLocation.resolve(Paths.get(uniqueFileName)).normalize().toAbsolutePath();
-            String nameImage = UUID.randomUUID().toString() + "_" + name + "_" + image.getOriginalFilename();
+            // filename.substring(filename.lastIndexOf("."));
+            String extension = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf("."));
+            String nameImage = UUID.randomUUID().toString() + extension;
             Path path = getPath(nameImage);
             try (InputStream inputStream = image.getInputStream()) {
                 Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);

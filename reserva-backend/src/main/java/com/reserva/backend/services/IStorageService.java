@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IStorageService {
 
-    public String saveImage(MultipartFile image, String name);
+    public String saveImage(MultipartFile image);
     public Path getPath(String url);
     public Resource getImage(String url);
     

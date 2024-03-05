@@ -83,7 +83,7 @@ public class SightingService implements ISightingService {
             sighting.setFields(fields);
             List<Image> images = new ArrayList<>();
             for (MultipartFile m : files) {
-                String url = storageService.saveImage(m, request.getName());
+                String url = storageService.saveImage(m);
                 Image image = new Image();
                 image.setUrl(url);
                 image.setSighting(sighting);
