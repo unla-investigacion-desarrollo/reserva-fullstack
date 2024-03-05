@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `field`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `field` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `description` varchar(255) DEFAULT NULL,
+  `description` varchar(1000) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `sighting_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
