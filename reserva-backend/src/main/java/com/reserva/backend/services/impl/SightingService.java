@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.reserva.backend.constants.SightingConstants;
 import com.reserva.backend.dto.FieldRequestDto;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
@@ -50,7 +52,7 @@ public class SightingService implements ISightingService {
     private IStorageService storageService;
 
     @Override
-    public boolean create(SightingRequestDto request, List<MultipartFile> files) {
+    public SightingResponseDto create(SightingRequestDto request, List<MultipartFile> files) {
         try {
             User user = userRepository.findById(request.getUserId())
                     .orElseThrow(() -> new ReservaException("el usuario no fue encontrado", HttpStatus.NOT_FOUND));
@@ -91,9 +93,10 @@ public class SightingService implements ISightingService {
             }
             sighting.setImages(images);
             sightingRepository.save(sighting);
-            return true;
-        } catch (Exception e) {
-            return false;
+            SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
+            return response;
+        } catch (MappingException e) {
+            throw new ReservaException(SightingConstants.MAPPING_WRONG, HttpStatus.EXPECTATION_FAILED);
         }
     }
 

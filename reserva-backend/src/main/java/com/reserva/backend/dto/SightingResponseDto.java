@@ -23,6 +23,7 @@ public class SightingResponseDto {
     private UserResponseDto createdBy;
     private List<FieldRequestDto> fields;
     private List<Image> images;
+    
 
     
 }

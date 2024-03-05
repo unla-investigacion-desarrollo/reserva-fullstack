@@ -10,7 +10,7 @@ import com.reserva.backend.dto.UpdateStatusDto;
 
 public interface ISightingService {
     
-    public boolean create(SightingRequestDto request, List<MultipartFile> files);
+    public SightingResponseDto create(SightingRequestDto request, List<MultipartFile> files);
     public SightingResponseDto getById(long id);
     public List<SightingResponseDto> getByUserId(long id);
     public List<SightingResponseDto> getAll(String status, String type, int page, int size, String orderBy, String sortBy);
