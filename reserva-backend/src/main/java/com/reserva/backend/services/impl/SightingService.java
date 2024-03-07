@@ -134,7 +134,10 @@ public class SightingService implements ISightingService {
                 }
                 List<SightingResponseDto> response = new ArrayList<>();
                 for(Sighting t : pageTipo.getContent()){
-                    response.add(modelMapper.map(t, SightingResponseDto.class));
+                    SightingResponseDto dto = modelMapper.map(t, SightingResponseDto.class);
+                    dto.setCurrentPage(page);
+                    dto.setAmountOfPages(pageTipo.getTotalPages());
+                    response.add(dto);
                 }
                 return response;
         }catch(Exception e){
