@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.reserva.backend.constants.SightingConstants;
 import com.reserva.backend.dto.FieldRequestDto;
+import com.reserva.backend.dto.SightingCustomResponseDto;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
 import com.reserva.backend.dto.UpdateStatusDto;
@@ -118,7 +119,7 @@ public class SightingService implements ISightingService {
     }
 
     @Override
-    public List<SightingResponseDto> getAll(String status, String type, int page, int size, String orderBy,
+    public SightingCustomResponseDto getAll(String status, String type, int page, int size, String orderBy,
             String sortBy) {
         try{
             if(page < 1 ) page = 1; if(size < 1) size = 999999;
@@ -132,13 +133,16 @@ public class SightingService implements ISightingService {
                 }else{
                     pageTipo = sightingRepository.findByActive(true, pageable);
                 }
-                List<SightingResponseDto> response = new ArrayList<>();
+                // Primero hago el mapeo de los avistamientos y despues mando la respuesta personalizada
+                List<SightingResponseDto> sightings = new ArrayList<>();
                 for(Sighting t : pageTipo.getContent()){
-                    SightingResponseDto dto = modelMapper.map(t, SightingResponseDto.class);
-                    dto.setCurrentPage(page);
-                    dto.setAmountOfPages(pageTipo.getTotalPages());
-                    response.add(dto);
+                    SightingResponseDto sighting = modelMapper.map(t, SightingResponseDto.class);
+                    sightings.add(sighting);
                 }
+                SightingCustomResponseDto response = new SightingCustomResponseDto();
+                response.setCurrentPage(page);
+                response.setAmountOfPages(pageTipo.getTotalPages());
+                response.setSightings(sightings);
                 return response;
         }catch(Exception e){
             throw new ReservaException("No se pudieron listar los avistamientos", HttpStatus.EXPECTATION_FAILED);
