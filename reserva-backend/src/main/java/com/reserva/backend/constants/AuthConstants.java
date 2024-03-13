@@ -8,8 +8,8 @@ public class AuthConstants {
 	public static final String USERNAME_ALREADY_EXIST = "Ya existe un usuario registrado con ese username";
 	public static final String EMAIL_ALREADY_EXIST = "Ya existe un usuario registrado con ese email";
 	public static final String ROLE_NOT_FOUND = "No se encontro ningun rol con ese nombre";
-	public static final String SIGN_UP_SUSSCEFUL = "registrado con exito";
-	public static final String SIGN_IN_SUSSCEFUL = "logeado con exito";
+	public static final String SIGN_UP_SUCCESSFUL = "registrado con exito";
+	public static final String SIGN_IN_SUCCESSFUL = "logeado con exito";
 	public static final String EMAIL_NOT_FOUND = "No se encuentra ningun usuario registrado con ese email";
 	public static final String EMAIL_SEND_ERROR = "error al enviar el email";
 	public static final String EMAIL_SEND_OK = "Las instrucciones para cambiar la contraseña han sido enviadas al email";

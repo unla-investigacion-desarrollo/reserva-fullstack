@@ -90,7 +90,7 @@ public class AuthService implements IAuthService {
 		user.setRole(role);
 		userRepository.save(user);
 
-		return AuthConstants.SIGN_UP_SUSSCEFUL;
+		return AuthConstants.SIGN_UP_SUCCESSFUL;
 	}
 
 	@Override
