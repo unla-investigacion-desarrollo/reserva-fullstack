@@ -50,7 +50,7 @@ public class UserService implements IUserService{
 			newUser.setActive(true);
 			BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 			newUser.setPassword(passEncoder.encode(request.getPassword()));
-			Optional<Role> newRole = roleRepository.findByName(request.getName());
+			Optional<Role> newRole = roleRepository.findByName(request.getRole());
 			if(!newRole.isPresent()) {
 				throw new ReservaException(UserConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
 			}
