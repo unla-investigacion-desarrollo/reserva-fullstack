@@ -56,7 +56,7 @@ public class SightingService implements ISightingService {
     public SightingResponseDto create(SightingRequestDto request, List<MultipartFile> files) {
         try {
             User user = userRepository.findById(request.getUserId())
-                    .orElseThrow(() -> new ReservaException("el usuario no fue encontrado", HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
             Sighting sighting = new Sighting();
             sighting.setName(request.getName());
             sighting.setScientificName(request.getScientificName());
@@ -65,14 +65,14 @@ public class SightingService implements ISightingService {
             sighting.setActive(true);
             SightingType tipo = sightingTypeRepository.findByName(request.getType());
             if (tipo == null || !tipo.isActive()) {
-                throw new ReservaException("El Tipo_Avistamiento no es valido", HttpStatus.BAD_REQUEST);
+                throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.BAD_REQUEST);
             }
             sighting.setType(tipo);
-            if (user.getRole().getName().equals("ROLE_PERSONAL_RESERVA")) {
-                sighting.setStatus("APROBADO");
+            if (user.getRole().getName().equals(SightingConstants.ADMIN)) {
+                sighting.setStatus(SightingConstants.APPROVED_STATUS);
                 sighting.setApprovedBy(user);
             } else {
-                sighting.setStatus("PENDIENTE");
+                sighting.setStatus(SightingConstants.PENDING_STATUS);
             }
             sighting.setCreatedAt(new Date());
             sighting.setCreatedBy(user);
@@ -105,7 +105,7 @@ public class SightingService implements ISightingService {
     public SightingResponseDto getById(long id) {
         Optional<Sighting> sighting = sightingRepository.findById(id);
         if (!sighting.isPresent() || !sighting.get().isActive()) {
-            throw new ReservaException("no hay ningun avistamiento con id: " + id, HttpStatus.NOT_FOUND);
+            throw new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
         SightingResponseDto response = modelMapper.map(sighting.get(), SightingResponseDto.class);
         return response;
@@ -145,18 +145,18 @@ public class SightingService implements ISightingService {
                 response.setSightings(sightings);
                 return response;
         }catch(Exception e){
-            throw new ReservaException("No se pudieron listar los avistamientos", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException(SightingConstants.SIGHTING_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
         }
     }
 
     @Override
     public String updateStatus(UpdateStatusDto request) {
-        User user = userRepository.findById(request.getApprovedById()).orElseThrow(() -> new ReservaException("No existe un usuario con ese id", HttpStatus.NOT_FOUND));
-        Sighting sighting = sightingRepository.findById(request.getIdSighting()).orElseThrow(() -> new ReservaException("No existe un avistamiento con ese id", HttpStatus.NOT_FOUND));
+        User user = userRepository.findById(request.getApprovedById()).orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+        Sighting sighting = sightingRepository.findById(request.getIdSighting()).orElseThrow(() -> new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND));
         sighting.setStatus(request.getStatus());
         sighting.setApprovedBy(user);
         sightingRepository.save(sighting);
-        return "Avistamiento con id "+sighting.getId()+" fue "+sighting.getStatus();
+        return String.format(SightingConstants.SIGHTING_STATUS, sighting.getId(), sighting.getStatus());
     }
 
 }
