@@ -29,7 +29,6 @@ public class UserRequestDto {
 	@NotBlank(message = "la contraseña no debe estar vacia")
 	@Size(max = 250, message = "la contraseña no debe tener más de {max} caracteres")
 	private String password;
-	private boolean active;
 	@NotBlank(message = "no se puede asignar un rol vacio")
 	@Pattern(regexp = "ROLE_USER|ROLE_PERSONAL_RESERVA", message = "Solo existen los roles 'ROLE_USER' y 'ROLE_PERSONAL_RESERVA'")
 	private String role;

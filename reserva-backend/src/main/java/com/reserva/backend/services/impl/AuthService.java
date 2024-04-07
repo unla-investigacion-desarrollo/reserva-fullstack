@@ -82,7 +82,7 @@ public class AuthService implements IAuthService {
 
 		user.setPassword(passEncoder.encode(request.getPassword()));
 
-		Optional<Role> verificar = roleRepository.findByName("ROLE_USER");
+		Optional<Role> verificar = roleRepository.findByName(AuthConstants.USER);
 		if (!verificar.isPresent()) {
 			throw new ReservaException(AuthConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
@@ -90,7 +90,7 @@ public class AuthService implements IAuthService {
 		user.setRole(role);
 		userRepository.save(user);
 
-		return AuthConstants.SIGN_UP_SUSSCEFUL;
+		return AuthConstants.SIGN_UP_SUCCESSFUL;
 	}
 
 	@Override

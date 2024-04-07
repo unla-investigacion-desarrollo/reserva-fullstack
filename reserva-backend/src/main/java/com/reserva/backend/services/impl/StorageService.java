@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.reserva.backend.config.StorageProperties;
+import com.reserva.backend.constants.SightingConstants;
 import com.reserva.backend.exceptions.ReservaException;
 import com.reserva.backend.services.IStorageService;
 
@@ -31,7 +32,7 @@ public class StorageService implements IStorageService {
     @Autowired
     public StorageService(StorageProperties storageProperties) {
         if (storageProperties.getStorageLocation().trim().length() == 0) {
-            throw new ReservaException("Ubicacion no encontrada", HttpStatus.NOT_FOUND);
+            throw new ReservaException(SightingConstants.LOCATION_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
         storageLocation = Paths.get(storageProperties.getStorageLocation());
     }
@@ -40,11 +41,11 @@ public class StorageService implements IStorageService {
     public String saveImage(MultipartFile image) {
         try {
             if (image.isEmpty()) {
-                throw new ReservaException("Es necesario subir al menos una imagen por cada avistamiento",
+                throw new ReservaException(SightingConstants.IMAGE_UPLOAD_REQUIRED,
                         HttpStatus.BAD_REQUEST);
             }
             if (image.getContentType() == null || !image.getContentType().startsWith("image/")) {
-                throw new ReservaException("El formato no es valido", HttpStatus.BAD_REQUEST);
+                throw new ReservaException(SightingConstants.INVALID_FORMAT, HttpStatus.BAD_REQUEST);
             }
             // Esto se puede cambiar en caso de se quiera guardar la ruta absoluta con
             // storageLocation.resolve(Paths.get(uniqueFileName)).normalize().toAbsolutePath();
@@ -57,7 +58,7 @@ public class StorageService implements IStorageService {
             }
             return nameImage;
         } catch (IOException e) {
-            throw new ReservaException("Error al guardar la imagen", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ReservaException(SightingConstants.IMAGE_UPLOAD_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

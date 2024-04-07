@@ -37,7 +37,7 @@ public class UserController {
 
 	@Operation(summary = "realiza el alta manual de un usuario o personal de la reserva", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "usuario creado correctamente", content = @Content),
+			@ApiResponse(responseCode = "201", description = "usuario creado correctamente", content = @Content),
 			@ApiResponse(responseCode = "400", description = "email o username existentes", content = @Content),
 			@ApiResponse(responseCode = "404", description = "no existe un rol con ese nombre", content = @Content),
 			@ApiResponse(responseCode = "417", description = "algo salió mal en el mapeo", content = @Content) })
