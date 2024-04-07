@@ -12,3 +12,21 @@
     width: 50%;
     padding: 10px;
   }
+
+  .wrapper {
+    height: 400px;
+    display: flex;
+    gap: 20px;
+  }
+
+  .fill {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.fill img {
+  min-height:100%; 
+  min-width: 100%; 
+  object-fit: cover;
+}

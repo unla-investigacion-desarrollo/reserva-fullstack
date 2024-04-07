@@ -1,5 +1,6 @@
 <div class="content">
-    <table class="table" id="table" style="width: 50%;">
+  <table class="table align-middle mb-0 bg-white" >
+    <thead class="bg-light">
         <tr>
           <th scope="col">Avistamiento</th>
           <th scope="col">Numero</th>
@@ -11,6 +12,8 @@
           <th scope="col"></th>
 
         </tr>
+      </thead>
+        <tbody>
         <tr *ngFor="let avist of avistamientos">
           <td>{{avist.especie}}</td>
           <td>{{avist.number}}</td>
@@ -22,5 +25,6 @@
           <td><span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: left;"></span></td>
 
         </tr>
-      </table>
+      </tbody>
+    </table>
 </div>

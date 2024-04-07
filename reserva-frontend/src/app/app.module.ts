@@ -13,6 +13,8 @@ import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import { DialogComponentComponent } from './components/dialog-component/dialog-component.component';
 import { DialogService } from './services/dialog-service.service';
+import { LoginComponent } from './components/login/login.component';
+import { HeaderComponent } from './components/shared/header/header.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { DialogService } from './services/dialog-service.service';
     AvistamientoAprobadoComponent,
     AvistamientoReprobadoComponent,
     EditAvistamientoComponent,
-    DialogComponentComponent
+    DialogComponentComponent,
+    LoginComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

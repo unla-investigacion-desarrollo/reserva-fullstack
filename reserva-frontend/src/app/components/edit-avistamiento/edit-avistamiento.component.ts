@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AvistamientoService } from '../../services/avistamiento.service';
-import { DialogService } from 'src/app/services/dialog-service.service';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog'; 
+import {MatDialog} from '@angular/material/dialog'; 
 import { DialogComponentComponent } from '../../components/dialog-component/dialog-component.component';
 
 @Component({
@@ -15,7 +14,6 @@ export class EditAvistamientoComponent {
   avistamiento: any;
   
   constructor(private avistamientoService: AvistamientoService, 
-    private _dialog: DialogService,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute) { }
 
@@ -31,20 +29,14 @@ export class EditAvistamientoComponent {
   }
 
   Aprobar(){
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.position = {
-      'top': '0',
-      left: '0'
-  };
-    this.dialog.open(DialogComponentComponent, dialogConfig);
+    this.dialog.open(DialogComponentComponent, {
+      data: { type:0},
+    });
   }
 
   Rechazar(){
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.position = {
-      'top': '0',
-      left: '0'
-    };
-    this.dialog.open(DialogComponentComponent, dialogConfig);
+    this.dialog.open(DialogComponentComponent, {
+      data: { type:1},
+    });
   }
 }
