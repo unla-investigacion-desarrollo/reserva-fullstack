@@ -30,13 +30,13 @@ export class EditAvistamientoComponent {
 
   Aprobar(){
     this.dialog.open(DialogComponentComponent, {
-      data: { type:0},
+      data: { type:0, dialog: this.dialog},
     });
   }
 
   Rechazar(){
     this.dialog.open(DialogComponentComponent, {
-      data: { type:1},
+      data: { type:1, dialog: this.dialog},
     });
   }
 }

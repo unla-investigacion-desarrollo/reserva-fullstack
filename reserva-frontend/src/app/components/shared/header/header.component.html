@@ -3,8 +3,9 @@
       width="80"
       alt="Reserva Logo"
       src="assets\navbar\reserva_icon.png" 
+      routerLink="/home" routerLinkActive="active"
     />
-    <p class="navbar-title">Reserva Santa Catalina</p>
+    <p class="navbar-title" routerLink="/home" routerLinkActive="active">Reserva Santa Catalina</p>
   
     <div style="text-align: right;" class="container">
       <div style="display: inline-block;width: 400px;">
@@ -22,7 +23,7 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
       </div>
       <div class="offcanvas-body">
-        <p>Volver al inicio</p>
+        <p routerLink="/home" routerLinkActive="active">Volver al inicio</p>
         <p>Mi usuario</p>
         <p>Configuración</p>
         <p>Salir de la plataforma</p>
