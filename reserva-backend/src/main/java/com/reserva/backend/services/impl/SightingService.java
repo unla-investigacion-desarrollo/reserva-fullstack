@@ -177,7 +177,7 @@ public class SightingService implements ISightingService {
     }
 
     private boolean isAdmin(User user){
-        return user.getRole().getName().equalsIgnoreCase("ROLE_PERSONAL_RESERVA") ? true : false;
+        return user.getRole().getName().equalsIgnoreCase(SightingConstants.ADMIN) ? true : false;
     }
 
 }

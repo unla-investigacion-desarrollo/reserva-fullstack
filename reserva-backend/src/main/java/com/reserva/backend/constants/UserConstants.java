@@ -13,6 +13,7 @@ public class UserConstants {
     public static final String USER_DELETE_SUCCESSFUL = "Usuario eliminado correctamente";
     public static final String USER_RESTORE_SUCCESSFUL = "Usuario dado de alta correctamente";
     public static final String USER_LIST_ERROR = "Error al listar los usuarios";
+    public static final String USER_CREATED = "Usuario creado correctamente";
     
     // Mapeo
     public static final String REQUEST_FAILURE = "Algo salió mal durante la solicitud";

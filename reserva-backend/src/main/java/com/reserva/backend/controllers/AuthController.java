@@ -40,9 +40,9 @@ public class AuthController {
 	@Operation(summary = "realiza el registro de un usuario nuevo, sin estar previamente registrado en la base de datos")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = AuthConstants.SIGN_UP_SUCCESSFUL, content = @Content),
-			@ApiResponse(responseCode = "404", description = AuthConstants.ROLE_NOT_FOUND, content = @Content),
 			@ApiResponse(responseCode = "400", description = AuthConstants.USERNAME_ALREADY_EXIST + " | "
-					+ AuthConstants.EMAIL_ALREADY_EXIST, content = @Content) })
+					+ AuthConstants.EMAIL_ALREADY_EXIST, content = @Content),
+			@ApiResponse(responseCode = "404", description = AuthConstants.ROLE_NOT_FOUND, content = @Content) })
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterDto request){
 		return ResponseEntity.ok(authService.signup(request));
