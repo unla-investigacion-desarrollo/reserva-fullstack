@@ -33,6 +33,7 @@ import com.reserva.backend.repositorys.ISightingTypeRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.ISightingService;
 import com.reserva.backend.services.IStorageService;
+import com.reserva.backend.util.Responses;
 
 @Service
 public class SightingService implements ISightingService {
@@ -52,7 +53,7 @@ public class SightingService implements ISightingService {
     private IStorageService storageService;
 
     @Override
-    public SightingResponseDto create(SightingRequestDto request, List<MultipartFile> files) {
+    public Responses<SightingResponseDto> create(SightingRequestDto request, List<MultipartFile> files) {
         User user = userRepository.findById(request.getUserId())
         .orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
         try {
@@ -75,7 +76,7 @@ public class SightingService implements ISightingService {
             sighting.setImages(createImages(files, sighting));
             sightingRepository.save(sighting);
             SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
-            return response;
+            return new Responses<>(true, SightingConstants.SIGHTING_CREATED, response);
         } catch (Exception e) {
             throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
         }
@@ -130,13 +131,18 @@ public class SightingService implements ISightingService {
     }
 
     @Override
-    public String updateStatus(UpdateStatusDto request) {
+    public Responses<SightingResponseDto> updateStatus(UpdateStatusDto request) {
         User user = userRepository.findById(request.getApprovedById()).orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
         Sighting sighting = sightingRepository.findById(request.getIdSighting()).orElseThrow(() -> new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND));
+        try{
         sighting.setStatus(request.getStatus());
         sighting.setApprovedBy(user);
         sightingRepository.save(sighting);
-        return String.format(SightingConstants.SIGHTING_STATUS, sighting.getId(), sighting.getStatus());
+        String response = String.format(SightingConstants.SIGHTING_STATUS, sighting.getId(), sighting.getStatus());
+        return new Responses<>(true, response, getById(sighting.getId()));
+        }catch(Exception e){
+            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     private List<Field> createFields(List<FieldRequestDto> request){

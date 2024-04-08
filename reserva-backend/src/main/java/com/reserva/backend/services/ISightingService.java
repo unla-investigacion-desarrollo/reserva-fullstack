@@ -8,13 +8,14 @@ import com.reserva.backend.dto.SightingCustomResponseDto;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
 import com.reserva.backend.dto.UpdateStatusDto;
+import com.reserva.backend.util.Responses;
 
 public interface ISightingService {
     
-    public SightingResponseDto create(SightingRequestDto request, List<MultipartFile> files);
+    public Responses<SightingResponseDto> create(SightingRequestDto request, List<MultipartFile> files);
     public SightingResponseDto getById(long id);
     public List<SightingResponseDto> getByUserId(long id);
     public SightingCustomResponseDto getAll(String status, String type, int page, int size, String orderBy, String sortBy);
-    public String updateStatus(UpdateStatusDto request);
+    public Responses<SightingResponseDto> updateStatus(UpdateStatusDto request);
     
 }

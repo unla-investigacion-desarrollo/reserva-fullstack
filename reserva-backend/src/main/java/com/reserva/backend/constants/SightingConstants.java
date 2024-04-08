@@ -11,6 +11,7 @@ public class SightingConstants {
     public static final String REJECTED_STATUS = "RECHAZADO";
 
     // Constantes generales
+    public static final String SIGHTINGTYPE_CREATED = "Tipo de avistamiento creado correctamente!";
     public static final String SIGHTINGTYPE_ALREADY_EXIST = "Ya existe un tipo de avistamiento con ese nombre";
     public static final String SIGHTINGTYPE_NOT_FOUND = "No se encontró ningun tipo de avistamiento";
     public static final String SIGHTINGTYPE_IS_ACTIVE = "El tipo de avistamiento se encuentra activo";
@@ -22,6 +23,7 @@ public class SightingConstants {
     public static final String SIGHTING_LIST_ERROR = "Error al listar los avistamientos";
     public static final String SIGHTING_NOT_FOUND = "Avistamiento no encontrado";
     public static final String SIGHTING_STATUS = "Avistamiento: %s Status: %s";
+    public static final String SIGHTING_CREATED = "Avistamiento creado correctamente!";
     
     // Mapeo 
     public static final String REQUEST_FAILURE = "Algo salió mal durante la solicitud";
