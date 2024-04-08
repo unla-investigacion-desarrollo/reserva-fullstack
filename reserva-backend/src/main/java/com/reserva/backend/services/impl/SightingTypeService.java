@@ -42,7 +42,7 @@ public class SightingTypeService implements ISightingTypeService{
 			SightingTypeResponseDto response = modelMapper.map(tipo, SightingTypeResponseDto.class);
 			return response;
 		}catch(MappingException e) {
-			throw new ReservaException(SightingConstants.MAPPING_WRONG, HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 

@@ -59,7 +59,7 @@ public class UserService implements IUserService{
 			UserResponseDto response = modelMapper.map(newUser, UserResponseDto.class);
 			return response;
 		}catch(MappingException e) {
-			throw new ReservaException(UserConstants.MAPPING_WRONG, HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 

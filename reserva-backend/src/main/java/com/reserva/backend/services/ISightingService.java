@@ -16,4 +16,5 @@ public interface ISightingService {
     public List<SightingResponseDto> getByUserId(long id);
     public SightingCustomResponseDto getAll(String status, String type, int page, int size, String orderBy, String sortBy);
     public String updateStatus(UpdateStatusDto request);
+    
 }

@@ -24,7 +24,7 @@ public class SightingConstants {
     public static final String SIGHTING_STATUS = "Avistamiento: %s Status: %s";
     
     // Mapeo 
-    public static final String MAPPING_WRONG = "Algo salió mal durante el mapeo";
+    public static final String REQUEST_FAILURE = "Algo salió mal durante la solicitud";
 
     // Storage
     public static final String LOCATION_NOT_FOUND = "Ubicacion no encontrada";

@@ -97,7 +97,7 @@ public class SightingService implements ISightingService {
             SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
             return response;
         } catch (MappingException e) {
-            throw new ReservaException(SightingConstants.MAPPING_WRONG, HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
         }
     }
 
