@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.reserva.backend.constants.SightingConstants;
 import com.reserva.backend.dto.FieldRequestDto;
-import com.reserva.backend.dto.SightingCustomResponseDto;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
 import com.reserva.backend.dto.UpdateStatusDto;
@@ -33,6 +32,7 @@ import com.reserva.backend.repositorys.ISightingTypeRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.ISightingService;
 import com.reserva.backend.services.IStorageService;
+import com.reserva.backend.util.ResponsePageable;
 import com.reserva.backend.util.Responses;
 
 @Service
@@ -100,7 +100,7 @@ public class SightingService implements ISightingService {
     }
 
     @Override
-    public SightingCustomResponseDto getAll(String status, String type, int page, int size, String orderBy,
+    public ResponsePageable<SightingResponseDto> getAll(String status, String type, int page, int size, String orderBy,
             String sortBy) {
         try{
             if(page < 1 ) page = 1; if(size < 1) size = 999999;
@@ -112,19 +112,12 @@ public class SightingService implements ISightingService {
                 }else if(!type.isEmpty()){
                     pageTipo = sightingRepository.findByType(type, pageable);
                 }else{
-                    pageTipo = sightingRepository.findByActive(true, pageable);
+                    pageTipo = sightingRepository.findByActive(pageable);
                 }
-                // Primero hago el mapeo de los avistamientos y despues mando la respuesta personalizada
-                List<SightingResponseDto> sightings = new ArrayList<>();
-                for(Sighting t : pageTipo.getContent()){
-                    SightingResponseDto sighting = modelMapper.map(t, SightingResponseDto.class);
-                    sightings.add(sighting);
-                }
-                SightingCustomResponseDto response = new SightingCustomResponseDto();
-                response.setCurrentPage(page);
-                response.setAmountOfPages(pageTipo.getTotalPages());
-                response.setSightings(sightings);
-                return response;
+                return new ResponsePageable<>(page, pageTipo.getTotalPages(), 
+                    pageTipo.getContent().stream()
+                            .map(sighting -> modelMapper.map(sighting, SightingResponseDto.class))
+                            .collect(Collectors.toList()));
         }catch(Exception e){
             throw new ReservaException(SightingConstants.SIGHTING_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
         }
@@ -151,6 +144,7 @@ public class SightingService implements ISightingService {
             Field field = new Field();
             field.setTitle(f.getTitle());
             field.setDescription(f.getDescription());
+            field.setActive(true);
             fields.add(field);
         }
         return fields;

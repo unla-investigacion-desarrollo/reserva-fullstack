@@ -1,8 +1,7 @@
 package com.reserva.backend.services.impl;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import com.reserva.backend.dto.SightingTypeResponseDto;
 import com.reserva.backend.entities.SightingType;
 import com.reserva.backend.repositorys.ISightingTypeRepository;
 import com.reserva.backend.services.ISightingTypeService;
+import com.reserva.backend.util.ResponsePageable;
 import com.reserva.backend.util.Responses;
 import com.reserva.backend.exceptions.ReservaException;
 
@@ -113,7 +113,7 @@ public class SightingTypeService implements ISightingTypeService{
 	}
 
 	@Override
-	public List<SightingTypeResponseDto> getAll(String name, String category, int page, int size, String orderBy, String sortBy) {
+	public ResponsePageable<SightingTypeResponseDto> getAll(String name, String category, int page, int size, String orderBy, String sortBy) {
 		try {
 			if(page < 1) page = 1; if(size < 1) size = 999999;
 			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
@@ -125,11 +125,10 @@ public class SightingTypeService implements ISightingTypeService{
 			}else{
 				pageTipo = sightingTypeRepository.findByActive(true, pageable);
 			}
-			List<SightingTypeResponseDto> response = new ArrayList<>();
-			for(SightingType t : pageTipo.getContent()) {
-				response.add(modelMapper.map(t, SightingTypeResponseDto.class));
-			}
-			return response;
+			return new ResponsePageable<>(page, pageTipo.getTotalPages(),
+				pageTipo.getContent().stream()
+						.map(sightingType -> modelMapper.map(sightingType, SightingTypeResponseDto.class))
+						.collect(Collectors.toList()));
 			}catch(Exception e) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
 		}

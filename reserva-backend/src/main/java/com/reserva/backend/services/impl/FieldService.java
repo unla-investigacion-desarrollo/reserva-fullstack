@@ -2,6 +2,7 @@ package com.reserva.backend.services.impl;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class FieldService implements IFieldService {
     @Autowired
     private ISightingRepository sightingRepository;
 
+    private ModelMapper modelmapper = new ModelMapper();
+
     @Override
     public Responses<FieldRequestDto> create(long sightingId, FieldRequestDto request) {
         Sighting sighting = sightingRepository.findById(sightingId)
@@ -33,17 +36,21 @@ public class FieldService implements IFieldService {
         Field field = new Field();
         field.setTitle(request.getTitle());
         field.setDescription(request.getDescription());
+        field.setActive(true);
+        field.setSighting(sighting);
         fieldRepository.save(field);
+        FieldRequestDto response = modelmapper.map(field, FieldRequestDto.class);
+        return new Responses<>(true, "field creado", response);
         }catch(Exception e){
-            throw new ReservaException("AJUSTAR EL MAPEO PARA QUE SEA BIDIRECCIONAL", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
         }
-
     }
 
     @Override
     public FieldRequestDto getById(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+        Field field = fieldRepository.findById(id).orElseThrow(() -> new ReservaException("not found field", HttpStatus.NOT_FOUND));
+        FieldRequestDto response = modelmapper.map(field, FieldRequestDto.class);
+        return response;
     }
 
     @Override

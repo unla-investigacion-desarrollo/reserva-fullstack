@@ -1,8 +1,7 @@
 package com.reserva.backend.services.impl;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
@@ -22,6 +21,7 @@ import com.reserva.backend.dto.user.UserUpdateDto;
 import com.reserva.backend.repositorys.IRoleRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IUserService;
+import com.reserva.backend.util.ResponsePageable;
 import com.reserva.backend.util.Responses;
 import com.reserva.backend.exceptions.ReservaException;
 import com.reserva.backend.entities.Role;
@@ -144,16 +144,15 @@ public class UserService implements IUserService{
 	}
 
 	@Override
-	public List<UserResponseDto> getAll(String name, int page, int size, String orderBy, String sortBy) {
+	public ResponsePageable<UserResponseDto> getAll(String name, int page, int size, String orderBy, String sortBy) {
 		try {
 			if(page < 1) page = 1; if (size < 1) size = 999999;
 			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
 			Page<User> pageUser = userRepository.findByNameContaining(name, pageable);
-			List<UserResponseDto> response = new ArrayList<>();
-			for(User u : pageUser.getContent()) {
-				response.add(modelMapper.map(u, UserResponseDto.class));
-			}
-			return response;
+			return new ResponsePageable<>(page, pageUser.getTotalPages(),
+				pageUser.getContent().stream()
+                        .map(user -> modelMapper.map(user, UserResponseDto.class))
+                        .collect(Collectors.toList()));
 		}catch(Exception e) {
 			throw new ReservaException(UserConstants.USER_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
 		}
