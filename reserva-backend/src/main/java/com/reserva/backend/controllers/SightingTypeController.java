@@ -37,7 +37,8 @@ public class SightingTypeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "ok", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "Ya existe un tipo_avistamiento con ese nombre", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "algo sali\u00F3 mal en el mapeo", content = @Content(mediaType = "application/json"))
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content),
+            @ApiResponse(responseCode = "500", description = "algo sali\u00F3 mal durante la solicitud", content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
@@ -59,7 +60,8 @@ public class SightingTypeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content),
             @ApiResponse(responseCode = "400", description = "tipo_avistamiento no se encuentra activo", content = @Content),
-            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content)
+            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
     })
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
@@ -71,7 +73,8 @@ public class SightingTypeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content),
             @ApiResponse(responseCode = "400", description = "tipo_avistamiento ya se encuentra dado de baja", content = @Content),
-            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content)
+            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
     })
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
@@ -83,7 +86,8 @@ public class SightingTypeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content),
             @ApiResponse(responseCode = "400", description = "tipo_avistamiento ya se encuentra dado de alta", content = @Content),
-            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content)
+            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
     })
     @PatchMapping("/restore/{id}")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")

@@ -39,7 +39,8 @@ public class SightingController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "created", content = @Content),
             @ApiResponse(responseCode = "400", description = "el Tipo_Avistamiento no es valido", content = @Content),
-            @ApiResponse(responseCode = "404", description = "el usuario no fue encontrado", content = @Content)
+            @ApiResponse(responseCode = "404", description = "el usuario no fue encontrado", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
         })
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestPart SightingRequestDto request, @RequestPart List<MultipartFile> files){
@@ -86,7 +87,8 @@ public class SightingController {
     @Operation(summary = "realiza la actualizacion de el estado de los avistamientos", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content),
-            @ApiResponse(responseCode = "404", description = "usuario o avistamiento no enecontrado", content = @Content)
+            @ApiResponse(responseCode = "404", description = "usuario o avistamiento no enecontrado", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
     })
     @PostMapping("/status")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")

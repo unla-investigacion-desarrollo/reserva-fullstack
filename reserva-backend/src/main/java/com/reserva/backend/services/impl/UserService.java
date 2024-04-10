@@ -1,8 +1,7 @@
 package com.reserva.backend.services.impl;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
@@ -22,6 +21,8 @@ import com.reserva.backend.dto.user.UserUpdateDto;
 import com.reserva.backend.repositorys.IRoleRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IUserService;
+import com.reserva.backend.util.ResponsePageable;
+import com.reserva.backend.util.Responses;
 import com.reserva.backend.exceptions.ReservaException;
 import com.reserva.backend.entities.Role;
 import com.reserva.backend.entities.User;
@@ -38,7 +39,7 @@ public class UserService implements IUserService{
 	private ModelMapper modelMapper = new ModelMapper();
 
 	@Override
-	public UserResponseDto create(UserRequestDto request) {
+	public Responses<UserResponseDto> create(UserRequestDto request) {
 		if(userRepository.existsByUsername(request.getUsername())) {
 			throw new ReservaException(UserConstants.USERNAME_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
@@ -57,9 +58,9 @@ public class UserService implements IUserService{
 			newUser.setRole(newRole.get());
 			userRepository.save(newUser);
 			UserResponseDto response = modelMapper.map(newUser, UserResponseDto.class);
-			return response;
+			return new Responses<>(true, UserConstants.USER_CREATED, response);
 		}catch(MappingException e) {
-			throw new ReservaException(UserConstants.MAPPING_WRONG, HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
@@ -74,7 +75,7 @@ public class UserService implements IUserService{
 	}
 
 	@Override
-	public String update(long id, UserUpdateDto request) {
+	public Responses<UserResponseDto> update(long id, UserUpdateDto request) {
 		Optional<User> user = userRepository.findById(id);
 		if(id != request.getId()) {//SI PATH ES DIFERENTE DE LO QUE SE MANDAN EN EL JSON
 			throw new ReservaException(UserConstants.RESOURCE_ERROR_ID_MISMATCH, HttpStatus.UNAUTHORIZED);
@@ -88,6 +89,7 @@ public class UserService implements IUserService{
 		if(userRepository.existsByEmail(request.getEmail()) && !user.get().getEmail().equalsIgnoreCase(request.getEmail())) {
 			throw new ReservaException(UserConstants.EMAIL_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
+		try{
 		User updateUser = user.get();
 		updateUser.setName(request.getName());
 		updateUser.setUsername(request.getUsername());
@@ -99,11 +101,14 @@ public class UserService implements IUserService{
 		}
 		updateUser.setRole(updateRole.get());
 		userRepository.save(updateUser);
-		return UserConstants.USER_UPDATE_SUCCESSFUL;
+		return new Responses<>(true, UserConstants.USER_UPDATE_SUCCESSFUL, getById(id));
+		}catch(Exception e){
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 
 	@Override
-	public String delete(long id) {
+	public Responses<UserResponseDto> delete(long id) {
 		Optional<User> user = userRepository.findById(id);
 		if(!user.isPresent()) {
 			throw new ReservaException(UserConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -111,13 +116,17 @@ public class UserService implements IUserService{
 		if(!user.get().isActive()) {
 			throw new ReservaException(UserConstants.USER_INACTIVE, HttpStatus.BAD_REQUEST);
 		}
+		try{
 		user.get().setActive(false);
 		userRepository.save(user.get());
-		return UserConstants.USER_DELETE_SUCCESSFUL;
+		return new Responses<>(true, UserConstants.USER_DELETE_SUCCESSFUL, getById(id));
+		}catch(Exception e){
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 
 	@Override
-	public String restore(long id) {
+	public Responses<UserResponseDto> restore(long id) {
 		Optional<User> user = userRepository.findById(id);
 		if(!user.isPresent()) {
 			throw new ReservaException(UserConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -125,22 +134,25 @@ public class UserService implements IUserService{
 		if(user.get().isActive()) {
 			throw new ReservaException(UserConstants.USER_ACTIVE, HttpStatus.BAD_REQUEST);
 		}
+		try{
 		user.get().setActive(true);
 		userRepository.save(user.get());
-		return UserConstants.USER_RESTORE_SUCCESSFUL;
+		return new Responses<>(true, UserConstants.USER_RESTORE_SUCCESSFUL, getById(id));
+		}catch(Exception e){
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 
 	@Override
-	public List<UserResponseDto> getAll(String name, int page, int size, String orderBy, String sortBy) {
+	public ResponsePageable<UserResponseDto> getAll(String name, int page, int size, String orderBy, String sortBy) {
 		try {
 			if(page < 1) page = 1; if (size < 1) size = 999999;
 			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
 			Page<User> pageUser = userRepository.findByNameContaining(name, pageable);
-			List<UserResponseDto> response = new ArrayList<>();
-			for(User u : pageUser.getContent()) {
-				response.add(modelMapper.map(u, UserResponseDto.class));
-			}
-			return response;
+			return new ResponsePageable<>(page, pageUser.getTotalPages(),
+				pageUser.getContent().stream()
+                        .map(user -> modelMapper.map(user, UserResponseDto.class))
+                        .collect(Collectors.toList()));
 		}catch(Exception e) {
 			throw new ReservaException(UserConstants.USER_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
 		}

@@ -13,9 +13,10 @@ public class UserConstants {
     public static final String USER_DELETE_SUCCESSFUL = "Usuario eliminado correctamente";
     public static final String USER_RESTORE_SUCCESSFUL = "Usuario dado de alta correctamente";
     public static final String USER_LIST_ERROR = "Error al listar los usuarios";
+    public static final String USER_CREATED = "Usuario creado correctamente";
     
     // Mapeo
-    public static final String MAPPING_WRONG = "Algo salió mal durante el mapeo";
+    public static final String REQUEST_FAILURE = "Algo salió mal durante la solicitud";
 
     // Recurso
     public static final String RESOURCE_ERROR_ID_MISMATCH = "Los id's no coinciden, no puedes utilizar a este recurso";

@@ -1,10 +1,8 @@
 package com.reserva.backend.services.impl;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.hibernate.MappingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +18,8 @@ import com.reserva.backend.dto.SightingTypeResponseDto;
 import com.reserva.backend.entities.SightingType;
 import com.reserva.backend.repositorys.ISightingTypeRepository;
 import com.reserva.backend.services.ISightingTypeService;
+import com.reserva.backend.util.ResponsePageable;
+import com.reserva.backend.util.Responses;
 import com.reserva.backend.exceptions.ReservaException;
 
 @Service
@@ -31,7 +31,7 @@ public class SightingTypeService implements ISightingTypeService{
 	private ModelMapper modelMapper = new ModelMapper();
 
 	@Override
-	public SightingTypeResponseDto create(SightingTypeRequestDto request) {
+	public Responses<SightingTypeResponseDto> create(SightingTypeRequestDto request) {
 		if(sightingTypeRepository.existsByName(request.getName())) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
@@ -40,9 +40,9 @@ public class SightingTypeService implements ISightingTypeService{
 			tipo.setActive(true);
 			sightingTypeRepository.save(tipo);
 			SightingTypeResponseDto response = modelMapper.map(tipo, SightingTypeResponseDto.class);
-			return response;
-		}catch(MappingException e) {
-			throw new ReservaException(SightingConstants.MAPPING_WRONG, HttpStatus.EXPECTATION_FAILED);
+			return new Responses<>(true, SightingConstants.SIGHTINGTYPE_CREATED, response);
+		}catch(Exception e) {
+			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
@@ -57,7 +57,7 @@ public class SightingTypeService implements ISightingTypeService{
 	}
 
 	@Override
-	public String update(long id, SightingTypeRequestDto request) {
+	public Responses<SightingTypeResponseDto> update(long id, SightingTypeRequestDto request) {
 		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -65,15 +65,19 @@ public class SightingTypeService implements ISightingTypeService{
 		if(!tipo.get().isActive()) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.BAD_REQUEST);
 		}
+		try{
 		SightingType update = tipo.get();
 		update.setName(request.getName());
 		update.setCategory(request.getCategory());
 		sightingTypeRepository.save(update);
-		return SightingConstants.SIGHTINGTYPE_UPDATE_SUCCESSFUL;
+		return new Responses<>(true, SightingConstants.SIGHTINGTYPE_UPDATE_SUCCESSFUL, getById(id));
+		}catch(Exception e){
+			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 
 	@Override
-	public String delete(long id) {
+	public Responses<SightingTypeResponseDto> delete(long id) {
 		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -81,13 +85,17 @@ public class SightingTypeService implements ISightingTypeService{
 		if(!tipo.get().isActive()) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.BAD_REQUEST);
 		}
+		try{
 		tipo.get().setActive(false);
 		sightingTypeRepository.save(tipo.get());
-		return SightingConstants.SIGHTINGTYPE_DELETE_SUCCESSFUL;
+		return new Responses<>(true, SightingConstants.SIGHTINGTYPE_DELETE_SUCCESSFUL, getById(id));
+		}catch(Exception e){
+			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 
 	@Override
-	public String restore(long id) {
+	public Responses<SightingTypeResponseDto> restore(long id) {
 		Optional<SightingType> tipo = sightingTypeRepository.findById(id);
 		if(!tipo.isPresent()) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -95,13 +103,17 @@ public class SightingTypeService implements ISightingTypeService{
 		if(tipo.get().isActive()) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_IS_ACTIVE, HttpStatus.BAD_REQUEST);
 		}
+		try{
 		tipo.get().setActive(true);
 		sightingTypeRepository.save(tipo.get());
-		return SightingConstants.SIGHTINGTYPE_IS_ACTIVE;
+		return new Responses<>(true, SightingConstants.SIGHTINGTYPE_IS_ACTIVE, getById(id));
+		}catch(Exception e){
+			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 
 	@Override
-	public List<SightingTypeResponseDto> getAll(String name, String category, int page, int size, String orderBy, String sortBy) {
+	public ResponsePageable<SightingTypeResponseDto> getAll(String name, String category, int page, int size, String orderBy, String sortBy) {
 		try {
 			if(page < 1) page = 1; if(size < 1) size = 999999;
 			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
@@ -113,11 +125,10 @@ public class SightingTypeService implements ISightingTypeService{
 			}else{
 				pageTipo = sightingTypeRepository.findByActive(true, pageable);
 			}
-			List<SightingTypeResponseDto> response = new ArrayList<>();
-			for(SightingType t : pageTipo.getContent()) {
-				response.add(modelMapper.map(t, SightingTypeResponseDto.class));
-			}
-			return response;
+			return new ResponsePageable<>(page, pageTipo.getTotalPages(),
+				pageTipo.getContent().stream()
+						.map(sightingType -> modelMapper.map(sightingType, SightingTypeResponseDto.class))
+						.collect(Collectors.toList()));
 			}catch(Exception e) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
 		}
