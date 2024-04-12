@@ -109,16 +109,13 @@ public class UserService implements IUserService{
 
 	@Override
 	public Responses<UserResponseDto> delete(long id) {
-		Optional<User> user = userRepository.findById(id);
-		if(!user.isPresent()) {
-			throw new ReservaException(UserConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
-		if(!user.get().isActive()) {
+		User user = userRepository.findById(id).orElseThrow(() -> new ReservaException(UserConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+		if(!user.isActive()) {
 			throw new ReservaException(UserConstants.USER_INACTIVE, HttpStatus.BAD_REQUEST);
 		}
 		try{
-		user.get().setActive(false);
-		userRepository.save(user.get());
+		user.setActive(false);
+		userRepository.save(user);
 		return new Responses<>(true, UserConstants.USER_DELETE_SUCCESSFUL, getById(id));
 		}catch(Exception e){
 			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
@@ -127,16 +124,13 @@ public class UserService implements IUserService{
 
 	@Override
 	public Responses<UserResponseDto> restore(long id) {
-		Optional<User> user = userRepository.findById(id);
-		if(!user.isPresent()) {
-			throw new ReservaException(UserConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
-		if(user.get().isActive()) {
+		User user = userRepository.findById(id).orElseThrow(() -> new ReservaException(UserConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+		if(user.isActive()) {
 			throw new ReservaException(UserConstants.USER_ACTIVE, HttpStatus.BAD_REQUEST);
 		}
 		try{
-		user.get().setActive(true);
-		userRepository.save(user.get());
+		user.setActive(true);
+		userRepository.save(user);
 		return new Responses<>(true, UserConstants.USER_RESTORE_SUCCESSFUL, getById(id));
 		}catch(Exception e){
 			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);

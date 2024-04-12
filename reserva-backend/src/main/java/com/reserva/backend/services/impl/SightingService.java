@@ -72,7 +72,7 @@ public class SightingService implements ISightingService {
             }
             sighting.setCreatedAt(new Date());
             sighting.setCreatedBy(user);
-            sighting.setFields(createFields(request.getFields()));
+            sighting.setFields(createFields(request.getFields(), sighting));
             sighting.setImages(createImages(files, sighting));
             sightingRepository.save(sighting);
             SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
@@ -138,13 +138,14 @@ public class SightingService implements ISightingService {
         }
     }
 
-    private List<Field> createFields(List<FieldRequestDto> request){
+    private List<Field> createFields(List<FieldRequestDto> request, Sighting sighting){
         List<Field> fields = new ArrayList<>();
         for(FieldRequestDto f : request){
             Field field = new Field();
             field.setTitle(f.getTitle());
             field.setDescription(f.getDescription());
             field.setActive(true);
+            field.setSighting(sighting);
             fields.add(field);
         }
         return fields;
