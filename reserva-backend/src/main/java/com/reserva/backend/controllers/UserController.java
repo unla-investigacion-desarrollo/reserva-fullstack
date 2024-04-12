@@ -40,7 +40,7 @@ public class UserController {
 			@ApiResponse(responseCode = "201", description = "usuario creado correctamente", content = @Content),
 			@ApiResponse(responseCode = "400", description = "email o username existentes", content = @Content),
 			@ApiResponse(responseCode = "404", description = "no existe un rol con ese nombre", content = @Content),
-			@ApiResponse(responseCode = "417", description = "algo salió mal en el mapeo", content = @Content) })
+			@ApiResponse(responseCode = "417", description = "algo salió mal en la solicitud", content = @Content) })
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@Valid @RequestBody UserRequestDto request) {
 		return new ResponseEntity<>(userService.create(request), HttpStatus.CREATED);
@@ -60,7 +60,8 @@ public class UserController {
 			@ApiResponse(responseCode = "200", description = "usuario actualizado correctamente", content = @Content),
 			@ApiResponse(responseCode = "400", description = "email o username existentes o usuario inactivo", content = @Content),
 			@ApiResponse(responseCode = "401", description = "los id's no coinciden, no puedes utilizar a este recurso", content = @Content),
-			@ApiResponse(responseCode = "404", description = "no existe un rol con ese nombre", content = @Content) })
+			@ApiResponse(responseCode = "404", description = "no existe un rol con ese nombre", content = @Content),
+			@ApiResponse(responseCode = "417", description = "algo salió mal en la solicitud", content = @Content) })
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> update(@PathVariable("id") long id, @Valid @RequestBody UserUpdateDto request) {
 		return ResponseEntity.ok(userService.update(id, request));
@@ -70,7 +71,8 @@ public class UserController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "usuario dado de baja correctamente", content = @Content),
 			@ApiResponse(responseCode = "400", description = "el usuario ya se encuentra dado de baja", content = @Content),
-			@ApiResponse(responseCode = "404", description = "usuario no encontrado", content = @Content) })
+			@ApiResponse(responseCode = "404", description = "usuario no encontrado", content = @Content),
+			@ApiResponse(responseCode = "417", description = "algo salió mal en la solicitud", content = @Content) })
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long id) {
 		return ResponseEntity.ok(userService.delete(id));
@@ -80,7 +82,8 @@ public class UserController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "usuario dado de alta correctamente", content = @Content),
 			@ApiResponse(responseCode = "400", description = "el usuario ya se encuentra dado de alta", content = @Content),
-			@ApiResponse(responseCode = "404", description = "usuario no encontrado", content = @Content) })
+			@ApiResponse(responseCode = "404", description = "usuario no encontrado", content = @Content),
+			@ApiResponse(responseCode = "417", description = "algo salió mal en la solicitud", content = @Content) })
 	@PatchMapping("/restore/{id}")
 	public ResponseEntity<?> restore(@PathVariable("id") long id) {
 		return ResponseEntity.ok(userService.restore(id));

@@ -42,12 +42,10 @@ public class EmailInfoService implements IEmailInfoService {
 		if (cc != null && cc.length > 0) {
 			helper.setCc(cc);
 		}
-
 		String[] bcc = email.getBcc();
 		if (bcc != null && bcc.length > 0) {
 			helper.setBcc(bcc);
 		}
-
 		String[] attachments = email.getAttachments();
 		if (attachments != null && attachments.length > 0) {
 			for (String path : attachments) {
@@ -55,9 +53,7 @@ public class EmailInfoService implements IEmailInfoService {
 				helper.addAttachment(file.getName(), file);
 			}
 		}
-
 		javaMailSender.send(message);
-
 	}
 
 	@Override
@@ -68,7 +64,6 @@ public class EmailInfoService implements IEmailInfoService {
 		helper.setSubject(subject);
 		helper.setText(body, true);
 		javaMailSender.send(message);
-
 	}
 
 	@Override

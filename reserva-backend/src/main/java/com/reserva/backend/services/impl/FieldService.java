@@ -1,6 +1,7 @@
 package com.reserva.backend.services.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,49 +33,83 @@ public class FieldService implements IFieldService {
         Sighting sighting = sightingRepository.findById(sightingId)
                 .orElseThrow(() -> new ReservaException("No se puede asignar un campo a un avistamiento no existente",
                         HttpStatus.BAD_REQUEST));
-        try{                
-        Field field = new Field();
-        field.setTitle(request.getTitle());
-        field.setDescription(request.getDescription());
-        field.setActive(true);
-        field.setSighting(sighting);
-        fieldRepository.save(field);
-        FieldRequestDto response = modelmapper.map(field, FieldRequestDto.class);
-        return new Responses<>(true, "field creado", response);
-        }catch(Exception e){
+        try {
+            Field field = new Field();
+            field.setTitle(request.getTitle());
+            field.setDescription(request.getDescription());
+            field.setActive(true);
+            field.setSighting(sighting);
+            fieldRepository.save(field);
+            FieldRequestDto response = modelmapper.map(field, FieldRequestDto.class);
+            return new Responses<>(true, "field creado", response);
+        } catch (Exception e) {
             throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
         }
     }
 
     @Override
     public FieldRequestDto getById(long id) {
-        Field field = fieldRepository.findById(id).orElseThrow(() -> new ReservaException("not found field", HttpStatus.NOT_FOUND));
+        Field field = fieldRepository.findById(id)
+                .orElseThrow(() -> new ReservaException("not found field", HttpStatus.NOT_FOUND));
         FieldRequestDto response = modelmapper.map(field, FieldRequestDto.class);
         return response;
     }
 
     @Override
     public Responses<FieldRequestDto> update(long id, FieldRequestDto request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        Field field = fieldRepository.findById(id)
+                .orElseThrow(() -> new ReservaException("not found field", HttpStatus.NOT_FOUND));
+        if (!field.isActive()) {
+            throw new ReservaException("not found field", HttpStatus.NOT_FOUND);
+        }
+        try {
+            field.setTitle(request.getTitle());
+            field.setDescription(request.getDescription());
+            fieldRepository.save(field);
+            return new Responses<>(true, "update ok", getById(id));
+        } catch (Exception e) {
+            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @Override
     public Responses<FieldRequestDto> delete(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        Field field = fieldRepository.findById(id)
+                .orElseThrow(() -> new ReservaException("not found field", HttpStatus.NOT_FOUND));
+        if (!field.isActive()) {
+            throw new ReservaException("not found field", HttpStatus.NOT_FOUND);
+        }
+        try {
+            field.setActive(false);
+            fieldRepository.save(field);
+            return new Responses<>(true, "delete ok", null);
+        } catch (Exception e) {
+            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @Override
     public Responses<FieldRequestDto> restore(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'restore'");
+        Field field = fieldRepository.findById(id)
+                .orElseThrow(() -> new ReservaException("not found field", HttpStatus.NOT_FOUND));
+        if (field.isActive()) {
+            throw new ReservaException("found field", HttpStatus.NOT_FOUND);
+        }
+        try {
+            field.setActive(true);
+            fieldRepository.save(field);
+            return new Responses<>(true, "restore ok", getById(id));
+        } catch (Exception e) {
+            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @Override
     public List<FieldRequestDto> getBySightingId(long sightingId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBySightingId'");
+        Sighting sighting = sightingRepository.findById(sightingId)
+                .orElseThrow(() -> new ReservaException("sighting not found", HttpStatus.NOT_FOUND));
+        return sighting.getFields().stream().map(field -> modelmapper.map(field, FieldRequestDto.class))
+                .collect(Collectors.toList());
     }
 
 }
