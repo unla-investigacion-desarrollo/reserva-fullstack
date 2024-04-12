@@ -1,10 +1,10 @@
 package com.reserva.backend.services.impl;
 
 import java.util.Date;
-import java.util.Optional;
 
 import javax.mail.MessagingException;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,7 @@ import com.reserva.backend.dto.auth.ForgotPasswordDto;
 import com.reserva.backend.dto.auth.LoginDto;
 import com.reserva.backend.dto.auth.RegisterDto;
 import com.reserva.backend.dto.auth.ResetPasswordDto;
+import com.reserva.backend.dto.user.UserResponseDto;
 import com.reserva.backend.entities.Role;
 import com.reserva.backend.entities.TokenVerification;
 import com.reserva.backend.entities.User;
@@ -26,6 +27,7 @@ import com.reserva.backend.repositorys.ITokenVerificationRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IAuthService;
 import com.reserva.backend.services.IEmailInfoService;
+import com.reserva.backend.util.Responses;
 
 @Service
 public class AuthService implements IAuthService {
@@ -46,62 +48,49 @@ public class AuthService implements IAuthService {
 	private IEmailInfoService emailInfoService;
 	
 	private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
+	
+	private ModelMapper modelmaper = new ModelMapper();
 
 	@Override
-	public JwtAuthResponse signin(LoginDto request) {
+	public Responses<JwtAuthResponse> signin(LoginDto request) {
 		User user = userRepository.findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
 				.orElseThrow(() -> {
 					throw new ReservaException(AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, HttpStatus.UNAUTHORIZED);
 				});
-
 		if (!validateUser(request, user)) {
 			throw new ReservaException(AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, HttpStatus.UNAUTHORIZED);
 		}
-
 		String token = jwtTokenProvider.generateToken(user);
-
 		JwtAuthResponse response = new JwtAuthResponse(user.getUsername(), user.getRole().getName(), token, "bearer");
-
-		return response;
+		return new Responses<>(true, AuthConstants.SIGN_IN_SUCCESSFUL, response);
 	}
 
 	@Override
-	public String signup(RegisterDto request) {
+	public Responses<UserResponseDto> signup(RegisterDto request) {
 		if (userRepository.existsByUsername(request.getUsername())) {
 			throw new ReservaException(AuthConstants.USERNAME_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
 		if (userRepository.existsByEmail(request.getEmail())) {
 			throw new ReservaException(AuthConstants.EMAIL_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
-
 		User user = new User();
 		user.setName(request.getName());
 		user.setUsername(request.getUsername());
 		user.setEmail(request.getEmail());
 		user.setActive(true);
-
 		user.setPassword(passEncoder.encode(request.getPassword()));
-
-		Optional<Role> verificar = roleRepository.findByName(AuthConstants.USER);
-		if (!verificar.isPresent()) {
-			throw new ReservaException(AuthConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
-		Role role = verificar.get();
+		Role role = roleRepository.findByName(AuthConstants.USER).orElseThrow(() -> new ReservaException(AuthConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND));
 		user.setRole(role);
 		userRepository.save(user);
-
-		return AuthConstants.SIGN_UP_SUCCESSFUL;
+		return new Responses<>(true, AuthConstants.SIGN_UP_SUCCESSFUL, modelmaper.map(user, UserResponseDto.class));
 	}
 
 	@Override
-	public String forgotPassword(ForgotPasswordDto request) {
-		Optional<User> user = userRepository.findByEmail(request.getEmail());
-		if(!user.isPresent()) {
-			throw new ReservaException(AuthConstants.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
-		TokenVerification token = tokenVerificationRepository.findByUser(user.get());
+	public Responses<String> forgotPassword(ForgotPasswordDto request) {
+		User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ReservaException(AuthConstants.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
+		TokenVerification token = tokenVerificationRepository.findByUser(user);
 		if(token == null) {
-			token = new TokenVerification(user.get());
+			token = new TokenVerification(user);
 			}else {
 				token.setToken(token.generateToken());
 				token.setCreatedAt(new Date());
@@ -118,11 +107,11 @@ public class AuthService implements IAuthService {
 		}catch(MessagingException e) {
 			throw new ReservaException(AuthConstants.EMAIL_SEND_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return AuthConstants.EMAIL_SEND_OK;
+		return new Responses<>(true, AuthConstants.EMAIL_SEND_OK, null);
 	}
 
 	@Override
-	public String resetPassword(ResetPasswordDto request) {
+	public Responses<String> resetPassword(ResetPasswordDto request) {
 		TokenVerification token = tokenVerificationRepository.findByToken(request.getToken());
 		if(token == null) {
 			throw new ReservaException(AuthConstants.TOKEN_BAD_REQUEST, HttpStatus.BAD_REQUEST);
@@ -138,11 +127,7 @@ public class AuthService implements IAuthService {
 		}
 		user.setPassword(passEncoder.encode(request.getPassword()));
 		tokenVerificationRepository.save(token);
-		return AuthConstants.PASSWORD_HAS_BEEN_CHANGED;
-	}
-
-	public boolean isEmail(String email) {
-		return email.contains("@") && email != null;
+		return new Responses<>(true, AuthConstants.PASSWORD_HAS_BEEN_CHANGED, null);
 	}
 
 	public boolean validateUser(LoginDto request, User user) {

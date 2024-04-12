@@ -5,12 +5,14 @@ import com.reserva.backend.dto.auth.ForgotPasswordDto;
 import com.reserva.backend.dto.auth.LoginDto;
 import com.reserva.backend.dto.auth.RegisterDto;
 import com.reserva.backend.dto.auth.ResetPasswordDto;
+import com.reserva.backend.dto.user.UserResponseDto;
+import com.reserva.backend.util.Responses;
 
 public interface IAuthService {
 	
-	public JwtAuthResponse signin(LoginDto request);
-	public String signup(RegisterDto request);
-	public String forgotPassword(ForgotPasswordDto request);
-	public String resetPassword(ResetPasswordDto request);
+	public Responses<JwtAuthResponse> signin(LoginDto request);
+	public Responses<UserResponseDto> signup(RegisterDto request);
+	public Responses<String> forgotPassword(ForgotPasswordDto request);
+	public Responses<String> resetPassword(ResetPasswordDto request);
 	
 }
