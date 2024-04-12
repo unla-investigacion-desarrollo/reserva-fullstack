@@ -104,6 +104,8 @@ public class UserService implements IUserService{
 			updateUser.setRole(updateRole.get());
 			userRepository.save(updateUser);
 			return new Responses<>(true, UserConstants.USER_UPDATE_SUCCESSFUL, getById(id));
+		} catch (ReservaException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}

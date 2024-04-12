@@ -20,6 +20,7 @@ import com.reserva.backend.constants.SightingConstants;
 import com.reserva.backend.dto.FieldRequestDto;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
+import com.reserva.backend.dto.SightingUpdateDto;
 import com.reserva.backend.dto.UpdateStatusDto;
 import com.reserva.backend.entities.Field;
 import com.reserva.backend.entities.Image;
@@ -77,6 +78,8 @@ public class SightingService implements ISightingService {
             sightingRepository.save(sighting);
             SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
             return new Responses<>(true, SightingConstants.SIGHTING_CREATED, response);
+        } catch (ReservaException e) {
+            throw e;
         } catch (Exception e) {
             throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
         }
@@ -135,6 +138,40 @@ public class SightingService implements ISightingService {
             sightingRepository.save(sighting);
             String response = String.format(SightingConstants.SIGHTING_STATUS, sighting.getId(), sighting.getStatus());
             return new Responses<>(true, response, getById(sighting.getId()));
+        } catch (Exception e) {
+            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    public Responses<SightingResponseDto> update(long id, SightingUpdateDto request) {
+        Sighting sighting = sightingRepository.findById(id)
+                .orElseThrow(() -> new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND));
+        if (!sighting.isActive()) {
+            throw new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+        if (user.getId() != sighting.getCreatedBy().getId() && !isAdmin(user)) {
+            throw new ReservaException(SightingConstants.SIGHTING_NON_OWNED,
+                    HttpStatus.BAD_REQUEST);
+        }
+        try {
+            sighting.setName(request.getName());
+            sighting.setScientificName(request.getScientificName());
+            sighting.setLatitude(request.getLatitude());
+            sighting.setLongitude(request.getLongitude());
+            sighting.setType(getType(request.getType()));
+            if (isAdmin(user)) {
+                sighting.setStatus(SightingConstants.APPROVED_STATUS);
+                sighting.setApprovedBy(user);
+            } else {
+                sighting.setStatus(SightingConstants.PENDING_STATUS);
+            }
+            sightingRepository.save(sighting);
+            SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
+            return new Responses<>(true, SightingConstants.SIGHTING_UPDATE_SUCCESSFUL, response);
+        } catch (ReservaException e) {
+            throw e;
         } catch (Exception e) {
             throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
         }

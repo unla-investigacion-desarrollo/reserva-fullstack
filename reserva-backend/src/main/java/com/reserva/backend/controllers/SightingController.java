@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.reserva.backend.dto.SightingRequestDto;
+import com.reserva.backend.dto.SightingUpdateDto;
 import com.reserva.backend.dto.UpdateStatusDto;
 import com.reserva.backend.services.ISightingService;
 
@@ -94,6 +96,18 @@ public class SightingController {
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
     public ResponseEntity<?> updateStatus(@RequestBody UpdateStatusDto request){
         return ResponseEntity.ok(sightingService.updateStatus(request));
+    }
+
+    @Operation(summary = "realiza la actualizacion de un avistamiento")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "avistamiento actualizado correctamente", content = @Content),
+            @ApiResponse(responseCode = "400", description = "el Tipo_Avistamiento no es valido o no se puede actualizar un avistamiento que no te pertenece", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Avistamiento o usuario no encontrado", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
+        })
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") long id, @Valid @RequestBody SightingUpdateDto request){
+        return ResponseEntity.ok(sightingService.update(id, request));
     }
 
 }

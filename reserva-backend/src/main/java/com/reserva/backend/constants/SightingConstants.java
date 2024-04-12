@@ -24,6 +24,8 @@ public class SightingConstants {
     public static final String SIGHTING_NOT_FOUND = "Avistamiento no encontrado";
     public static final String SIGHTING_STATUS = "Avistamiento: %s Status: %s";
     public static final String SIGHTING_CREATED = "Avistamiento creado correctamente!";
+    public static final String SIGHTING_UPDATE_SUCCESSFUL = "Avistamiento actualizado correctamente";
+    public static final String SIGHTING_NON_OWNED = "No se puede actualziar un avistamiento que no te pertenece";
     
     // Mapeo 
     public static final String REQUEST_FAILURE = "Algo salió mal durante la solicitud";
