@@ -82,7 +82,7 @@ public class FieldService implements IFieldService {
         try {
             field.setActive(false);
             fieldRepository.save(field);
-            return new Responses<>(true, "delete ok", getById(id));
+            return new Responses<>(true, "delete ok", null);
         } catch (Exception e) {
             throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
         }

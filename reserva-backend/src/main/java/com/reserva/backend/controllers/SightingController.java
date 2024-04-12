@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -108,6 +110,31 @@ public class SightingController {
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") long id, @Valid @RequestBody SightingUpdateDto request){
         return ResponseEntity.ok(sightingService.update(id, request));
+    }
+    
+    @Operation(summary = "realiza el borrado logico de un avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ok", content = @Content),
+            @ApiResponse(responseCode = "404", description = "no existe ese avistamiento", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
+    })
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
+    public ResponseEntity<?> delete(@PathVariable("id") long id) {
+        return ResponseEntity.ok(sightingService.delete(id));
+    }
+
+    @Operation(summary = "realiza el alta logico de un avistamiento borrado", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ok", content = @Content),
+            @ApiResponse(responseCode = "400", description = "avistamiento ya se encuentra dado de alta", content = @Content),
+            @ApiResponse(responseCode = "404", description = "no existe ese avistamiento", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
+    })
+    @PatchMapping("/restore/{id}")
+    @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
+    public ResponseEntity<?> restore(@PathVariable("id") long id) {
+        return ResponseEntity.ok(sightingService.restore(id));
     }
 
 }

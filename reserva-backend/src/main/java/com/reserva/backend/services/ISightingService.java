@@ -19,5 +19,6 @@ public interface ISightingService {
     public ResponsePageable<SightingResponseDto> getAll(String status, String type, int page, int size, String orderBy, String sortBy);
     public Responses<SightingResponseDto> updateStatus(UpdateStatusDto request);
     public Responses<SightingResponseDto> update(long id, SightingUpdateDto request);
-    
+    public Responses<SightingResponseDto> delete(long id);
+    public Responses<SightingResponseDto> restore(long id);
 }

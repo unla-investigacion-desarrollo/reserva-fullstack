@@ -143,6 +143,7 @@ public class SightingService implements ISightingService {
         }
     }
 
+    @Override
     public Responses<SightingResponseDto> update(long id, SightingUpdateDto request) {
         Sighting sighting = sightingRepository.findById(id)
                 .orElseThrow(() -> new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND));
@@ -173,6 +174,39 @@ public class SightingService implements ISightingService {
         } catch (ReservaException e) {
             throw e;
         } catch (Exception e) {
+            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    
+    @Override
+    public Responses<SightingResponseDto> delete(long id) {
+        Sighting sighting = sightingRepository.findById(id)
+            .orElseThrow(() -> new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND));
+        if(!sighting.isActive()){
+            throw new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        try{
+            sighting.setActive(false);
+            sightingRepository.save(sighting);
+            return new Responses<>(true, SightingConstants.SIGHTING_DELETE_SUCCESSFUL, null); //return 418 I'M TEAPOT
+        }catch(Exception e){
+            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    @Override
+    public Responses<SightingResponseDto> restore(long id) {
+        Sighting sighting = sightingRepository.findById(id)
+            .orElseThrow(() -> new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND));
+        if(sighting.isActive()){
+            throw new ReservaException(SightingConstants.SIGHTING_IS_ACTIVE, HttpStatus.BAD_REQUEST);
+        }
+        try{
+            sighting.setActive(true);
+            sightingRepository.save(sighting);
+            return new Responses<>(true, SightingConstants.SIGHTING_DELETE_SUCCESSFUL, getById(id));
+        }catch(Exception e){
             throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
         }
     }

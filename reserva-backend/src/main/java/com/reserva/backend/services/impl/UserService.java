@@ -121,7 +121,7 @@ public class UserService implements IUserService{
 		try {
 			user.setActive(false);
 			userRepository.save(user);
-			return new Responses<>(true, UserConstants.USER_DELETE_SUCCESSFUL, getById(id));
+			return new Responses<>(true, UserConstants.USER_DELETE_SUCCESSFUL, null);
 		} catch (Exception e) {
 			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}

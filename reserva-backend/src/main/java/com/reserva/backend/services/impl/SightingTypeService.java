@@ -58,7 +58,7 @@ public class SightingTypeService implements ISightingTypeService{
 		SightingType tipo = sightingTypeRepository.findById(id)
 			.orElseThrow(() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
 		if (!tipo.isActive()) {
-			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
 		try {
 			SightingType update = tipo;
@@ -76,12 +76,12 @@ public class SightingTypeService implements ISightingTypeService{
 		SightingType tipo = sightingTypeRepository.findById(id)
 			.orElseThrow(() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
 		if (!tipo.isActive()) {
-			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
 		try {
 			tipo.setActive(false);
 			sightingTypeRepository.save(tipo);
-			return new Responses<>(true, SightingConstants.SIGHTINGTYPE_DELETE_SUCCESSFUL, getById(id));
+			return new Responses<>(true, SightingConstants.SIGHTINGTYPE_DELETE_SUCCESSFUL, null);
 		} catch (Exception e) {
 			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
