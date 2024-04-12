@@ -69,12 +69,12 @@ public class StorageService implements IStorageService {
 
     @Override
     public Resource getImage(String url) {
-        try{
+        try {
             Path path = getPath(url);
             Resource resource = new UrlResource(path.toUri());
-            if(resource.exists() || resource.isReadable()){
+            if (resource.exists() || resource.isReadable()) {
                 return resource;
-            }else{
+            } else {
                 throw new ReservaException("No se pudo encontrar la imagen" + url, HttpStatus.NOT_FOUND);
             }
         } catch (MalformedURLException e) {

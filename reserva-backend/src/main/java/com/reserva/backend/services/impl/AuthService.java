@@ -79,7 +79,8 @@ public class AuthService implements IAuthService {
 		user.setEmail(request.getEmail());
 		user.setActive(true);
 		user.setPassword(passEncoder.encode(request.getPassword()));
-		Role role = roleRepository.findByName(AuthConstants.USER).orElseThrow(() -> new ReservaException(AuthConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND));
+		Role role = roleRepository.findByName(AuthConstants.USER)
+				.orElseThrow(() -> new ReservaException(AuthConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND));
 		user.setRole(role);
 		userRepository.save(user);
 		return new Responses<>(true, AuthConstants.SIGN_UP_SUCCESSFUL, modelmaper.map(user, UserResponseDto.class));
@@ -87,24 +88,25 @@ public class AuthService implements IAuthService {
 
 	@Override
 	public Responses<String> forgotPassword(ForgotPasswordDto request) {
-		User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ReservaException(AuthConstants.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
+		User user = userRepository.findByEmail(request.getEmail())
+				.orElseThrow(() -> new ReservaException(AuthConstants.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
 		TokenVerification token = tokenVerificationRepository.findByUser(user);
-		if(token == null) {
+		if (token == null) {
 			token = new TokenVerification(user);
-			}else {
-				token.setToken(token.generateToken());
-				token.setCreatedAt(new Date());
-				token.setExpiratedAt(token.getEpirationTime(10));
-			}
+		} else {
+			token.setToken(token.generateToken());
+			token.setCreatedAt(new Date());
+			token.setExpiratedAt(token.getEpirationTime(10));
+		}
 		tokenVerificationRepository.save(token);
 		String subjet = "Reserva - Cambiar Contraseña";
-		String link = "http://localhost:8000/api/auth/reset-password?token="+token.getToken();
+		String link = "http://localhost:8000/api/auth/reset-password?token=" + token.getToken();
 		String body = "Hola, se solicito un cambio de contraseña:" + "<br><a href='" + link + "'>" + link + "</a>"
 				+ "<br><br>Recorda que el token es valido solamente por 10 minutos"
 				+ "<br><br><br>Saludos,<br>Reserva.";
 		try {
 			emailInfoService.send(request.getEmail(), subjet, body);
-		}catch(MessagingException e) {
+		} catch (MessagingException e) {
 			throw new ReservaException(AuthConstants.EMAIL_SEND_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new Responses<>(true, AuthConstants.EMAIL_SEND_OK, null);
@@ -113,16 +115,16 @@ public class AuthService implements IAuthService {
 	@Override
 	public Responses<String> resetPassword(ResetPasswordDto request) {
 		TokenVerification token = tokenVerificationRepository.findByToken(request.getToken());
-		if(token == null) {
+		if (token == null) {
 			throw new ReservaException(AuthConstants.TOKEN_BAD_REQUEST, HttpStatus.BAD_REQUEST);
 		}
 		Date expiration = token.getExpiratedAt();
 		Date now = new Date();
-		if(request.getToken() == null || now.after(expiration)) {
+		if (request.getToken() == null || now.after(expiration)) {
 			throw new ReservaException(AuthConstants.TOKEN_INVALID, HttpStatus.FORBIDDEN);
 		}
 		User user = token.getUser();
-		if(!request.getPassword().equals(request.getPasswordRepeat())) {
+		if (!request.getPassword().equals(request.getPasswordRepeat())) {
 			throw new ReservaException(AuthConstants.PASSWORD_NOT_MATCH, HttpStatus.BAD_REQUEST);
 		}
 		user.setPassword(passEncoder.encode(request.getPassword()));
