@@ -49,7 +49,8 @@ public class AuthService implements IAuthService {
 	
 	private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 	
-	private ModelMapper modelmaper = new ModelMapper();
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public Responses<JwtAuthResponse> signin(LoginDto request) {
@@ -83,7 +84,7 @@ public class AuthService implements IAuthService {
 				.orElseThrow(() -> new ReservaException(AuthConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND));
 		user.setRole(role);
 		userRepository.save(user);
-		return new Responses<>(true, AuthConstants.SIGN_UP_SUCCESSFUL, modelmaper.map(user, UserResponseDto.class));
+		return new Responses<>(true, AuthConstants.SIGN_UP_SUCCESSFUL, modelMapper.map(user, UserResponseDto.class));
 	}
 
 	@Override

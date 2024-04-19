@@ -36,7 +36,8 @@ public class UserService implements IUserService{
 	@Autowired
 	private IRoleRepository roleRepository;
 	
-	private ModelMapper modelMapper = new ModelMapper();
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public Responses<UserResponseDto> create(UserRequestDto request) {

@@ -27,7 +27,8 @@ public class SightingTypeService implements ISightingTypeService{
 	@Autowired
 	private ISightingTypeRepository sightingTypeRepository;
 	
-	private ModelMapper modelMapper = new ModelMapper();
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public Responses<SightingTypeResponseDto> create(SightingTypeRequestDto request) {

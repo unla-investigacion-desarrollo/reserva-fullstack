@@ -51,7 +51,8 @@ public class SightingService implements ISightingService {
     @Autowired
     private ISightingTypeRepository sightingTypeRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+	private ModelMapper modelMapper;
 
     @Autowired
     private IStorageService storageService;
