@@ -36,7 +36,8 @@ public class UserService implements IUserService{
 	@Autowired
 	private IRoleRepository roleRepository;
 	
-	private ModelMapper modelMapper = new ModelMapper();
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public Responses<UserResponseDto> create(UserRequestDto request) {
@@ -119,8 +120,7 @@ public class UserService implements IUserService{
 			throw new ReservaException(UserConstants.USER_INACTIVE, HttpStatus.BAD_REQUEST);
 		}
 		try {
-			user.setActive(false);
-			userRepository.save(user);
+			userRepository.delete(user);
 			return new Responses<>(true, UserConstants.USER_DELETE_SUCCESSFUL, null);
 		} catch (Exception e) {
 			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
