@@ -36,6 +36,9 @@ import com.reserva.backend.services.IStorageService;
 import com.reserva.backend.util.ResponsePageable;
 import com.reserva.backend.util.Responses;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class SightingService implements ISightingService {
 
@@ -55,9 +58,10 @@ public class SightingService implements ISightingService {
 
     @Override
     public Responses<SightingResponseDto> create(SightingRequestDto request, List<MultipartFile> files) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+        log.info("Processing 'create-sighting' with [name: {}] for [user: {}]", request.getName(), request.getUserId());
         try {
+            User user = userRepository.findById(request.getUserId())
+            .orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
             Sighting sighting = new Sighting();
             sighting.setName(request.getName());
             sighting.setScientificName(request.getScientificName());
@@ -77,10 +81,13 @@ public class SightingService implements ISightingService {
             sighting.setImages(createImages(files, sighting));
             sightingRepository.save(sighting);
             SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
+            log.info("Successful process 'create-sighting' with with [name: {}] for [user: {}]", request.getName(), request.getUserId());
             return new Responses<>(true, SightingConstants.SIGHTING_CREATED, response);
         } catch (ReservaException e) {
+            log.error("Process 'create-sighting' with [name: {}] had an [exception: {}]", request.getName(), e.getMessage());
             throw e;
         } catch (Exception e) {
+            log.error("Process 'create-sighting' with [name: {}] had an [exception: {}]", request.getName(), e.getMessage());
             throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
         }
     }
@@ -187,8 +194,7 @@ public class SightingService implements ISightingService {
             throw new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
         try{
-            sighting.setActive(false);
-            sightingRepository.save(sighting);
+            sightingRepository.delete(sighting);
             return new Responses<>(true, SightingConstants.SIGHTING_DELETE_SUCCESSFUL, null); //return 418 I'M TEAPOT
         }catch(Exception e){
             throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);

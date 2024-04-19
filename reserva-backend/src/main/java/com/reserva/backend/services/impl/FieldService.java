@@ -80,8 +80,7 @@ public class FieldService implements IFieldService {
             throw new ReservaException("not found field", HttpStatus.NOT_FOUND);
         }
         try {
-            field.setActive(false);
-            fieldRepository.save(field);
+            fieldRepository.delete(field);
             return new Responses<>(true, "delete ok", null);
         } catch (Exception e) {
             throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
