@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE sighting_type SET active = false WHERE id = ?")
 public class Sighting {
 
     @Id
@@ -47,6 +51,7 @@ public class Sighting {
     private User approvedBy;
 
     @OneToMany(mappedBy = "sighting", cascade = CascadeType.ALL)
+    @Where(clause = "active = true")
     private List<Field> fields;
 
     @OneToMany(mappedBy = "sighting", cascade = CascadeType.ALL)

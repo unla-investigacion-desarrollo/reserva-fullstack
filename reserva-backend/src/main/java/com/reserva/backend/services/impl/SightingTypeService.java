@@ -27,7 +27,8 @@ public class SightingTypeService implements ISightingTypeService{
 	@Autowired
 	private ISightingTypeRepository sightingTypeRepository;
 	
-	private ModelMapper modelMapper = new ModelMapper();
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public Responses<SightingTypeResponseDto> create(SightingTypeRequestDto request) {
@@ -79,8 +80,7 @@ public class SightingTypeService implements ISightingTypeService{
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
 		try {
-			tipo.setActive(false);
-			sightingTypeRepository.save(tipo);
+			sightingTypeRepository.delete(tipo);
 			return new Responses<>(true, SightingConstants.SIGHTINGTYPE_DELETE_SUCCESSFUL, null);
 		} catch (Exception e) {
 			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);

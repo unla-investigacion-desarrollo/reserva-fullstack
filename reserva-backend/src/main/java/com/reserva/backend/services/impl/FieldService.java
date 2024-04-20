@@ -26,7 +26,8 @@ public class FieldService implements IFieldService {
     @Autowired
     private ISightingRepository sightingRepository;
 
-    private ModelMapper modelmapper = new ModelMapper();
+    @Autowired
+	private ModelMapper modelMapper;
 
     @Override
     public Responses<FieldRequestDto> create(long sightingId, FieldRequestDto request) {
@@ -40,7 +41,7 @@ public class FieldService implements IFieldService {
             field.setActive(true);
             field.setSighting(sighting);
             fieldRepository.save(field);
-            FieldRequestDto response = modelmapper.map(field, FieldRequestDto.class);
+            FieldRequestDto response = modelMapper.map(field, FieldRequestDto.class);
             return new Responses<>(true, "field creado", response);
         } catch (Exception e) {
             throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
@@ -51,7 +52,7 @@ public class FieldService implements IFieldService {
     public FieldRequestDto getById(long id) {
         Field field = fieldRepository.findById(id)
                 .orElseThrow(() -> new ReservaException("not found field", HttpStatus.NOT_FOUND));
-        FieldRequestDto response = modelmapper.map(field, FieldRequestDto.class);
+        FieldRequestDto response = modelMapper.map(field, FieldRequestDto.class);
         return response;
     }
 
@@ -80,8 +81,7 @@ public class FieldService implements IFieldService {
             throw new ReservaException("not found field", HttpStatus.NOT_FOUND);
         }
         try {
-            field.setActive(false);
-            fieldRepository.save(field);
+            fieldRepository.delete(field);
             return new Responses<>(true, "delete ok", null);
         } catch (Exception e) {
             throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
@@ -108,7 +108,7 @@ public class FieldService implements IFieldService {
     public List<FieldRequestDto> getBySightingId(long sightingId) {
         Sighting sighting = sightingRepository.findById(sightingId)
                 .orElseThrow(() -> new ReservaException("sighting not found", HttpStatus.NOT_FOUND));
-        return sighting.getFields().stream().map(field -> modelmapper.map(field, FieldRequestDto.class))
+        return sighting.getFields().stream().map(field -> modelMapper.map(field, FieldRequestDto.class))
                 .collect(Collectors.toList());
     }
 
