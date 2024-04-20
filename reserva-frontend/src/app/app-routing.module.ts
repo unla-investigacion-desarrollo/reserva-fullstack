@@ -5,7 +5,7 @@ import { AvistamientoAprobadoComponent } from './components/avistamiento-aprobad
 import { AvistamientoReprobadoComponent } from './components/avistamiento-reprobado/avistamiento-reprobado.component';
 import { EditAvistamientoComponent } from './components/edit-avistamiento/edit-avistamiento.component';
 import { LoginComponent } from './components/login/login.component';
-
+import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/shared/header/header.component';
 
@@ -21,7 +21,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes),HttpClientModule ],
   exports: [RouterModule]
 })
 
