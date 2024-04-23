@@ -42,7 +42,8 @@ public class AuthController {
 			@ApiResponse(responseCode = "200", description = AuthConstants.SIGN_UP_SUCCESSFUL, content = @Content),
 			@ApiResponse(responseCode = "400", description = AuthConstants.USERNAME_ALREADY_EXIST + " | "
 					+ AuthConstants.EMAIL_ALREADY_EXIST, content = @Content),
-			@ApiResponse(responseCode = "404", description = AuthConstants.ROLE_NOT_FOUND, content = @Content) })
+			@ApiResponse(responseCode = "404", description = AuthConstants.ROLE_NOT_FOUND, content = @Content),
+			@ApiResponse(responseCode = "500", description = AuthConstants.DATABASE_SAVE_ERROR, content = @Content) })
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterDto request){
 		return ResponseEntity.ok(authService.signup(request));
@@ -64,7 +65,8 @@ public class AuthController {
 			@ApiResponse(responseCode = "200", description = AuthConstants.PASSWORD_HAS_BEEN_CHANGED, content = @Content),
 			@ApiResponse(responseCode = "400", description = AuthConstants.TOKEN_BAD_REQUEST, content = @Content),
 			@ApiResponse(responseCode = "400", description = AuthConstants.PASSWORD_NOT_MATCH, content = @Content),
-			@ApiResponse(responseCode = "403", description = AuthConstants.TOKEN_INVALID,  content = @Content)
+			@ApiResponse(responseCode = "403", description = AuthConstants.TOKEN_INVALID,  content = @Content),
+			@ApiResponse(responseCode = "500", description = AuthConstants.DATABASE_SAVE_ERROR, content = @Content)
 	})
 	@PostMapping("/reset-password")
 	public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto request){
