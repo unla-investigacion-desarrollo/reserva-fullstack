@@ -115,6 +115,7 @@ Responses:
 | `200` | SIGN_UP_SUCCESSFUL |
 | `400` | ROLE_NOT_FOUND |
 | `404` | USERNAME_OR_EMAIL_ALREADY_EXIST |
+| `500` | DATABASE_SAVE_ERROR |
 
 ---
 #### Realizar el inicio de sesion de un usuario ya registrado:
@@ -195,3 +196,4 @@ Responses:
 | `400` | TOKEN_BAD_REQUEST |
 | `400` | PASSWORD_NOT_MATCH |
 | `403` | TOKEN_INVALID |
+| `500` | DATABASE_SAVE_ERROR |
