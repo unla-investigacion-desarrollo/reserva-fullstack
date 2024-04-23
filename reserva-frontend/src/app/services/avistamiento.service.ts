@@ -1,22 +1,33 @@
 import { Injectable } from '@angular/core';
 import { LoremIpsum, loremIpsum } from "lorem-ipsum";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AvistamientoService {
 
-  constructor() { }
+  private headers = new HttpHeaders({
+    'Content-Type': 'application/json'
+  });
 
-  getAvistamientosPendientes() {
-    var obj = [
-      { id: '1', tipo: 'Arbol', especie: 'Jacaranda', descripcion: 'Descripcion de la especie.', subespecie: 'Jacaranda mimosifolia', familia: 'Bignoniaceae', number: '0011', user: 'Nicolas', location: '34 35 36: 16 45 48', avistDate: new Date(2023,7,1) },
-      { id: '2', especie: 'Castor', number: '0022', user: 'Federico', location: '34 22 77: 11 22 24', avistDate: new Date(2023,7,15) },
-      { id: '3', especie: 'Lechuza', number: '0033', user: 'Martin', location: '76 16 36: 42 12 18', avistDate: new Date(2023,7,14)},
-      { id: '4', especie: 'Buho', number: '0044', user: 'Juan', location: '34 37 56: 16 15 12', avistDate: new Date(2023,7,13) },
-      { id: '5', especie: 'Ciervo', number: '0055', user: 'Nicolas', location: '34 35 73: 16 54 43', avistDate: new Date(2023,7,12) }
-    ];
-    return JSON.stringify(obj);
+  constructor(private http: HttpClient) { }
+
+  async getAvistamientosPendientes() {
+    // var obj = [
+    //   { id: '1', tipo: 'Arbol', especie: 'Jacaranda', descripcion: 'Descripcion de la especie.', subespecie: 'Jacaranda mimosifolia', familia: 'Bignoniaceae', number: '0011', user: 'Nicolas', location: '34 35 36: 16 45 48', avistDate: new Date(2023,7,1) },
+    //   { id: '2', especie: 'Castor', number: '0022', user: 'Federico', location: '34 22 77: 11 22 24', avistDate: new Date(2023,7,15) },
+    //   { id: '3', especie: 'Lechuza', number: '0033', user: 'Martin', location: '76 16 36: 42 12 18', avistDate: new Date(2023,7,14)},
+    //   { id: '4', especie: 'Buho', number: '0044', user: 'Juan', location: '34 37 56: 16 15 12', avistDate: new Date(2023,7,13) },
+    //   { id: '5', especie: 'Ciervo', number: '0055', user: 'Nicolas', location: '34 35 73: 16 54 43', avistDate: new Date(2023,7,12) }
+    // ];
+    // return JSON.stringify(obj);
+
+    const url = 'http://localhost:8000/sighting?page=1&size=999999&orderBy=asc&sortBy=id';
+
+    return await lastValueFrom(this.http.get(url));
+
   }
 
   getAvistamientosAprobados() {

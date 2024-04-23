@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -11,24 +11,12 @@ export class LoginComponent {
 
 private router: Router;
 
-constructor(private router2: Router, private http: HttpClient) {
+constructor(private router2: Router, private loginService: LoginService) {
     this.router = router2;
   }
 
 async login(){
-
-  const url = 'http://localhost:8000/account/login';
-    const body = {
-      usernameOrEmail: "nfiasche",
-      password: "nfiasche"
-    };
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    var rta = await this.http.post(url, body, { headers: headers }).toPromise();
-    console.log(rta);
-  // this.router.navigate(['/', 'home']);
+  await this.loginService.login() ? this.router.navigate(['/', 'home']) : null;
 }
 
 }

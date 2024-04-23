@@ -16,6 +16,9 @@ import { DialogService } from './services/dialog-service.service';
 import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/shared/header/header.component';
 
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpInterceptorInterceptor } from './http-interceptor.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +42,11 @@ import { HeaderComponent } from './components/shared/header/header.component';
     {
       provide: MatDialogRef,
       useValue: {}
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorInterceptor,
+      multi: true
     },
     DialogService
  ],

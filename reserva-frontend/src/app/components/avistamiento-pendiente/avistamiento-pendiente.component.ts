@@ -10,11 +10,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 export class AvistamientoPendienteComponent {
 
-  avistamientos: string;
+  avistamientos: any;
 
   constructor(private avistamientoService: AvistamientoService) {}
 
-  ngOnInit(): void {
-    this.avistamientos = JSON.parse(this.avistamientoService.getAvistamientosPendientes());
+  async ngOnInit(): Promise<void> {
+    // this.avistamientos = JSON.parse(await this.avistamientoService.getAvistamientosPendientes());
+    this.avistamientos = await this.avistamientoService.getAvistamientosPendientes();
   }
 }
