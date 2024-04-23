@@ -55,6 +55,7 @@ public class Sighting {
     private List<Field> fields;
 
     @OneToMany(mappedBy = "sighting", cascade = CascadeType.ALL)
+    @Where(clause = "active = true")
     private List<Image> images;
   
 }

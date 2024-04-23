@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.SQLDelete;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE sighting_type SET active = false WHERE id = ?")
 public class Image {
 
     @Id
@@ -26,6 +29,7 @@ public class Image {
     private long id;
 
     private String url;
+    private boolean active;
 
     @JsonBackReference
     @ManyToOne
