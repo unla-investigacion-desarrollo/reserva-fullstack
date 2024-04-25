@@ -15,7 +15,7 @@ export class AvistamientoPendienteComponent {
   constructor(private avistamientoService: AvistamientoService) {}
 
   async ngOnInit(): Promise<void> {
-    // this.avistamientos = JSON.parse(await this.avistamientoService.getAvistamientosPendientes());
     this.avistamientos = await this.avistamientoService.getAvistamientosPendientes();
+    this.avistamientos = this.avistamientos.data;
   }
 }
