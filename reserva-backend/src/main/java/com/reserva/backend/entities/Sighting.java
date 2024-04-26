@@ -25,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@SQLDelete(sql = "UPDATE sighting_type SET active = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE sighting SET active = false WHERE id = ?")
 public class Sighting {
 
     @Id
