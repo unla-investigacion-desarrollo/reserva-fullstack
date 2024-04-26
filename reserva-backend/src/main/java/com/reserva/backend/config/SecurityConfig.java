@@ -6,7 +6,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -59,18 +58,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .and()
 		    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		    .and()
-		    .authorizeRequests().antMatchers(HttpMethod.GET, "/**").permitAll()
+		    .authorizeRequests()
 		    .antMatchers("/account/login").permitAll()
 		    .antMatchers("/account/register").permitAll()
 		    .antMatchers("/account/recovery").permitAll()
 		    .antMatchers("/account/reset-password").permitAll()
 		    .antMatchers("/swagger-ui/**").permitAll()
 		    .antMatchers("/v3/api-docs/**").permitAll()
-			.antMatchers("/sighting/**").permitAll()
-			.antMatchers("/field/**").permitAll()
-			.antMatchers("/storage/**").permitAll()
-		    .anyRequest()
-		    .authenticated();
+		    .anyRequest().authenticated();
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 
