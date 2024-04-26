@@ -25,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@SQLDelete(sql = "UPDATE sighting_type SET active = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE sighting SET active = false WHERE id = ?")
 public class Sighting {
 
     @Id
@@ -55,7 +55,6 @@ public class Sighting {
     private List<Field> fields;
 
     @OneToMany(mappedBy = "sighting", cascade = CascadeType.ALL)
-    @Where(clause = "active = true")
     private List<Image> images;
   
 }
