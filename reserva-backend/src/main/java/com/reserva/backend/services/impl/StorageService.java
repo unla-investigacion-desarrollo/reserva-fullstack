@@ -18,13 +18,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.reserva.backend.config.StorageProperties;
 import com.reserva.backend.constants.SightingConstants;
+import com.reserva.backend.constants.StorageConstants;
+import com.reserva.backend.entities.Image;
 import com.reserva.backend.exceptions.ReservaException;
+import com.reserva.backend.repositorys.IStorageRepository;
 import com.reserva.backend.services.IStorageService;
+import com.reserva.backend.util.Responses;
 
 @Service
 public class StorageService implements IStorageService {
 
     private final Path storageLocation;
+
+    @Autowired
+    private IStorageRepository storageRepository;
 
     /*
      * Para asegurarnos que vamos a guardar correctamente las imagenes en una ubicacion valida
@@ -75,10 +82,39 @@ public class StorageService implements IStorageService {
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new ReservaException("No se pudo encontrar la imagen" + url, HttpStatus.NOT_FOUND);
+                throw new ReservaException(StorageConstants.IMAGE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (MalformedURLException e) {
-            throw new ReservaException("No se pudo encontrar la imagen" + url, HttpStatus.BAD_REQUEST);
+            throw new ReservaException(StorageConstants.IMAGE_URL_INVALID, HttpStatus.BAD_REQUEST);
+        }   
+    }
+    
+    @Override
+    public Resource getImage(long id) {
+        Image image = storageRepository.findById(id).orElseThrow(() -> new ReservaException(StorageConstants.IMAGE_NOT_FOUND, HttpStatus.NOT_FOUND));
+        try {
+            Path path = getPath(image.getUrl());
+            Resource resource = new UrlResource(path.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new ReservaException(StorageConstants.IMAGE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+        } catch (MalformedURLException e) {
+            throw new ReservaException(StorageConstants.IMAGE_URL_INVALID, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public Responses<String> delete(long id) {
+        Image image = storageRepository.findById(id).orElseThrow(() -> new ReservaException(StorageConstants.IMAGE_NOT_FOUND, HttpStatus.NOT_FOUND));
+        try {
+            Path path = getPath(image.getUrl());
+            Files.deleteIfExists(path);
+            storageRepository.delete(image);
+            return new Responses<>(true, StorageConstants.IMAGE_SUCCESSFUL_DELETED, null);
+        } catch (Exception e) {
+            throw new ReservaException(StorageConstants.IMAGE_URL_INVALID, HttpStatus.BAD_REQUEST);
         }
     }
 
