@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/field")
@@ -28,7 +29,7 @@ public class FieldController {
     @Autowired
     private IFieldService fieldService;
 
-    @Operation(summary = "realiza la creacion de un field para un avistamiento especifico")
+    @Operation(summary = "realiza la creacion de un field para un avistamiento especifico", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "created", content = @Content),
             @ApiResponse(responseCode = "400", description = "no se puede asignar un campo a un avistamiento no existente", content = @Content),
@@ -39,7 +40,7 @@ public class FieldController {
         return new ResponseEntity<>(fieldService.create(id, request), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "trae el field dado su id")
+    @Operation(summary = "trae el field dado su id", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "not found field", content = @Content(mediaType = "application/json"))
@@ -49,7 +50,7 @@ public class FieldController {
         return ResponseEntity.ok(fieldService.getById(id));
     }
 
-    @Operation(summary = "actualiza un field activo")
+    @Operation(summary = "actualiza un field activo", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "update ok", content = @Content),
 			@ApiResponse(responseCode = "404", description = "not found field", content = @Content),
@@ -60,7 +61,7 @@ public class FieldController {
 		return ResponseEntity.ok(fieldService.update(id, request));
 	}
 
-    @Operation(summary = "realiza el borrado logico de un field")
+    @Operation(summary = "realiza el borrado logico de un field", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "delete ok", content = @Content),
 			@ApiResponse(responseCode = "404", description = "not foud field", content = @Content),
@@ -71,7 +72,7 @@ public class FieldController {
 		return ResponseEntity.ok(fieldService.delete(id));
 	}
 
-    @Operation(summary = "realiza el alta logico de un field")
+    @Operation(summary = "realiza el alta logico de un field", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "restore ok", content = @Content),
 			@ApiResponse(responseCode = "404", description = "foud field", content = @Content),
@@ -81,7 +82,7 @@ public class FieldController {
 		return ResponseEntity.ok(fieldService.restore(id));
 	}
 
-    @Operation(summary = "trae todos los field's que tiene un avistamiento")
+    @Operation(summary = "trae todos los field's que tiene un avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "sighting not found", content = @Content(mediaType = "application/json")),
