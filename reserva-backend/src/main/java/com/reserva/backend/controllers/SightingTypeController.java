@@ -46,7 +46,7 @@ public class SightingTypeController {
         return new ResponseEntity<>(sightingTypeService.create(request), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "trae un tipo de avistamiento por su id")
+    @Operation(summary = "trae un tipo de avistamiento por su id", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content(mediaType = "application/json"))
@@ -95,7 +95,7 @@ public class SightingTypeController {
         return ResponseEntity.ok(sightingTypeService.restore(id));
     }
 
-    @Operation(summary = "trae todos los tipos de avistamientos con paginacion")
+    @Operation(summary = "trae todos los tipos de avistamientos con paginacion", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "No se pudieron listar los tipo_avistamiento", content = @Content(mediaType = "application/json")),

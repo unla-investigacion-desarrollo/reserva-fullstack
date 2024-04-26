@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/storage")
@@ -23,7 +24,7 @@ public class StorageController {
     @Autowired
     private IStorageService storageService;
 
-    @Operation(summary = "obtiene una imagen/recurso a partir de una url")
+    @Operation(summary = "obtiene una imagen/recurso a partir de una url", security = @SecurityRequirement(name = "bearerAuth"))
         @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content),
             @ApiResponse(responseCode = "400", description = "La url no es valida", content = @Content),
@@ -36,7 +37,7 @@ public class StorageController {
         .body(storageService.getImage(url));
     }
 
-    @Operation(summary = "obtiene una imagen/recurso a partir de un id")
+    @Operation(summary = "obtiene una imagen/recurso a partir de un id", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "ok", content = @Content),
         @ApiResponse(responseCode = "400", description = "La url no es valida", content = @Content),
@@ -49,7 +50,7 @@ public class StorageController {
         .body(storageService.getImage(id));
     }
     
-    @Operation(summary = "elimina una imagen (fisicamente) NO logicamente, 'Si eliminas las imagenes de un avistamiento no vas a poder reestablecer ese avistamiento'")
+    @Operation(summary = "elimina una imagen (fisicamente) NO logicamente, 'Si eliminas las imagenes de un avistamiento no vas a poder reestablecer ese avistamiento'", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "ok", content = @Content),
         @ApiResponse(responseCode = "400", description = "Error al intentar eliminar la imagen", content = @Content),

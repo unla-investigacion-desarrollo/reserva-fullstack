@@ -39,7 +39,7 @@ public class SightingController {
     @Autowired
     private ISightingService sightingService;
 
-    @Operation(summary = "realiza la creacion completa de un avistamiento")
+    @Operation(summary = "realiza la creacion completa de un avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "created", content = @Content),
             @ApiResponse(responseCode = "400", description = "el Tipo_Avistamiento no es valido", content = @Content),
@@ -54,7 +54,7 @@ public class SightingController {
         return new ResponseEntity<>(sightingService.create(request, files), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "trae el avistamiento dado su id")
+    @Operation(summary = "trae el avistamiento dado su id", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "no hay ningun avistamiento con ese id", content = @Content(mediaType = "application/json"))
@@ -64,7 +64,7 @@ public class SightingController {
         return ResponseEntity.ok(sightingService.getById(id));
     }
 
-    @Operation(summary = "trae el avistamiento completo por idUsuario")
+    @Operation(summary = "trae el avistamiento completo por idUsuario", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")) 
     })
@@ -100,7 +100,7 @@ public class SightingController {
         return ResponseEntity.ok(sightingService.updateStatus(request));
     }
 
-    @Operation(summary = "realiza la actualizacion de un avistamiento")
+    @Operation(summary = "realiza la actualizacion de un avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "avistamiento actualizado correctamente", content = @Content),
             @ApiResponse(responseCode = "400", description = "el Tipo_Avistamiento no es valido o no se puede actualizar un avistamiento que no te pertenece", content = @Content),
