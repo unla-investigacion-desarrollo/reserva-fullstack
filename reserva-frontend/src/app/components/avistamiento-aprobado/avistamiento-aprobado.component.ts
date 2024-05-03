@@ -8,11 +8,14 @@ import { AvistamientoService } from '../../services/avistamiento.service';
 })
 export class AvistamientoAprobadoComponent {
 
-  avistamientos: string;
+  avistamientos: any;
 
   constructor(private avistamientoService: AvistamientoService) {}
 
-  ngOnInit(): void {
-    this.avistamientos = JSON.parse(this.avistamientoService.getAvistamientosAprobados());
+  async ngOnInit(): Promise<void> {
+    // this.avistamientos = JSON.parse(this.avistamientoService.getAvistamientosAprobados());
+
+    this.avistamientos = await this.avistamientoService.getAvistamientosAprobados();
+    this.avistamientos = this.avistamientos.data;
   }
 }

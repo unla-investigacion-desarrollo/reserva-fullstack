@@ -17,15 +17,16 @@ export class EditAvistamientoComponent {
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
 
     this.activatedRoute.params.subscribe((params: Params) => {
       if(params != null && params.id != null){
         this.id = params["id"];
       }
     });
+    this.avistamiento = await this.avistamientoService.getAvistamientoById(this.id);
 
-    this.avistamiento = JSON.parse(this.avistamientoService.getAvistamientoById(this.id));
+    // this.avistamiento = JSON.parse(this.avistamientoService.getAvistamientoById(this.id));
   }
 
   Aprobar(){

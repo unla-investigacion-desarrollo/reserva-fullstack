@@ -15,11 +15,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let avist of avistamientos">
-        <td>{{avist.especie}}</td>
-        <td>{{avist.number}}</td>
+        <td>{{avist.scientificName}}</td>
+        <td>{{avist.id}}</td>
         <td>{{avist.user}}</td>
-        <td>{{avist.location}}</td>
-        <td>{{avist.avistDate}}</td>
+        <td>{{avist.latitude}} - {{avist.longitude}}</td>
+        <td>{{avist.createdAt}}</td>
         <td><span class="glyphicon glyphicon-camera" style="font-size: 25px;float: left;"></span></td>
         <td><span class="glyphicon glyphicon-trash" style="font-size: 25px;float: left;"></span></td>
         <td><span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: left;"></span></td>

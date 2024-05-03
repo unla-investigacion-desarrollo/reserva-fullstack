@@ -1,10 +1,10 @@
 <div class="content">
       <div class="container">
         <div class="row">
-            <h1>{{avistamiento.especie}}</h1>
+            <h1>{{avistamiento.scientificName}}</h1>
         </div>
         <div class="row">
-            <a>{{avistamiento.subespecie}}</a>
+            <a>{{avistamiento.name}}</a>
         </div>
 
         <div class="fill">
@@ -13,13 +13,13 @@
 
         <div class="row">
           <div class="col">
-            <b>Familia:</b> {{avistamiento.familia}}
+            <b>Familia:</b> {{avistamiento.type.category}}
           </div>
           <div class="col">
-            <b>Tipo:</b> {{avistamiento.tipo}}
+            <b>Tipo:</b> {{avistamiento.type.name}}
           </div>
           <div class="col">
-            <b>Zona:</b> {{avistamiento.location}}
+            <b>Zona:</b> {{avistamiento.latitude}} - {{avistamiento.longitude}}
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@
         <span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: right;" ></span></div>
       </div>
       <div class="center">
-        {{avistamiento.descripcion}}
+        {{avistamiento.fields[0].description}}
       </div>
       <div class="center">
         <div style="text-align: center;">

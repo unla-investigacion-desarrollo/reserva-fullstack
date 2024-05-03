@@ -25,6 +25,8 @@ export class LoginService {
 
     this.rta = await lastValueFrom(this.http.post(url, body, { headers: this.headers }));
 
+    console.log(this.rta);
+
     localStorage.setItem('userData', JSON.stringify(this.rta));
     return this.rta.success;
   }
