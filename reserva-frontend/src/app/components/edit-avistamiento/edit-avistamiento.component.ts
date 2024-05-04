@@ -25,17 +25,25 @@ export class EditAvistamientoComponent {
       }
     });
     this.avistamiento = await this.avistamientoService.getAvistamientoById(this.id);
-
-    // this.avistamiento = JSON.parse(this.avistamientoService.getAvistamientoById(this.id));
   }
 
-  Aprobar(){
+  async Aprobar(){
+
+    //id hardcodeado hasta poder obtenerlo del login
+
+    await this.avistamientoService.updateStatusAvistamiento(1, Number(this.id), "aprobado");
+
     this.dialog.open(DialogComponentComponent, {
       data: { type:0, dialog: this.dialog},
     });
   }
 
-  Rechazar(){
+  async Rechazar(){
+
+    //id hardcodeado hasta poder obtenerlo del login
+
+    await this.avistamientoService.updateStatusAvistamiento(1, Number(this.id), "reprobado");
+
     this.dialog.open(DialogComponentComponent, {
       data: { type:1, dialog: this.dialog},
     });
