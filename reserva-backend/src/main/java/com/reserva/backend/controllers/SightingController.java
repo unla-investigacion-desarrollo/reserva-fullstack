@@ -84,8 +84,9 @@ public class SightingController {
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "999999") int size,
 			@RequestParam(value = "orderBy", defaultValue = "asc") String orderBy,
-			@RequestParam(value = "sortBy", defaultValue = "id") String sortBy){
-        return ResponseEntity.ok(sightingService.getAll(status, type, page, size, orderBy, sortBy));
+			@RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "active", defaultValue = "1") boolean active){
+        return ResponseEntity.ok(sightingService.getAll(status, type, page, size, orderBy, sortBy, active));
     }
 
     @Operation(summary = "realiza la actualizacion de el estado de los avistamientos", security = @SecurityRequirement(name = "bearerAuth"))

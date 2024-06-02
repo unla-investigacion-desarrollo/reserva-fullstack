@@ -105,25 +105,25 @@ public class SightingService implements ISightingService {
 
     @Override
     public List<SightingResponseDto> getByUserId(long id) {
-        List<Sighting> sightings = sightingRepository.findByUserId(id);
+        List<Sighting> sightings = sightingRepository.findByUserIdAndActive(id, true);
         return sightings.stream().map(sighting -> modelMapper.map(sighting, SightingResponseDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public ResponsePageable<SightingResponseDto> getAll(String status, String type, int page, int size, String orderBy,
-            String sortBy) {
+            String sortBy, boolean active) {
         try {
             if (page < 1) page = 1; if (size < 1) size = 999999;
             Pageable pageable = PageRequest.of(page - 1, size, Sort.by(
                     orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
             Page<Sighting> pageTipo;
             if (!status.isEmpty()) {
-                pageTipo = sightingRepository.findByStatus(status, pageable);
+                pageTipo = sightingRepository.findByStatusAndActive(status, active, pageable);
             } else if (!type.isEmpty()) {
-                pageTipo = sightingRepository.findByType(type, pageable);
+                pageTipo = sightingRepository.findByTypeAndActive(type, active, pageable);
             } else {
-                pageTipo = sightingRepository.findByActive(pageable);
+                pageTipo = sightingRepository.findByActive(active, pageable);
             }
             return new ResponsePageable<>(page, pageTipo.getTotalPages(),
                     pageTipo.getContent().stream()
