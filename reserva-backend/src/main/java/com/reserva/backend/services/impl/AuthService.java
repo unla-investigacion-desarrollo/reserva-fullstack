@@ -62,7 +62,7 @@ public class AuthService implements IAuthService {
 			throw new ReservaException(AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, HttpStatus.UNAUTHORIZED);
 		}
 		String token = jwtTokenProvider.generateToken(user);
-		JwtAuthResponse response = new JwtAuthResponse(user.getUsername(), user.getRole().getName(), token, "bearer");
+		JwtAuthResponse response = new JwtAuthResponse(user.getId(), user.getUsername(), user.getRole().getName(), token, "bearer");
 		return new Responses<>(true, AuthConstants.SIGN_IN_SUCCESSFUL, response);
 	}
 
