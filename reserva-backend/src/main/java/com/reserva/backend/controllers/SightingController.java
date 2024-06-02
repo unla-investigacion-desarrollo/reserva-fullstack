@@ -73,7 +73,7 @@ public class SightingController {
         return ResponseEntity.ok(sightingService.getByUserId(userId));
     }
 
-    @Operation(summary = "trae todos los avistamientos con paginacion, filtros de estado y tipo")
+    @Operation(summary = "trae todos los avistamientos con paginacion, filtros de estado y tipo", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "no se pudieron listar los avistamientos", content = @Content(mediaType = "application/json")),
