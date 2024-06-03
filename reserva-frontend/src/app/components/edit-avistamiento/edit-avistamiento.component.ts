@@ -29,9 +29,7 @@ export class EditAvistamientoComponent {
 
   async Aprobar(){
 
-    //id hardcodeado hasta poder obtenerlo del login
-
-    await this.avistamientoService.updateStatusAvistamiento(1, Number(this.id), "aprobado");
+    await this.avistamientoService.updateStatusAvistamiento(JSON.parse(localStorage.getItem("userData")).data.id, Number(this.id), "aprobado");
 
     this.dialog.open(DialogComponentComponent, {
       data: { type:0, dialog: this.dialog},
@@ -40,9 +38,7 @@ export class EditAvistamientoComponent {
 
   async Rechazar(){
 
-    //id hardcodeado hasta poder obtenerlo del login
-
-    await this.avistamientoService.updateStatusAvistamiento(1, Number(this.id), "reprobado");
+    await this.avistamientoService.updateStatusAvistamiento(JSON.parse(localStorage.getItem("userData")).data.id, Number(this.id), "reprobado");
 
     this.dialog.open(DialogComponentComponent, {
       data: { type:1, dialog: this.dialog},

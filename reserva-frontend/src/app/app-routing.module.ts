@@ -8,6 +8,7 @@ import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/shared/header/header.component';
+import { DatePipe } from '@angular/common';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -21,8 +22,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes),HttpClientModule ],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes),HttpClientModule],
+  exports: [RouterModule],
+  providers: [
+    DatePipe 
+  ]
 })
 
 export class AppRoutingModule { } 

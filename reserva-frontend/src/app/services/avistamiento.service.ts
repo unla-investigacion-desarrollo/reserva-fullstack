@@ -54,4 +54,11 @@ export class AvistamientoService {
 
     return await lastValueFrom(this.http.post(url, body, { headers: this.headers }));
   }
+
+  async deleteAvistamiento(avistamientoId){
+    const url = 'http://localhost:8000/sighting/delete/' + avistamientoId;
+
+    return await lastValueFrom(this.http.delete(url));
+
+  }
 }

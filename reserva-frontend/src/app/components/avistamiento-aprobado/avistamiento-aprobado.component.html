@@ -17,9 +17,9 @@
         <tr *ngFor="let avist of avistamientos">
           <td>{{avist.scientificName}}</td>
           <td>{{avist.id}}</td>
-          <td>{{avist.user}}</td>
+          <td>{{avist.createdBy.username}}</td>
           <td>{{avist.latitude}} - {{avist.longitude}}</td>
-          <td>{{avist.createdAt}}</td>
+          <td>{{datePipe.transform(avist.createdAt, 'yyyy-MM-dd HH:mm:ss')}}</td>
           <td><span class="glyphicon glyphicon-camera" style="font-size: 25px;float: left;"></span></td>
           <td><span class="glyphicon glyphicon-trash" style="font-size: 25px;float: left;"></span></td>
           <td><span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: left;"></span></td>

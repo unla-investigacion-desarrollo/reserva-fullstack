@@ -15,12 +15,14 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  async login(){
+  async login(usernameOrEmail, password){
 
     const url = 'http://localhost:8000/account/login';
     const body = {
-      usernameOrEmail: "nfiasche",
-      password: "nfiasche"
+      // usernameOrEmail: "nfiasche",
+      // password: "nfiasche"
+      usernameOrEmail: usernameOrEmail,
+      password: password
     };
 
     this.rta = await lastValueFrom(this.http.post(url, body, { headers: this.headers }));

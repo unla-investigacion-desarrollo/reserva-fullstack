@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AvistamientoService } from '../../services/avistamiento.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-avistamiento-aprobado',
@@ -10,11 +11,9 @@ export class AvistamientoAprobadoComponent {
 
   avistamientos: any;
 
-  constructor(private avistamientoService: AvistamientoService) {}
+  constructor(private avistamientoService: AvistamientoService, private datePipe: DatePipe) {}
 
   async ngOnInit(): Promise<void> {
-    // this.avistamientos = JSON.parse(this.avistamientoService.getAvistamientosAprobados());
-
     this.avistamientos = await this.avistamientoService.getAvistamientosAprobados();
     this.avistamientos = this.avistamientos.data;
   }

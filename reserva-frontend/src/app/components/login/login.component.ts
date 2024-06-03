@@ -15,8 +15,8 @@ constructor(private router2: Router, private loginService: LoginService) {
     this.router = router2;
   }
 
-async login(){
-  await this.loginService.login() ? this.router.navigate(['/', 'home']) : null;
+async login(usernameOrEmail, password){
+  await this.loginService.login(usernameOrEmail, password) ? this.router.navigate(['/', 'home']) : null;
 }
 
 }

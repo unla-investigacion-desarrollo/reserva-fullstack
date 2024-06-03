@@ -25,17 +25,17 @@
         <div class="col-lg-8">
           <div class="card-body py-5 px-md-5">
   
-            <form>
+            <form >
               <!-- Email input -->
-              <div class="form-outline mb-4">
-                <input type="email" id="form2Example1" class="form-control" />
-                <label class="form-label" for="form2Example1">Email address</label>
+              <div class="form-outline mb-4" >
+                <input type="email" #usernameOrEmail for="email" id="email" class="form-control" />
+                <label class="form-label" for="email">Email address</label>
               </div>
   
               <!-- Password input -->
-              <div class="form-outline mb-4">
-                <input type="password" id="form2Example2" class="form-control" />
-                <label class="form-label" for="form2Example2">Password</label>
+              <div class="form-outline mb-4"> 
+                <input type="password" #password id="password" class="form-control" />
+                <label class="form-label" for="password">Password</label>
               </div>
   
               <!-- 2 column grid layout for inline styling -->
@@ -55,7 +55,7 @@
               </div>
   
               <!-- Submit button -->
-              <button type="button" class="btn btn-primary btn-block mb-4" (click)="login()">Sign in</button>
+              <button type="button" class="btn btn-primary btn-block mb-4" (click)="login(usernameOrEmail.value, password.value)">Sign in</button>
   
             </form>
   
