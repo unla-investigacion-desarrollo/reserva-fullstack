@@ -37,7 +37,9 @@
                 <input type="password" #password id="password" class="form-control" />
                 <label class="form-label" for="password">Password</label>
               </div>
-  
+              <div class="form-outline mb-4"> 
+                <label *ngIf="!rtaLogin" class="form-label" style="color: red;" >Usuario o contraseña inválidos.</label>
+              </div>
               <!-- 2 column grid layout for inline styling -->
               <div class="row mb-4">
                 <div class="col d-flex justify-content-center">

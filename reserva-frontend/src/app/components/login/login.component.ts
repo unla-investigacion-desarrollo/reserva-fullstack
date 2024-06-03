@@ -10,13 +10,22 @@ import { LoginService } from '../../services/login.service';
 export class LoginComponent {
 
 private router: Router;
-
+ rtaLogin: boolean = true;
 constructor(private router2: Router, private loginService: LoginService) {
     this.router = router2;
   }
 
 async login(usernameOrEmail, password){
-  await this.loginService.login(usernameOrEmail, password) ? this.router.navigate(['/', 'home']) : null;
+  try{
+    this.rtaLogin = await this.loginService.login(usernameOrEmail, password);
+  
+    if(this.rtaLogin){
+      this.router.navigate(['/', 'home'])
+    }else{
+      this.rtaLogin = false;
+    }
+  }catch(ex){
+    this.rtaLogin = false;
+  }
 }
-
 }

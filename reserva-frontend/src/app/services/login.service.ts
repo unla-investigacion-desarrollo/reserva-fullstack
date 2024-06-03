@@ -12,6 +12,7 @@ export class LoginService {
   });
 
   private rta: any;
+  isLoggedIn = false;
 
   constructor(private http: HttpClient) { }
 
@@ -28,6 +29,13 @@ export class LoginService {
     this.rta = await lastValueFrom(this.http.post(url, body, { headers: this.headers }));
 
     localStorage.setItem('userData', JSON.stringify(this.rta));
-    return this.rta.success;
+
+    if(this.rta.success){
+      this.isLoggedIn = true;
+      return this.rta.success;
+
+    }
+
+    return false;
   }
 }
