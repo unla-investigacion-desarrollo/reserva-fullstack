@@ -12,6 +12,8 @@ import com.reserva.backend.entities.Sighting;
 
 public interface ISightingRepository extends JpaRepository<Sighting, Long>{
 
+    public Page<Sighting> findByNameContainingOrScientificNameContainingAndActive(String name, String scientificName, boolean active, Pageable pageable);
+
     public Page<Sighting> findByStatusAndActive(String status, boolean active, Pageable pageable);
 
     @Query(value = "SELECT * FROM sighting s WHERE s.created_by_id =:id AND s.active =:active", nativeQuery = true)

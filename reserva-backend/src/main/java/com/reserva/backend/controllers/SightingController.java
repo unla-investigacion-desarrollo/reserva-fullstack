@@ -79,14 +79,15 @@ public class SightingController {
             @ApiResponse(responseCode = "500", description = "no se pudieron listar los avistamientos", content = @Content(mediaType = "application/json")),
     })
     @GetMapping
-    public ResponseEntity<?> getAll(@RequestParam(value = "status", defaultValue = "") String status,
+    public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "") String name,
+            @RequestParam(value = "status", defaultValue = "") String status,
 			@RequestParam(value = "type", defaultValue = "") String type,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "999999") int size,
 			@RequestParam(value = "orderBy", defaultValue = "asc") String orderBy,
 			@RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
             @RequestParam(value = "active", defaultValue = "1") boolean active){
-        return ResponseEntity.ok(sightingService.getAll(status, type, page, size, orderBy, sortBy, active));
+        return ResponseEntity.ok(sightingService.getAll(name, status, type, page, size, orderBy, sortBy, active));
     }
 
     @Operation(summary = "realiza la actualizacion de el estado de los avistamientos", security = @SecurityRequirement(name = "bearerAuth"))

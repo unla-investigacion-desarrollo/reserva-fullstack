@@ -111,14 +111,16 @@ public class SightingService implements ISightingService {
     }
 
     @Override
-    public ResponsePageable<SightingResponseDto> getAll(String status, String type, int page, int size, String orderBy,
+    public ResponsePageable<SightingResponseDto> getAll(String name, String status, String type, int page, int size, String orderBy,
             String sortBy, boolean active) {
         try {
             if (page < 1) page = 1; if (size < 1) size = 999999;
             Pageable pageable = PageRequest.of(page - 1, size, Sort.by(
                     orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
             Page<Sighting> pageTipo;
-            if (!status.isEmpty()) {
+            if(!name.isEmpty()){
+                pageTipo = sightingRepository.findByNameContainingOrScientificNameContainingAndActive(name, name, active, pageable);
+            } else if (!status.isEmpty()) {
                 pageTipo = sightingRepository.findByStatusAndActive(status, active, pageable);
             } else if (!type.isEmpty()) {
                 pageTipo = sightingRepository.findByTypeAndActive(type, active, pageable);

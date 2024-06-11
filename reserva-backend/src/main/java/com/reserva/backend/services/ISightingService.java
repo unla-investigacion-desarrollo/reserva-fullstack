@@ -16,7 +16,7 @@ public interface ISightingService {
     public Responses<SightingResponseDto> create(SightingRequestDto request, List<MultipartFile> files);
     public SightingResponseDto getById(long id);
     public List<SightingResponseDto> getByUserId(long id);
-    public ResponsePageable<SightingResponseDto> getAll(String status, String type, int page, int size, String orderBy, String sortBy, boolean active);
+    public ResponsePageable<SightingResponseDto> getAll(String name, String status, String type, int page, int size, String orderBy, String sortBy, boolean active);
     public Responses<SightingResponseDto> updateStatus(UpdateStatusDto request);
     public Responses<SightingResponseDto> update(long id, SightingUpdateDto request);
     public Responses<SightingResponseDto> delete(long id);
