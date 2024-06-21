@@ -104,19 +104,17 @@ public class SightingTypeService implements ISightingTypeService{
 	}
 
 	@Override
-	public ResponsePageable<SightingTypeResponseDto> getAll(String name, String category, int page, int size, String orderBy, String sortBy) {
+	public ResponsePageable<SightingTypeResponseDto> getAll(String name, String category, int page, int size, String orderBy, String sortBy, boolean active) {
 		try {
 			if(page < 1) page = 1; if(size < 1) size = 999999;
 			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(
 					orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
-			Page<SightingType> pageTipo;
-			if (!name.isEmpty()) {
-				pageTipo = sightingTypeRepository.findByNameContainingAndActive(name, true, pageable);
-			} else if (!category.isEmpty()) {
-				pageTipo = sightingTypeRepository.findByCategoryAndActive(category, true, pageable);
-			} else {
-				pageTipo = sightingTypeRepository.findByActive(true, pageable);
-			}
+
+			name = name.isEmpty() ? null : name;
+			category = category.isEmpty() ? null : category;
+
+			Page<SightingType> pageTipo = sightingTypeRepository.findAll(name, category, active, pageable);
+
 			return new ResponsePageable<>(page, pageTipo.getTotalPages(),
 					pageTipo.getContent().stream()
 							.map(sightingType -> modelMapper.map(sightingType, SightingTypeResponseDto.class))

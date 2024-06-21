@@ -117,16 +117,13 @@ public class SightingService implements ISightingService {
             if (page < 1) page = 1; if (size < 1) size = 999999;
             Pageable pageable = PageRequest.of(page - 1, size, Sort.by(
                     orderBy.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.toLowerCase()));
-            Page<Sighting> pageTipo;
-            if(!name.isEmpty()){
-                pageTipo = sightingRepository.findByNameContainingOrScientificNameContainingAndActive(name, name, active, pageable);
-            } else if (!status.isEmpty()) {
-                pageTipo = sightingRepository.findByStatusAndActive(status, active, pageable);
-            } else if (!type.isEmpty()) {
-                pageTipo = sightingRepository.findByTypeAndActive(type, active, pageable);
-            } else {
-                pageTipo = sightingRepository.findByActive(active, pageable);
-            }
+
+            name = name.isEmpty() ? null : name;
+            status = status.isEmpty() ? null : status;
+            type = type.isEmpty() ? null : type;
+
+            Page<Sighting> pageTipo = sightingRepository.findAll(name, status, type, active, pageable);
+
             return new ResponsePageable<>(page, pageTipo.getTotalPages(),
                     pageTipo.getContent().stream()
                             .map(sighting -> modelMapper.map(sighting, SightingResponseDto.class))

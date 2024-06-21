@@ -106,8 +106,9 @@ public class SightingTypeController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "999999") int size,
             @RequestParam(value = "orderBy", defaultValue = "asc") String orderBy,
-            @RequestParam(value = "sortBy", defaultValue = "id") String soryBy) {
-        return ResponseEntity.ok(sightingTypeService.getAll(name, category, page, size, orderBy, soryBy));
+            @RequestParam(value = "sortBy", defaultValue = "id") String soryBy,
+            @RequestParam(value = "active", defaultValue = "true") boolean active) {
+        return ResponseEntity.ok(sightingTypeService.getAll(name, category, page, size, orderBy, soryBy, active));
     }
 
 }
