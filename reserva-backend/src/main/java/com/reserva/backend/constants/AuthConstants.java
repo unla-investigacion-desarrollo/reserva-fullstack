@@ -8,7 +8,7 @@ public class AuthConstants {
 	//Constantes generales
 	public static final String USERNAME_OR_EMAIL_NOT_FOUND = "No existe ningun usuario con ese username/email";
 	public static final String USERNAME_NOT_FOUND = "No se encuentra ningun usuario registrado con ese username";
-	public static final String USERNAME_OR_PASSWORD_INCORRECT = "Username/email o contraseña incorrecta";
+	public static final String USERNAME_OR_PASSWORD_INCORRECT = "Nombre de usuario/Email o Contraseña incorrecta";
 	public static final String USERNAME_ALREADY_EXIST = "Ya existe un usuario registrado con ese username";
 	public static final String EMAIL_ALREADY_EXIST = "Ya existe un usuario registrado con ese email";
 	public static final String ROLE_NOT_FOUND = "No se encontro ningun rol con ese nombre";
