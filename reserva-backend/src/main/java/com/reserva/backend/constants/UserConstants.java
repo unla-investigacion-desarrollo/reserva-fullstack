@@ -3,7 +3,7 @@ package com.reserva.backend.constants;
 public class UserConstants {
 
     // Constantes generales
-    public static final String USERNAME_ALREADY_EXIST = "El username ya existe";
+    public static final String USERNAME_ALREADY_EXIST = "El nombre de usuario ya existe";
     public static final String EMAIL_ALREADY_EXIST = "El email ya existe";
     public static final String ROLE_NOT_FOUND = "No existe un rol con ese nombre";
     public static final String USER_NOT_FOUND = "Usuario no encontrado";
