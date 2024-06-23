@@ -27,6 +27,7 @@ import com.reserva.backend.repositorys.ITokenVerificationRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IAuthService;
 import com.reserva.backend.services.IEmailInfoService;
+import com.reserva.backend.util.Response;
 import com.reserva.backend.util.Responses;
 
 @Service
@@ -63,7 +64,7 @@ public class AuthService implements IAuthService {
 		}
 		String token = jwtTokenProvider.generateToken(user);
 		JwtAuthResponse response = new JwtAuthResponse(user.getId(), user.getUsername(), user.getRole().getName(), token, "bearer");
-		return new Responses<>(true, AuthConstants.SIGN_IN_SUCCESSFUL, response);
+		return Response.success(AuthConstants.SIGN_IN_SUCCESSFUL, response);
 	}
 
 	@Override
@@ -85,8 +86,7 @@ public class AuthService implements IAuthService {
 		user.setRole(role);
 		try {
 			userRepository.save(user);
-			return new Responses<>(true, AuthConstants.SIGN_UP_SUCCESSFUL,
-					modelMapper.map(user, UserResponseDto.class));
+			return Response.success(AuthConstants.SIGN_UP_SUCCESSFUL, modelMapper.map(user, UserResponseDto.class));
 		} catch (Exception e) {
 			throw new ReservaException(AuthConstants.DATABASE_SAVE_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -112,7 +112,7 @@ public class AuthService implements IAuthService {
 				+ "<br><br><br>Saludos,<br>Reserva.";
 		try {
 			emailInfoService.send(request.getEmail(), subjet, body);
-			return new Responses<>(true, AuthConstants.EMAIL_SEND_OK, null);
+			return Response.success(AuthConstants.EMAIL_SEND_OK, null);
 		} catch (MessagingException e) {
 			throw new ReservaException(AuthConstants.EMAIL_SEND_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
@@ -136,7 +136,7 @@ public class AuthService implements IAuthService {
 		user.setPassword(passEncoder.encode(request.getPassword()));
 		try {
 			tokenVerificationRepository.save(token);
-			return new Responses<>(true, AuthConstants.PASSWORD_HAS_BEEN_CHANGED, null);
+			return Response.success(AuthConstants.PASSWORD_HAS_BEEN_CHANGED, null);
 		} catch (Exception e) {
 			throw new ReservaException(AuthConstants.DATABASE_SAVE_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

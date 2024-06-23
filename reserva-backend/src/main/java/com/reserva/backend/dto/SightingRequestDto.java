@@ -18,7 +18,7 @@ public class SightingRequestDto {
 
     private long userId;
     @NotBlank(message = "el nombre no debe estar vacio")
-	@Size(max = 250, message = "el nombre no debe tener más de {max} caracteres")
+
     private String name;
     @NotBlank(message = "el nombre cientifico no debe estar vacio")
 	@Size(max = 250, message = "el nombre cientifico no debe tener más de {max} caracteres")

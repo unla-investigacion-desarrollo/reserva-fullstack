@@ -17,6 +17,7 @@ import com.reserva.backend.dto.SightingTypeResponseDto;
 import com.reserva.backend.entities.SightingType;
 import com.reserva.backend.repositorys.ISightingTypeRepository;
 import com.reserva.backend.services.ISightingTypeService;
+import com.reserva.backend.util.Response;
 import com.reserva.backend.util.ResponsePageable;
 import com.reserva.backend.util.Responses;
 import com.reserva.backend.exceptions.ReservaException;
@@ -40,7 +41,7 @@ public class SightingTypeService implements ISightingTypeService{
 			tipo.setActive(true);
 			sightingTypeRepository.save(tipo);
 			SightingTypeResponseDto response = modelMapper.map(tipo, SightingTypeResponseDto.class);
-			return new Responses<>(true, SightingConstants.SIGHTINGTYPE_CREATED, response);
+			return Response.success(SightingConstants.SIGHTINGTYPE_CREATED, response);
 		} catch (Exception e) {
 			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
@@ -66,7 +67,7 @@ public class SightingTypeService implements ISightingTypeService{
 			update.setName(request.getName());
 			update.setCategory(request.getCategory());
 			sightingTypeRepository.save(update);
-			return new Responses<>(true, SightingConstants.SIGHTINGTYPE_UPDATE_SUCCESSFUL, getById(id));
+			return Response.success(SightingConstants.SIGHTINGTYPE_UPDATE_SUCCESSFUL, getById(id));
 		} catch (Exception e) {
 			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
@@ -81,7 +82,7 @@ public class SightingTypeService implements ISightingTypeService{
 		}
 		try {
 			sightingTypeRepository.delete(tipo);
-			return new Responses<>(true, SightingConstants.SIGHTINGTYPE_DELETE_SUCCESSFUL, null);
+			return Response.success(SightingConstants.SIGHTINGTYPE_DELETE_SUCCESSFUL, null);
 		} catch (Exception e) {
 			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
@@ -97,7 +98,7 @@ public class SightingTypeService implements ISightingTypeService{
 		try {
 			tipo.setActive(true);
 			sightingTypeRepository.save(tipo);
-			return new Responses<>(true, SightingConstants.SIGHTINGTYPE_IS_ACTIVE, getById(id));
+			return Response.success(SightingConstants.SIGHTINGTYPE_IS_ACTIVE, getById(id));
 		} catch (Exception e) {
 			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}

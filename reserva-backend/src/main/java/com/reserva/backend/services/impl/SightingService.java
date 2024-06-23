@@ -33,6 +33,7 @@ import com.reserva.backend.repositorys.ISightingTypeRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.ISightingService;
 import com.reserva.backend.services.IStorageService;
+import com.reserva.backend.util.Response;
 import com.reserva.backend.util.ResponsePageable;
 import com.reserva.backend.util.Responses;
 
@@ -83,7 +84,7 @@ public class SightingService implements ISightingService {
             sightingRepository.save(sighting);
             SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
             log.info("Successful process 'create-sighting' with with [name: {}] for [user: {}]", request.getName(), request.getUserId());
-            return new Responses<>(true, SightingConstants.SIGHTING_CREATED, response);
+            return Response.success(SightingConstants.SIGHTING_CREATED, response);
         } catch (ReservaException e) {
             log.error("Process 'create-sighting' with [name: {}] had an [exception: {}]", request.getName(), e.getMessage());
             throw e;
@@ -144,7 +145,7 @@ public class SightingService implements ISightingService {
             sighting.setApprovedBy(user);
             sightingRepository.save(sighting);
             String response = String.format(SightingConstants.SIGHTING_STATUS, sighting.getId(), sighting.getStatus());
-            return new Responses<>(true, response, getById(sighting.getId()));
+            return Response.success(response, getById(sighting.getId()));
         } catch (Exception e) {
             throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
         }
@@ -177,7 +178,7 @@ public class SightingService implements ISightingService {
             }
             sightingRepository.save(sighting);
             SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
-            return new Responses<>(true, SightingConstants.SIGHTING_UPDATE_SUCCESSFUL, response);
+            return Response.success(SightingConstants.SIGHTING_UPDATE_SUCCESSFUL, response);
         } catch (ReservaException e) {
             throw e;
         } catch (Exception e) {
@@ -195,7 +196,8 @@ public class SightingService implements ISightingService {
         }
         try{
             sightingRepository.delete(sighting);
-            return new Responses<>(true, SightingConstants.SIGHTING_DELETE_SUCCESSFUL, null); //return 418 I'M TEAPOT
+            //return 418 I'M TEAPOT
+            return Response.success(SightingConstants.SIGHTING_DELETE_SUCCESSFUL, null);
         }catch(Exception e){
             throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
         }
@@ -211,7 +213,7 @@ public class SightingService implements ISightingService {
         try{
             sighting.setActive(true);
             sightingRepository.save(sighting);
-            return new Responses<>(true, SightingConstants.SIGHTING_DELETE_SUCCESSFUL, getById(id));
+            return Response.success(SightingConstants.SIGHTING_DELETE_SUCCESSFUL, getById(id));
         }catch(Exception e){
             throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
         }

@@ -21,6 +21,7 @@ import com.reserva.backend.dto.user.UserUpdateDto;
 import com.reserva.backend.repositorys.IRoleRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IUserService;
+import com.reserva.backend.util.Response;
 import com.reserva.backend.util.ResponsePageable;
 import com.reserva.backend.util.Responses;
 import com.reserva.backend.exceptions.ReservaException;
@@ -59,7 +60,7 @@ public class UserService implements IUserService{
 			newUser.setRole(newRole.get());
 			userRepository.save(newUser);
 			UserResponseDto response = modelMapper.map(newUser, UserResponseDto.class);
-			return new Responses<>(true, UserConstants.USER_CREATED, response);
+			return Response.success(UserConstants.USER_CREATED, response);
 		} catch (MappingException e) {
 			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
@@ -104,7 +105,7 @@ public class UserService implements IUserService{
 			}
 			updateUser.setRole(updateRole.get());
 			userRepository.save(updateUser);
-			return new Responses<>(true, UserConstants.USER_UPDATE_SUCCESSFUL, getById(id));
+			return Response.success(UserConstants.USER_UPDATE_SUCCESSFUL, getById(id));
 		} catch (ReservaException e) {
 			throw e;
 		} catch (Exception e) {
@@ -121,7 +122,7 @@ public class UserService implements IUserService{
 		}
 		try {
 			userRepository.delete(user);
-			return new Responses<>(true, UserConstants.USER_DELETE_SUCCESSFUL, null);
+			return Response.success(UserConstants.USER_DELETE_SUCCESSFUL, null);
 		} catch (Exception e) {
 			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
@@ -137,7 +138,7 @@ public class UserService implements IUserService{
 		try {
 			user.setActive(true);
 			userRepository.save(user);
-			return new Responses<>(true, UserConstants.USER_RESTORE_SUCCESSFUL, getById(id));
+			return Response.success(UserConstants.USER_RESTORE_SUCCESSFUL, getById(id));
 		} catch (Exception e) {
 			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}

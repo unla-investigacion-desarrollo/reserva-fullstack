@@ -23,6 +23,7 @@ import com.reserva.backend.entities.Image;
 import com.reserva.backend.exceptions.ReservaException;
 import com.reserva.backend.repositorys.IStorageRepository;
 import com.reserva.backend.services.IStorageService;
+import com.reserva.backend.util.Response;
 import com.reserva.backend.util.Responses;
 
 @Service
@@ -112,7 +113,7 @@ public class StorageService implements IStorageService {
             Path path = getPath(image.getUrl());
             Files.deleteIfExists(path);
             storageRepository.delete(image);
-            return new Responses<>(true, StorageConstants.IMAGE_SUCCESSFUL_DELETED, null);
+            return Response.success(StorageConstants.IMAGE_SUCCESSFUL_DELETED, null);
         } catch (Exception e) {
             throw new ReservaException(StorageConstants.IMAGE_URL_INVALID, HttpStatus.BAD_REQUEST);
         }
