@@ -45,7 +45,7 @@ public class FieldService implements IFieldService {
             FieldRequestDto response = modelMapper.map(field, FieldRequestDto.class);
             return Response.success("field creado", response);
         } catch (Exception e) {
-            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException("request failure", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -70,7 +70,7 @@ public class FieldService implements IFieldService {
             fieldRepository.save(field);
             return Response.success("update ok", getById(id));
         } catch (Exception e) {
-            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException("request failure", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -85,7 +85,7 @@ public class FieldService implements IFieldService {
             fieldRepository.delete(field);
             return Response.success("delete ok", null);
         } catch (Exception e) {
-            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException("request failure", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -101,7 +101,7 @@ public class FieldService implements IFieldService {
             fieldRepository.save(field);
             return Response.success("restore ok", getById(id));
         } catch (Exception e) {
-            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException("request failure", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

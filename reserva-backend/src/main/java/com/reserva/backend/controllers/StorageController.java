@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.reserva.backend.constants.StorageConstants;
 import com.reserva.backend.services.IStorageService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/storage")
@@ -24,11 +24,11 @@ public class StorageController {
     @Autowired
     private IStorageService storageService;
 
-    @Operation(summary = "obtiene una imagen/recurso a partir de una url", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Obtiene una imagen o recurso a partir de una URL")
         @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "ok", content = @Content),
-            @ApiResponse(responseCode = "400", description = "La url no es valida", content = @Content),
-            @ApiResponse(responseCode = "404", description = "No se pudo encontrar la imagen", content = @Content)
+            @ApiResponse(responseCode = "200", description = StorageConstants.STORAGE_OK, content = @Content),
+            @ApiResponse(responseCode = "400", description = StorageConstants.IMAGE_URL_INVALID, content = @Content),
+            @ApiResponse(responseCode = "404", description = StorageConstants.IMAGE_NOT_FOUND, content = @Content)
         })
     @GetMapping("/{url:.+}")
     public ResponseEntity<?> getImage(@PathVariable("url") String url){
@@ -37,11 +37,11 @@ public class StorageController {
         .body(storageService.getImage(url));
     }
 
-    @Operation(summary = "obtiene una imagen/recurso a partir de un id", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Obtiene una imagen o recurso a partir de un ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "ok", content = @Content),
-        @ApiResponse(responseCode = "400", description = "La url no es valida", content = @Content),
-        @ApiResponse(responseCode = "404", description = "No se pudo encontrar la imagen", content = @Content)
+        @ApiResponse(responseCode = "200", description = StorageConstants.STORAGE_OK, content = @Content),
+        @ApiResponse(responseCode = "400", description = StorageConstants.IMAGE_URL_INVALID, content = @Content),
+        @ApiResponse(responseCode = "404", description = StorageConstants.IMAGE_NOT_FOUND, content = @Content)
     })
     @GetMapping("/image/{id}")
     public ResponseEntity<?> getImage(@PathVariable("id") long id){
@@ -50,11 +50,11 @@ public class StorageController {
         .body(storageService.getImage(id));
     }
     
-    @Operation(summary = "elimina una imagen (fisicamente) NO logicamente, 'Si eliminas las imagenes de un avistamiento no vas a poder reestablecer ese avistamiento'", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Elimina una imagen de forma permanente (no lógicamente)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "ok", content = @Content),
-        @ApiResponse(responseCode = "400", description = "Error al intentar eliminar la imagen", content = @Content),
-        @ApiResponse(responseCode = "404", description = "No existe una imagen con ese id", content = @Content)
+        @ApiResponse(responseCode = "200", description = StorageConstants.IMAGE_DELETE_SUCCESS, content = @Content),
+        @ApiResponse(responseCode = "400", description = StorageConstants.IMAGE_DELETE_ERROR, content = @Content),
+        @ApiResponse(responseCode = "404", description = StorageConstants.IMAGE_NOT_FOUND, content = @Content)
     })
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") long id){

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.reserva.backend.constants.SightingConstants;
+import com.reserva.backend.constants.UserConstants;
 import com.reserva.backend.dto.FieldRequestDto;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
@@ -63,7 +64,7 @@ public class SightingService implements ISightingService {
         log.info("Processing 'create-sighting' with [name: {}] for [user: {}]", request.getName(), request.getUserId());
         try {
             User user = userRepository.findById(request.getUserId())
-            .orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+            .orElseThrow(() -> new ReservaException(UserConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
             Sighting sighting = new Sighting();
             sighting.setName(request.getName());
             sighting.setScientificName(request.getScientificName());
@@ -72,10 +73,10 @@ public class SightingService implements ISightingService {
             sighting.setActive(true);
             sighting.setType(getType(request.getType()));
             if (isAdmin(user)) {
-                sighting.setStatus(SightingConstants.APPROVED_STATUS);
+                sighting.setStatus(SightingConstants.STATUS_APPROVED);
                 sighting.setApprovedBy(user);
             } else {
-                sighting.setStatus(SightingConstants.PENDING_STATUS);
+                sighting.setStatus(SightingConstants.STATUS_PENDING);
             }
             sighting.setCreatedAt(new Date());
             sighting.setCreatedBy(user);
@@ -84,13 +85,13 @@ public class SightingService implements ISightingService {
             sightingRepository.save(sighting);
             SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
             log.info("Successful process 'create-sighting' with with [name: {}] for [user: {}]", request.getName(), request.getUserId());
-            return Response.success(SightingConstants.SIGHTING_CREATED, response);
+            return Response.success(SightingConstants.SIGHTING_CREATE_SUCCESS, response);
         } catch (ReservaException e) {
             log.error("Process 'create-sighting' with [name: {}] had an [exception: {}]", request.getName(), e.getMessage());
             throw e;
         } catch (Exception e) {
             log.error("Process 'create-sighting' with [name: {}] had an [exception: {}]", request.getName(), e.getMessage());
-            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException(SightingConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -130,14 +131,14 @@ public class SightingService implements ISightingService {
                             .map(sighting -> modelMapper.map(sighting, SightingResponseDto.class))
                             .collect(Collectors.toList()));
         } catch (Exception e) {
-            throw new ReservaException(SightingConstants.SIGHTING_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException(SightingConstants.SIGHTING_RETRIEVE_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public Responses<SightingResponseDto> updateStatus(UpdateStatusDto request) {
         User user = userRepository.findById(request.getApprovedById())
-                .orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ReservaException(UserConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
         Sighting sighting = sightingRepository.findById(request.getIdSighting())
                 .orElseThrow(() -> new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND));
         try {
@@ -147,7 +148,7 @@ public class SightingService implements ISightingService {
             String response = String.format(SightingConstants.SIGHTING_STATUS, sighting.getId(), sighting.getStatus());
             return Response.success(response, getById(sighting.getId()));
         } catch (Exception e) {
-            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException(SightingConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -159,9 +160,9 @@ public class SightingService implements ISightingService {
             throw new ReservaException(SightingConstants.SIGHTING_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ReservaException(SightingConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ReservaException(UserConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
         if (user.getId() != sighting.getCreatedBy().getId() && !isAdmin(user)) {
-            throw new ReservaException(SightingConstants.SIGHTING_NON_OWNED,
+            throw new ReservaException(SightingConstants.SIGHTING_NOT_OWNED,
                     HttpStatus.BAD_REQUEST);
         }
         try {
@@ -171,18 +172,18 @@ public class SightingService implements ISightingService {
             sighting.setLongitude(request.getLongitude());
             sighting.setType(getType(request.getType()));
             if (isAdmin(user)) {
-                sighting.setStatus(SightingConstants.APPROVED_STATUS);
+                sighting.setStatus(SightingConstants.STATUS_APPROVED);
                 sighting.setApprovedBy(user);
             } else {
-                sighting.setStatus(SightingConstants.PENDING_STATUS);
+                sighting.setStatus(SightingConstants.STATUS_PENDING);
             }
             sightingRepository.save(sighting);
             SightingResponseDto response = modelMapper.map(sighting, SightingResponseDto.class);
-            return Response.success(SightingConstants.SIGHTING_UPDATE_SUCCESSFUL, response);
+            return Response.success(SightingConstants.SIGHTING_UPDATE_SUCCESS, response);
         } catch (ReservaException e) {
             throw e;
         } catch (Exception e) {
-            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException(SightingConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -197,9 +198,9 @@ public class SightingService implements ISightingService {
         try{
             sightingRepository.delete(sighting);
             //return 418 I'M TEAPOT
-            return Response.success(SightingConstants.SIGHTING_DELETE_SUCCESSFUL, null);
+            return Response.success(SightingConstants.SIGHTING_DELETE_SUCCESS, null);
         }catch(Exception e){
-            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException(SightingConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -213,9 +214,9 @@ public class SightingService implements ISightingService {
         try{
             sighting.setActive(true);
             sightingRepository.save(sighting);
-            return Response.success(SightingConstants.SIGHTING_DELETE_SUCCESSFUL, getById(id));
+            return Response.success(SightingConstants.SIGHTING_DELETE_SUCCESS, getById(id));
         }catch(Exception e){
-            throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException(SightingConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -253,7 +254,7 @@ public class SightingService implements ISightingService {
     }
 
     private boolean isAdmin(User user){
-        return user.getRole().getName().equalsIgnoreCase(SightingConstants.ADMIN) ? true : false;
+        return user.getRole().getName().equalsIgnoreCase(UserConstants.ROLE_ADMIN) ? true : false;
     }
 
 }

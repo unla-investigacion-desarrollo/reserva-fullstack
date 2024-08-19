@@ -34,16 +34,16 @@ public class SightingTypeService implements ISightingTypeService{
 	@Override
 	public Responses<SightingTypeResponseDto> create(SightingTypeRequestDto request) {
 		if (sightingTypeRepository.existsByName(request.getName())) {
-			throw new ReservaException(SightingConstants.SIGHTINGTYPE_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_TAKEN, HttpStatus.BAD_REQUEST);
 		}
 		try {
 			SightingType tipo = modelMapper.map(request, SightingType.class);
 			tipo.setActive(true);
 			sightingTypeRepository.save(tipo);
 			SightingTypeResponseDto response = modelMapper.map(tipo, SightingTypeResponseDto.class);
-			return Response.success(SightingConstants.SIGHTINGTYPE_CREATED, response);
+			return Response.success(SightingConstants.SIGHTINGTYPE_CREATE_SUCCESS, response);
 		} catch (Exception e) {
-			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(SightingConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -67,9 +67,9 @@ public class SightingTypeService implements ISightingTypeService{
 			update.setName(request.getName());
 			update.setCategory(request.getCategory());
 			sightingTypeRepository.save(update);
-			return Response.success(SightingConstants.SIGHTINGTYPE_UPDATE_SUCCESSFUL, getById(id));
+			return Response.success(SightingConstants.SIGHTINGTYPE_UPDATE_SUCCESS, getById(id));
 		} catch (Exception e) {
-			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(SightingConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -82,9 +82,9 @@ public class SightingTypeService implements ISightingTypeService{
 		}
 		try {
 			sightingTypeRepository.delete(tipo);
-			return Response.success(SightingConstants.SIGHTINGTYPE_DELETE_SUCCESSFUL, null);
+			return Response.success(SightingConstants.SIGHTINGTYPE_DELETE_SUCCESS, null);
 		} catch (Exception e) {
-			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(SightingConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class SightingTypeService implements ISightingTypeService{
 			sightingTypeRepository.save(tipo);
 			return Response.success(SightingConstants.SIGHTINGTYPE_IS_ACTIVE, getById(id));
 		} catch (Exception e) {
-			throw new ReservaException(SightingConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(SightingConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -121,7 +121,7 @@ public class SightingTypeService implements ISightingTypeService{
 							.map(sightingType -> modelMapper.map(sightingType, SightingTypeResponseDto.class))
 							.collect(Collectors.toList()));
 		} catch (Exception e) {
-			throw new ReservaException(SightingConstants.SIGHTINGTYPE_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
+			throw new ReservaException(SightingConstants.SIGHTINGTYPE_LIST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

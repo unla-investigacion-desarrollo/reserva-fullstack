@@ -2,41 +2,55 @@ package com.reserva.backend.constants;
 
 public class SightingConstants {
 
-    // Admin
-    public static final String ADMIN = "ROLE_PERSONAL_RESERVA";
-
     // Status
-    public static final String APPROVED_STATUS = "APROBADO";
-    public static final String PENDING_STATUS = "PENDIENTE";
-    public static final String REJECTED_STATUS = "RECHAZADO";
+    public static final String STATUS_APPROVED = "APROBADO";
+    public static final String STATUS_PENDING = "PENDIENTE";
+    public static final String STATUS_REJECTED = "RECHAZADO";
 
     // Constantes generales
-    public static final String SIGHTINGTYPE_CREATED = "Tipo de avistamiento creado correctamente!";
-    public static final String SIGHTINGTYPE_ALREADY_EXIST = "Ya existe un tipo de avistamiento con ese nombre";
-    public static final String SIGHTINGTYPE_NOT_FOUND = "No se encontró ningun tipo de avistamiento";
-    public static final String SIGHTINGTYPE_IS_ACTIVE = "El tipo de avistamiento se encuentra activo";
-    public static final String SIGHTINGTYPE_LIST_ERROR = "Error al listar los tipos de avistamientos";
-    public static final String SIGHTINGTYPE_UPDATE_SUCCESSFUL = "Tipo de avistamiento actualizado correctamente";
-    public static final String SIGHTINGTYPE_DELETE_SUCCESSFUL = "Tipo de avistamiento borrado correctamente";
+    public static final String SIGHTINGTYPE_OK = "Tipo avistamiento OK.";
+    public static final String SIGHTINGTYPE_CREATE_SUCCESS = "Tipo de avistamiento creado correctamente.";
+    public static final String SIGHTINGTYPE_TAKEN = "Ya existe un tipo de avistamiento con ese nombre.";
+    public static final String SIGHTINGTYPE_NOT_FOUND = "No se encontró ningun tipo de avistamiento.";
+    public static final String SIGHTINGTYPE_IS_ACTIVE = "El tipo de avistamiento está activo.";
+    public static final String SIGHTINGTYPE_LIST_ERROR = "Error al listar los tipos de avistamientos.";
+    public static final String SIGHTINGTYPE_UPDATE_SUCCESS = "Tipo de avistamiento actualizado correctamente.";
+    public static final String SIGHTINGTYPE_DELETE_SUCCESS = "Tipo de avistamiento eliminado correctamente.";
+    public static final String SIGHTINGTYPE_RESTORE_SUCCESS = "Tipo de avistamiento restaurado correctamente.";
+    public static final String SIGHTINGTYPE_RETRIEVE_ERROR = "Error al recuperar los tipos de avistamientos.";
 
-    public static final String USER_NOT_FOUND = "El usuario no fue encontrado";
-    public static final String SIGHTING_LIST_ERROR = "Error al listar los avistamientos";
-    public static final String SIGHTING_NOT_FOUND = "Avistamiento no encontrado";
-    public static final String SIGHTING_STATUS = "Avistamiento: %s Status: %s";
-    public static final String SIGHTING_CREATED = "Avistamiento creado correctamente!";
-    public static final String SIGHTING_UPDATE_SUCCESSFUL = "Avistamiento actualizado correctamente";
-    public static final String SIGHTING_DELETE_SUCCESSFUL = "Avistamiento borrado correctamente";
-    public static final String SIGHTING_IS_ACTIVE = "Avistamiento se encuentra activo";
-    public static final String SIGHTING_NON_OWNED = "No se puede actualziar un avistamiento que no te pertenece";
-    
+    public static final String SIGHTING_OK = "Avistamiento OK.";
+    public static final String SIGHTING_LIST_ERROR = "Error al listar los avistamientos.";
+    public static final String SIGHTING_NOT_FOUND = "Avistamiento no encontrado.";
+    public static final String SIGHTING_STATUS = "Avistamiento: %s, Estado: %s.";
+    public static final String SIGHTING_CREATE_SUCCESS = "Avistamiento creado correctamente.";
+    public static final String SIGHTING_UPDATE_SUCCESS = "Avistamiento actualizado correctamente.";
+    public static final String SIGHTING_DELETE_SUCCESS = "Avistamiento borrado correctamente.";
+    public static final String SIGHTING_RESTORE_SUCCESS = "Avistamiento restaurado correctamente.";
+    public static final String SIGHTING_IS_ACTIVE = "Avistamiento está activo.";
+    public static final String SIGHTING_NOT_OWNED = "No se puede actualizar un avistamiento que no te pertenece.";
+    public static final String SIGHTING_RETRIEVE_ERROR = "Error al recuperar los avistamientos.";
+;    
     // Mapeo 
-    public static final String REQUEST_FAILURE = "Algo salió mal durante la solicitud";
+    public static final String REQUEST_ERROR = "Ocurrió un error durante la solicitud.";
+
+    // Fields
+    public static final String FIELD_OK = "Campo OK.";
+    public static final String FIELD_IS_ACTIVE = "Campo está existe";
+    public static final String FIELD_ASSIGNMENT_ERROR = "No se puede asignar un campo a un avistamiento inexistente.";
+    public static final String FIELD_RETRIEVE_ERROR = "Error al recuperar los campos.";
+    public static final String FIELD_CREATE_SUCCESS = "Campo creado correctamente.";
+    public static final String FIELD_NOT_FOUND = "Campo no encontrado.";
+    public static final String FIELD_UPDATE_SUCCESS = "Campo actualizado correctamente.";
+    public static final String FIELD_DELETE_SUCCESS = "Campo eliminado correctamente.";
+    public static final String FIELD_RESTORE_SUCCESS = "Campo restaurado correctamente.";
+    public static final String FIELD_REQUEST_FAILURE = "Error durante la solicitud.";
 
     // Storage
-    public static final String LOCATION_NOT_FOUND = "Ubicacion no encontrada";
-    public static final String INVALID_FORMAT = "Formato no valido";
-    public static final String IMAGE_UPLOAD_ERROR = "Error al guardar la imagen";
-    public static final String IMAGE_UPLOAD_REQUIRED = "Es necesario subir al menos una imagen por cada avistamiento";
+    public static final String LOCATION_NOT_FOUND = "Ubicación no encontrada.";
+    public static final String INVALID_FORMAT = "Formato no válido.";
+    public static final String IMAGE_UPLOAD_FAILED = "Error al subir la imagen.";
+    public static final String IMAGE_UPLOAD_REQUIRED = "Es necesario subir al menos una imagen por cada avistamiento.";
 
 
 }

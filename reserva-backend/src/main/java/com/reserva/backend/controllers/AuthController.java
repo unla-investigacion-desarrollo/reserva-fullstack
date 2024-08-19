@@ -28,45 +28,45 @@ public class AuthController {
 	@Autowired
 	private IAuthService authService;
 	
-	@Operation(summary = "realiza el inicio de sesion de un usuario previamente registrado en la base de datos")
+	@Operation(summary = "Inicio de sesión")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = AuthConstants.SIGN_IN_SUCCESSFUL, content = @Content),
-			@ApiResponse(responseCode = "500", description = AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, content = @Content) })
+			@ApiResponse(responseCode = "200", description = AuthConstants.SIGN_IN_SUCCESS, content = @Content),
+			@ApiResponse(responseCode = "500", description = AuthConstants.PASSWORD_MISMATCH, content = @Content) })
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginDto request){
 		return ResponseEntity.ok(authService.signin(request));
 	}
 	
-	@Operation(summary = "realiza el registro de un usuario nuevo, sin estar previamente registrado en la base de datos")
+	@Operation(summary = "Registro de un usuario nuevo")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = AuthConstants.SIGN_UP_SUCCESSFUL, content = @Content),
-			@ApiResponse(responseCode = "400", description = AuthConstants.USERNAME_ALREADY_EXIST + " | "
-					+ AuthConstants.EMAIL_ALREADY_EXIST, content = @Content),
+			@ApiResponse(responseCode = "200", description = AuthConstants.SIGN_UP_SUCCESS, content = @Content),
+			@ApiResponse(responseCode = "400", description = AuthConstants.USERNAME_TAKEN + " | "
+					+ AuthConstants.EMAIL_TAKEN, content = @Content),
 			@ApiResponse(responseCode = "404", description = AuthConstants.ROLE_NOT_FOUND, content = @Content),
-			@ApiResponse(responseCode = "500", description = AuthConstants.DATABASE_SAVE_ERROR, content = @Content) })
+			@ApiResponse(responseCode = "500", description = AuthConstants.DATABASE_SAVE_FAILED, content = @Content) })
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterDto request){
 		return ResponseEntity.ok(authService.signup(request));
 	}
 	
-	@Operation(summary = "realiza el envio de una solicitud de recuperacion de contraseña al email")
+	@Operation(summary = "Envío de token de recuperación de contraseña")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = AuthConstants.EMAIL_SEND_OK, content = @Content),
+			@ApiResponse(responseCode = "200", description = AuthConstants.EMAIL_SENT_SUCCESSFULLY, content = @Content),
 			@ApiResponse(responseCode = "404", description = AuthConstants.EMAIL_NOT_FOUND,  content = @Content),
-			@ApiResponse(responseCode = "500", description = AuthConstants.EMAIL_SEND_ERROR, content = @Content)
+			@ApiResponse(responseCode = "500", description = AuthConstants.EMAIL_SEND_FAILED, content = @Content)
 	})
 	@PostMapping("/recovery")
 	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto request){
 		return ResponseEntity.ok(authService.forgotPassword(request));
 	}
 	
-	@Operation(summary = "realiza el cambio de contraseña mas la verificacion del token")
+	@Operation(summary = "Cambio de contraseña con verificación de token")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = AuthConstants.PASSWORD_HAS_BEEN_CHANGED, content = @Content),
-			@ApiResponse(responseCode = "400", description = AuthConstants.TOKEN_BAD_REQUEST, content = @Content),
-			@ApiResponse(responseCode = "400", description = AuthConstants.PASSWORD_NOT_MATCH, content = @Content),
-			@ApiResponse(responseCode = "403", description = AuthConstants.TOKEN_INVALID,  content = @Content),
-			@ApiResponse(responseCode = "500", description = AuthConstants.DATABASE_SAVE_ERROR, content = @Content)
+			@ApiResponse(responseCode = "200", description = AuthConstants.PASSWORD_CHANGED, content = @Content),
+			@ApiResponse(responseCode = "400", description = AuthConstants.TOKEN_REQUEST_INVALID, content = @Content),
+			@ApiResponse(responseCode = "400", description = AuthConstants.PASSWORD_MISMATCH, content = @Content),
+			@ApiResponse(responseCode = "403", description = AuthConstants.INVALID_TOKEN,  content = @Content),
+			@ApiResponse(responseCode = "500", description = AuthConstants.DATABASE_SAVE_FAILED, content = @Content)
 	})
 	@PostMapping("/reset-password")
 	public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto request){
