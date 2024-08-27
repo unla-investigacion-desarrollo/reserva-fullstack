@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.reserva.backend.constants.AuthConstants;
+import com.reserva.backend.constants.UserConstants;
 import com.reserva.backend.dto.user.UserRequestDto;
 import com.reserva.backend.dto.user.UserUpdateDto;
 import com.reserva.backend.services.IUserService;
@@ -24,7 +26,6 @@ import com.reserva.backend.services.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
@@ -35,64 +36,64 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
-	@Operation(summary = "realiza el alta manual de un usuario o personal de la reserva", security = @SecurityRequirement(name = "bearerAuth"))
+	@Operation(summary = "Realiza el alta manual de un usuario o miembro del personal de la reserva")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "usuario creado correctamente", content = @Content),
-			@ApiResponse(responseCode = "400", description = "email o username existentes", content = @Content),
-			@ApiResponse(responseCode = "404", description = "no existe un rol con ese nombre", content = @Content),
-			@ApiResponse(responseCode = "417", description = "algo salió mal en la solicitud", content = @Content) })
+			@ApiResponse(responseCode = "201", description = UserConstants.USER_CREATE_SUCCESS, content = @Content),
+			@ApiResponse(responseCode = "400", description = AuthConstants.USERNAME_TAKEN, content = @Content),
+			@ApiResponse(responseCode = "404", description = UserConstants.ROLE_NOT_FOUND, content = @Content),
+			@ApiResponse(responseCode = "500", description = UserConstants.REQUEST_ERROR, content = @Content) })
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@Valid @RequestBody UserRequestDto request) {
 		return new ResponseEntity<>(userService.create(request), HttpStatus.CREATED);
 	}
 
-	@Operation(summary = "trae un usuario por su id", security = @SecurityRequirement(name = "bearerAuth"))
+	@Operation(summary = "Obtiene un usuario por su ID")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
-			@ApiResponse(responseCode = "404", description = "no se encontro ningun usuario con ese id", content = @Content) })
+			@ApiResponse(responseCode = "200", description = UserConstants.USER_OK, content = @Content(mediaType = "application/json")),
+			@ApiResponse(responseCode = "404", description = UserConstants.USER_NOT_FOUND, content = @Content) })
 	@GetMapping("/user/{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") long id) {
 		return ResponseEntity.ok(userService.getById(id));
 	}
 
-	@Operation(summary = "actualiza un usuario activo", security = @SecurityRequirement(name = "bearerAuth"))
+	@Operation(summary = "Actualiza un usuario existente")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "usuario actualizado correctamente", content = @Content),
-			@ApiResponse(responseCode = "400", description = "email o username existentes o usuario inactivo", content = @Content),
-			@ApiResponse(responseCode = "401", description = "los id's no coinciden, no puedes utilizar a este recurso", content = @Content),
-			@ApiResponse(responseCode = "404", description = "no existe un rol con ese nombre", content = @Content),
-			@ApiResponse(responseCode = "417", description = "algo salió mal en la solicitud", content = @Content) })
+			@ApiResponse(responseCode = "200", description = UserConstants.USER_UPDATE_SUCCESS, content = @Content),
+			@ApiResponse(responseCode = "400", description = AuthConstants.USERNAME_TAKEN, content = @Content),
+			@ApiResponse(responseCode = "401", description = UserConstants.RESOURCE_ID_MISMATCH, content = @Content),
+			@ApiResponse(responseCode = "404", description = UserConstants.ROLE_NOT_FOUND, content = @Content),
+			@ApiResponse(responseCode = "500", description = UserConstants.REQUEST_ERROR, content = @Content) })
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> update(@PathVariable("id") long id, @Valid @RequestBody UserUpdateDto request) {
 		return ResponseEntity.ok(userService.update(id, request));
 	}
 
-	@Operation(summary = "realiza el borrado logico de un usuario", security = @SecurityRequirement(name = "bearerAuth"))
+	@Operation(summary = "Elimina un usuario de manera lógica (borrado lógico)")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "usuario dado de baja correctamente", content = @Content),
-			@ApiResponse(responseCode = "400", description = "el usuario ya se encuentra dado de baja", content = @Content),
-			@ApiResponse(responseCode = "404", description = "usuario no encontrado", content = @Content),
-			@ApiResponse(responseCode = "417", description = "algo salió mal en la solicitud", content = @Content) })
+			@ApiResponse(responseCode = "200", description = UserConstants.USER_DELETE_SUCCESS, content = @Content),
+			@ApiResponse(responseCode = "400", description = UserConstants.USER_NOT_FOUND, content = @Content),
+			@ApiResponse(responseCode = "404", description = UserConstants.USER_NOT_FOUND, content = @Content),
+			@ApiResponse(responseCode = "500", description = UserConstants.REQUEST_ERROR, content = @Content) })
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long id) {
 		return ResponseEntity.ok(userService.delete(id));
 	}
 
-	@Operation(summary = "realiza el alta logico de un usuario", security = @SecurityRequirement(name = "bearerAuth"))
+	@Operation(summary = "Restaura un usuario previamente eliminado")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "usuario dado de alta correctamente", content = @Content),
-			@ApiResponse(responseCode = "400", description = "el usuario ya se encuentra dado de alta", content = @Content),
-			@ApiResponse(responseCode = "404", description = "usuario no encontrado", content = @Content),
-			@ApiResponse(responseCode = "417", description = "algo salió mal en la solicitud", content = @Content) })
+			@ApiResponse(responseCode = "200", description = UserConstants.USER_RESTORE_SUCCESS, content = @Content),
+			@ApiResponse(responseCode = "400", description = UserConstants.USER_ACTIVE, content = @Content),
+			@ApiResponse(responseCode = "404", description = UserConstants.USER_NOT_FOUND, content = @Content),
+			@ApiResponse(responseCode = "500", description = UserConstants.REQUEST_ERROR, content = @Content) })
 	@PatchMapping("/restore/{id}")
 	public ResponseEntity<?> restore(@PathVariable("id") long id) {
 		return ResponseEntity.ok(userService.restore(id));
 	}
 	
-	@Operation(summary = "trae a todos los usarios y se implementa pageable", security = @SecurityRequirement(name = "bearerAuth"))
+	@Operation(summary = "Obtiene todos los usuarios con paginación")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
-			@ApiResponse(responseCode = "417", description = "no se pudieron listar los usuarios", content = @Content) })
+			@ApiResponse(responseCode = "200", description = UserConstants.USER_OK, content = @Content(mediaType = "application/json")),
+			@ApiResponse(responseCode = "500", description = UserConstants.USER_RETRIEVE_ERROR, content = @Content) })
 	@GetMapping
 	public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "") String name,
 			@RequestParam(value = "page", defaultValue = "1") int page,

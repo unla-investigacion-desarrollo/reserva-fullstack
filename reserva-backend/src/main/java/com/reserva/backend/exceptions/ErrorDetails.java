@@ -16,5 +16,6 @@ public class ErrorDetails {
 	private Date time;
 	private String result;
 	private String from;
+	private boolean success;
 
 }

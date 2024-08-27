@@ -15,6 +15,7 @@ import com.reserva.backend.exceptions.ReservaException;
 import com.reserva.backend.repositorys.IFieldRepository;
 import com.reserva.backend.repositorys.ISightingRepository;
 import com.reserva.backend.services.IFieldService;
+import com.reserva.backend.util.Response;
 import com.reserva.backend.util.Responses;
 
 @Service
@@ -42,9 +43,9 @@ public class FieldService implements IFieldService {
             field.setSighting(sighting);
             fieldRepository.save(field);
             FieldRequestDto response = modelMapper.map(field, FieldRequestDto.class);
-            return new Responses<>(true, "field creado", response);
+            return Response.success("field creado", response);
         } catch (Exception e) {
-            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException("request failure", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -67,9 +68,9 @@ public class FieldService implements IFieldService {
             field.setTitle(request.getTitle());
             field.setDescription(request.getDescription());
             fieldRepository.save(field);
-            return new Responses<>(true, "update ok", getById(id));
+            return Response.success("update ok", getById(id));
         } catch (Exception e) {
-            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException("request failure", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -82,9 +83,9 @@ public class FieldService implements IFieldService {
         }
         try {
             fieldRepository.delete(field);
-            return new Responses<>(true, "delete ok", null);
+            return Response.success("delete ok", null);
         } catch (Exception e) {
-            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException("request failure", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -98,9 +99,9 @@ public class FieldService implements IFieldService {
         try {
             field.setActive(true);
             fieldRepository.save(field);
-            return new Responses<>(true, "restore ok", getById(id));
+            return Response.success("restore ok", getById(id));
         } catch (Exception e) {
-            throw new ReservaException("request failure", HttpStatus.EXPECTATION_FAILED);
+            throw new ReservaException("request failure", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

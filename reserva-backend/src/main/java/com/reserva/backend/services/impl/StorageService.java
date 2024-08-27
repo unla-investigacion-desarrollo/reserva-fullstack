@@ -23,6 +23,7 @@ import com.reserva.backend.entities.Image;
 import com.reserva.backend.exceptions.ReservaException;
 import com.reserva.backend.repositorys.IStorageRepository;
 import com.reserva.backend.services.IStorageService;
+import com.reserva.backend.util.Response;
 import com.reserva.backend.util.Responses;
 
 @Service
@@ -65,7 +66,7 @@ public class StorageService implements IStorageService {
             }
             return nameImage;
         } catch (IOException e) {
-            throw new ReservaException(SightingConstants.IMAGE_UPLOAD_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ReservaException(SightingConstants.IMAGE_UPLOAD_FAILED, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -112,7 +113,7 @@ public class StorageService implements IStorageService {
             Path path = getPath(image.getUrl());
             Files.deleteIfExists(path);
             storageRepository.delete(image);
-            return new Responses<>(true, StorageConstants.IMAGE_SUCCESSFUL_DELETED, null);
+            return Response.success(StorageConstants.IMAGE_DELETE_SUCCESS, null);
         } catch (Exception e) {
             throw new ReservaException(StorageConstants.IMAGE_URL_INVALID, HttpStatus.BAD_REQUEST);
         }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.reserva.backend.constants.SightingConstants;
 import com.reserva.backend.dto.SightingTypeRequestDto;
 import com.reserva.backend.services.ISightingTypeService;
 
@@ -24,7 +25,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/sighting/type")
@@ -33,12 +33,12 @@ public class SightingTypeController {
     @Autowired
     private ISightingTypeService sightingTypeService;
 
-    @Operation(summary = "realiza la creacion de los tipos de avistamiento ej Aves, Arboles etc", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Crea un nuevo tipo de avistamiento, como Aves o Árboles")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "ok", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "Ya existe un tipo_avistamiento con ese nombre", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content),
-            @ApiResponse(responseCode = "500", description = "algo sali\u00F3 mal durante la solicitud", content = @Content(mediaType = "application/json"))
+            @ApiResponse(responseCode = "201", description = SightingConstants.SIGHTINGTYPE_CREATE_SUCCESS, content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = SightingConstants.SIGHTINGTYPE_TAKEN, content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content),
+            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
@@ -46,22 +46,22 @@ public class SightingTypeController {
         return new ResponseEntity<>(sightingTypeService.create(request), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "trae un tipo de avistamiento por su id", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Obtiene un tipo de avistamiento por su ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content(mediaType = "application/json"))
+            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTINGTYPE_OK, content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTINGTYPE_NOT_FOUND, content = @Content(mediaType = "application/json"))
     })
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") long id) {
         return ResponseEntity.ok(sightingTypeService.getById(id));
     }
 
-    @Operation(summary = "realiza la edicion de los tipos de avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Actualiza un tipo de avistamiento existente")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "ok", content = @Content),
-            @ApiResponse(responseCode = "400", description = "tipo_avistamiento no se encuentra activo", content = @Content),
-            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content),
-            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
+            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTINGTYPE_UPDATE_SUCCESS, content = @Content),
+            @ApiResponse(responseCode = "400", description = SightingConstants.SIGHTINGTYPE_NOT_FOUND, content = @Content),
+            @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTINGTYPE_NOT_FOUND, content = @Content),
+            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content)
     })
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
@@ -69,12 +69,12 @@ public class SightingTypeController {
         return ResponseEntity.ok(sightingTypeService.update(id, request));
     }
 
-    @Operation(summary = "realiza el borrado logico de los tipos de avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Elimina un tipo de avistamiento de manera lógica (borrado lógico)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "ok", content = @Content),
-            @ApiResponse(responseCode = "400", description = "tipo_avistamiento ya se encuentra dado de baja", content = @Content),
-            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content),
-            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
+            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTINGTYPE_DELETE_SUCCESS, content = @Content),
+            @ApiResponse(responseCode = "400", description = SightingConstants.SIGHTINGTYPE_NOT_FOUND, content = @Content),
+            @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTINGTYPE_NOT_FOUND, content = @Content),
+            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content)
     })
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
@@ -82,12 +82,12 @@ public class SightingTypeController {
         return ResponseEntity.ok(sightingTypeService.delete(id));
     }
 
-    @Operation(summary = "realiza el alta logico de los tipos de avistamiento borrado", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Restaura un tipo de avistamiento previamente eliminado")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "ok", content = @Content),
-            @ApiResponse(responseCode = "400", description = "tipo_avistamiento ya se encuentra dado de alta", content = @Content),
-            @ApiResponse(responseCode = "404", description = "no hay ningun tipo_avistamiento con ese id", content = @Content),
-            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
+            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTINGTYPE_RESTORE_SUCCESS, content = @Content),
+            @ApiResponse(responseCode = "400", description = SightingConstants.SIGHTINGTYPE_IS_ACTIVE, content = @Content),
+            @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTINGTYPE_NOT_FOUND, content = @Content),
+            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content)
     })
     @PatchMapping("/restore/{id}")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
@@ -95,10 +95,10 @@ public class SightingTypeController {
         return ResponseEntity.ok(sightingTypeService.restore(id));
     }
 
-    @Operation(summary = "trae todos los tipos de avistamientos con paginacion", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Obtiene todos los tipos de avistamiento con paginación")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "No se pudieron listar los tipo_avistamiento", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTINGTYPE_OK, content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = SightingConstants.SIGHTINGTYPE_RETRIEVE_ERROR, content = @Content(mediaType = "application/json")),
     })
     @GetMapping
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "") String name,
@@ -106,8 +106,9 @@ public class SightingTypeController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "999999") int size,
             @RequestParam(value = "orderBy", defaultValue = "asc") String orderBy,
-            @RequestParam(value = "sortBy", defaultValue = "id") String soryBy) {
-        return ResponseEntity.ok(sightingTypeService.getAll(name, category, page, size, orderBy, soryBy));
+            @RequestParam(value = "sortBy", defaultValue = "id") String soryBy,
+            @RequestParam(value = "active", defaultValue = "true") boolean active) {
+        return ResponseEntity.ok(sightingTypeService.getAll(name, category, page, size, orderBy, soryBy, active));
     }
 
 }

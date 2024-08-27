@@ -1,5 +1,7 @@
 package com.reserva.backend.util;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Responses<T> {
 
-    private boolean success;
+    private Date time;
     private String result;
+    private String from;
+    private boolean success;
     private T data;
     
 }

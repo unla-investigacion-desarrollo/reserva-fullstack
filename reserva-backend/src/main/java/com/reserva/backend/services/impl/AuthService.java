@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.reserva.backend.config.security.jwt.JwtAuthResponse;
 import com.reserva.backend.config.security.jwt.JwtTokenProvider;
 import com.reserva.backend.constants.AuthConstants;
+import com.reserva.backend.constants.UserConstants;
 import com.reserva.backend.dto.auth.ForgotPasswordDto;
 import com.reserva.backend.dto.auth.LoginDto;
 import com.reserva.backend.dto.auth.RegisterDto;
@@ -27,6 +28,7 @@ import com.reserva.backend.repositorys.ITokenVerificationRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IAuthService;
 import com.reserva.backend.services.IEmailInfoService;
+import com.reserva.backend.util.Response;
 import com.reserva.backend.util.Responses;
 
 @Service
@@ -56,23 +58,23 @@ public class AuthService implements IAuthService {
 	public Responses<JwtAuthResponse> signin(LoginDto request) {
 		User user = userRepository.findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
 				.orElseThrow(() -> {
-					throw new ReservaException(AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, HttpStatus.UNAUTHORIZED);
+					throw new ReservaException(AuthConstants.USER_NOT_FOUND_BY_USERNAME, HttpStatus.UNAUTHORIZED);
 				});
 		if (!validateUser(request, user)) {
-			throw new ReservaException(AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, HttpStatus.UNAUTHORIZED);
+			throw new ReservaException(AuthConstants.INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
 		}
 		String token = jwtTokenProvider.generateToken(user);
 		JwtAuthResponse response = new JwtAuthResponse(user.getId(), user.getUsername(), user.getRole().getName(), token, "bearer");
-		return new Responses<>(true, AuthConstants.SIGN_IN_SUCCESSFUL, response);
+		return Response.success(AuthConstants.SIGN_IN_SUCCESS, response);
 	}
 
 	@Override
 	public Responses<UserResponseDto> signup(RegisterDto request) {
 		if (userRepository.existsByUsername(request.getUsername())) {
-			throw new ReservaException(AuthConstants.USERNAME_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(AuthConstants.USERNAME_TAKEN, HttpStatus.BAD_REQUEST);
 		}
 		if (userRepository.existsByEmail(request.getEmail())) {
-			throw new ReservaException(AuthConstants.EMAIL_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(AuthConstants.EMAIL_TAKEN, HttpStatus.BAD_REQUEST);
 		}
 		User user = new User();
 		user.setName(request.getName());
@@ -80,15 +82,14 @@ public class AuthService implements IAuthService {
 		user.setEmail(request.getEmail());
 		user.setActive(true);
 		user.setPassword(passEncoder.encode(request.getPassword()));
-		Role role = roleRepository.findByName(AuthConstants.USER)
+		Role role = roleRepository.findByName(UserConstants.ROLE_USER)
 				.orElseThrow(() -> new ReservaException(AuthConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND));
 		user.setRole(role);
 		try {
 			userRepository.save(user);
-			return new Responses<>(true, AuthConstants.SIGN_UP_SUCCESSFUL,
-					modelMapper.map(user, UserResponseDto.class));
+			return Response.success(AuthConstants.SIGN_UP_SUCCESS, modelMapper.map(user, UserResponseDto.class));
 		} catch (Exception e) {
-			throw new ReservaException(AuthConstants.DATABASE_SAVE_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ReservaException(AuthConstants.DATABASE_SAVE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -102,7 +103,7 @@ public class AuthService implements IAuthService {
 		} else {
 			token.setToken(token.generateToken());
 			token.setCreatedAt(new Date());
-			token.setExpiratedAt(token.getEpirationTime(10));
+			token.setExpiratedAt(token.getExpirationTime(10));
 		}
 		tokenVerificationRepository.save(token);
 		String subjet = "Reserva - Cambiar Contraseña";
@@ -112,9 +113,9 @@ public class AuthService implements IAuthService {
 				+ "<br><br><br>Saludos,<br>Reserva.";
 		try {
 			emailInfoService.send(request.getEmail(), subjet, body);
-			return new Responses<>(true, AuthConstants.EMAIL_SEND_OK, null);
+			return Response.success(AuthConstants.EMAIL_SENT_SUCCESSFULLY, null);
 		} catch (MessagingException e) {
-			throw new ReservaException(AuthConstants.EMAIL_SEND_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ReservaException(AuthConstants.EMAIL_SEND_FAILED, HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
 	}
 
@@ -122,23 +123,23 @@ public class AuthService implements IAuthService {
 	public Responses<String> resetPassword(ResetPasswordDto request) {
 		TokenVerification token = tokenVerificationRepository.findByToken(request.getToken());
 		if (token == null) {
-			throw new ReservaException(AuthConstants.TOKEN_BAD_REQUEST, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(AuthConstants.TOKEN_REQUEST_INVALID, HttpStatus.BAD_REQUEST);
 		}
 		Date expiration = token.getExpiratedAt();
 		Date now = new Date();
 		if (request.getToken() == null || now.after(expiration)) {
-			throw new ReservaException(AuthConstants.TOKEN_INVALID, HttpStatus.FORBIDDEN);
+			throw new ReservaException(AuthConstants.INVALID_TOKEN, HttpStatus.FORBIDDEN);
 		}
 		User user = token.getUser();
 		if (!request.getPassword().equals(request.getPasswordRepeat())) {
-			throw new ReservaException(AuthConstants.PASSWORD_NOT_MATCH, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(AuthConstants.PASSWORD_MISMATCH, HttpStatus.BAD_REQUEST);
 		}
 		user.setPassword(passEncoder.encode(request.getPassword()));
 		try {
 			tokenVerificationRepository.save(token);
-			return new Responses<>(true, AuthConstants.PASSWORD_HAS_BEEN_CHANGED, null);
+			return Response.success(AuthConstants.PASSWORD_CHANGED, null);
 		} catch (Exception e) {
-			throw new ReservaException(AuthConstants.DATABASE_SAVE_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ReservaException(AuthConstants.DATABASE_SAVE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
