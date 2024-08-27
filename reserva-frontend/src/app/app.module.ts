@@ -19,6 +19,8 @@ import { HeaderComponent } from './components/shared/header/header.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpInterceptorInterceptor } from './http-interceptor.interceptor';
 
+import { FormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +38,8 @@ import { HttpInterceptorInterceptor } from './http-interceptor.interceptor';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatDialogModule, 
-    MatButtonModule
+    MatButtonModule,
+    FormsModule
   ],
   providers: [
     {
