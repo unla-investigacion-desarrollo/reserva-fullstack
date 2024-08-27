@@ -9,14 +9,15 @@ import { HttpClientModule } from '@angular/common/http'; // Import HttpClientMod
 import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/shared/header/header.component';
 import { DatePipe } from '@angular/common';
+import { authGuard } from './services/auth-guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'avistamientos_pendientes', component: AvistamientoPendienteComponent },
-  { path: 'avistamientos_aprobados', component: AvistamientoAprobadoComponent },
-  { path: 'avistamientos_reprobados', component: AvistamientoReprobadoComponent },
-  { path: 'edit_avistamiento/:id', component: EditAvistamientoComponent },
+  { path: 'home', component: HomeComponent, canActivate: [authGuard] },
+  { path: 'avistamientos_pendientes', component: AvistamientoPendienteComponent, canActivate: [authGuard] },
+  { path: 'avistamientos_aprobados', component: AvistamientoAprobadoComponent, canActivate: [authGuard] },
+  { path: 'avistamientos_reprobados', component: AvistamientoReprobadoComponent, canActivate: [authGuard] },
+  { path: 'edit_avistamiento/:id', component: EditAvistamientoComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
 
 ];

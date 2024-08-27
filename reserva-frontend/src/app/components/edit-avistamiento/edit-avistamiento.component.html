@@ -1,5 +1,5 @@
-<div class="content">
-      <div class="container">
+<div *ngIf="avistamiento" class="content">
+      <div  class="container">
         <div class="row">
             <h1>{{avistamiento.scientificName}}</h1>
         </div>
@@ -28,7 +28,7 @@
         <span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: right;" ></span></div>
       </div>
       <div class="center">
-        {{avistamiento.fields[0].description}}
+        {{avistamiento.fields[0]?.description}}
       </div>
       <div class="center">
         <div style="text-align: center;">

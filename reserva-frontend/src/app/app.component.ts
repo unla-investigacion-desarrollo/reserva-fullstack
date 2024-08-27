@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
+import { LoginService } from './services/login.service';
 
 @Component({
   selector: 'app-root',
@@ -14,10 +15,10 @@ export class AppComponent {
   ngOnInit() {
   }
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private loginService: LoginService) {
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
-        if (event['url'] != '/login') {
+        if (loginService.checkLogin()) {
           this.showHead = true;
         } else {
           this.showHead = false;

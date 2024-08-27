@@ -38,4 +38,8 @@ export class LoginService {
 
     return false;
   }
+
+  checkLogin(){
+    return this.isLoggedIn;
+  }
 }
