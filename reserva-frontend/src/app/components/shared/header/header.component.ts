@@ -12,7 +12,7 @@ export class HeaderComponent {
   constructor(private router: Router, private loginService: LoginService) {}
 
   logout(){
-    this.loginService.isLoggedIn = false;
+    localStorage.setItem('isLoggedIn', "false");
     localStorage.removeItem('userData');
     this.router.navigate(['/login']);
   }

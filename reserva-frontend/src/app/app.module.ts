@@ -20,6 +20,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpInterceptorInterceptor } from './http-interceptor.interceptor';
 
 import { FormsModule } from '@angular/forms';
+import { MapComponentComponent } from './components/map-component/map-component.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { FormsModule } from '@angular/forms';
     EditAvistamientoComponent,
     DialogComponentComponent,
     LoginComponent,
-    HeaderComponent
+    HeaderComponent,
+    MapComponentComponent
   ],
   imports: [
     BrowserModule,

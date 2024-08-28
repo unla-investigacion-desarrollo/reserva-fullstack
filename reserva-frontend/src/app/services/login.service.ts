@@ -12,7 +12,6 @@ export class LoginService {
   });
 
   private rta: any;
-  isLoggedIn = false;
 
   constructor(private http: HttpClient) { }
 
@@ -29,7 +28,7 @@ export class LoginService {
       localStorage.setItem('userData', JSON.stringify(this.rta));
   
       if(this.rta.success){
-        this.isLoggedIn = true;
+        localStorage.setItem('isLoggedIn', "true");
         return this.rta.success;
       }
   
@@ -54,15 +53,14 @@ export class LoginService {
     localStorage.setItem('userData', JSON.stringify(this.rta));
 
     if(this.rta.success){
-      this.isLoggedIn = true;
+      localStorage.setItem('isLoggedIn', "true");
       return this.rta.success;
-
     }
 
     return false;
   }
 
   checkLogin(){
-    return this.isLoggedIn;
+    return localStorage.getItem("isLoggedIn") == "true";
   }
 }

@@ -4,6 +4,7 @@ import { AvistamientoPendienteComponent } from './components/avistamiento-pendie
 import { AvistamientoAprobadoComponent } from './components/avistamiento-aprobado/avistamiento-aprobado.component';
 import { AvistamientoReprobadoComponent } from './components/avistamiento-reprobado/avistamiento-reprobado.component';
 import { EditAvistamientoComponent } from './components/edit-avistamiento/edit-avistamiento.component';
+import { MapComponentComponent } from './components/map-component/map-component.component';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 import { HomeComponent } from './components/home/home.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'avistamientos_aprobados', component: AvistamientoAprobadoComponent, canActivate: [authGuard] },
   { path: 'avistamientos_reprobados', component: AvistamientoReprobadoComponent, canActivate: [authGuard] },
   { path: 'edit_avistamiento/:id', component: EditAvistamientoComponent, canActivate: [authGuard] },
+  { path: 'map', component: MapComponentComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
 
 ];

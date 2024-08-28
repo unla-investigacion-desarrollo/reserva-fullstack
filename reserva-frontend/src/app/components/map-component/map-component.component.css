@@ -1,0 +1,14 @@
+.content{
+    margin-top: 100px;
+}
+
+.map-container {
+    margin-top: 100px;
+    width: 100%; /* Ajusta al tamaño deseado */
+    height: 500px; /* Ajusta al tamaño deseado */
+    background-image: url('src\assets\images\map\mapa.png');  /*Ruta de la imagen */
+    background-size: cover; /* Asegura que la imagen cubra el contenedor */
+  /* background-position: center;  */
+  background-repeat: no-repeat;
+  position: relative;
+  }
