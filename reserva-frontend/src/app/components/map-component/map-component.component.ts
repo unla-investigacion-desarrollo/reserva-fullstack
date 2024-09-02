@@ -19,27 +19,14 @@ export class MapComponentComponent {
  latBottomRight = -34.784489;
  longBottomRight = -58.435327;
 
+ point: { x: number, y: number } | null = null;
+
  onMapClick(event: MouseEvent) {
-   const mapContainer = event.target as HTMLElement;
-   const rect = mapContainer.getBoundingClientRect();
+    const mapElement = event.target as HTMLElement;
+    const rect = mapElement.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
 
-   // Cálculo de las coordenadas relativas al clic
-   const clickX = event.clientX - rect.left;
-   const clickY = event.clientY - rect.top;
-
-   // Proporciones en X e Y
-   const xRatio = clickX / rect.width;
-   const yRatio = clickY / rect.height;
-
-   // Interpolación de latitud y longitud según la posición
-   const latTop = this.latTopLeft + (this.latTopRight - this.latTopLeft) * xRatio;
-   const latBottom = this.latBottomLeft + (this.latBottomRight - this.latBottomLeft) * xRatio;
-   const lat = latTop + (latBottom - latTop) * yRatio;
-
-   const longTop = this.longTopLeft + (this.longTopRight - this.longTopLeft) * xRatio;
-   const longBottom = this.longBottomLeft + (this.longBottomRight - this.longBottomLeft) * xRatio;
-   const long = longTop + (longBottom - longTop) * yRatio;
-
-   console.log(`Latitud: ${lat}, Longitud: ${long}`);
- }
+    this.point = { x, y };
+  }
 }

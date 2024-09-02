@@ -1,5 +1,7 @@
 <div class="content">
     <div  class="container">
-        <div class="map-container" (click)="onMapClick($event)"></div>
+        <div alt="Mapa" class="map-image" class="map-container" (click)="onMapClick($event)">
+            <div *ngIf="point" [ngStyle]="{'top': point.y + 'px', 'left': point.x + 'px'}" class="point"></div>
+        </div>
     </div>
 </div>
