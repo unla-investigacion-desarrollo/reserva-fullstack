@@ -20,9 +20,9 @@
           <td>{{avist.createdBy.username}}</td>
           <td>{{avist.latitude}} - {{avist.longitude}}</td>
           <td>{{datePipe.transform(avist.createdAt, 'yyyy-MM-dd HH:mm:ss')}}</td>
-          <td><span class="glyphicon glyphicon-camera" style="font-size: 25px;float: left;"></span></td>
-          <td><span class="glyphicon glyphicon-trash" style="font-size: 25px;float: left;"></span></td>
-          <td><span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: left;"></span></td>
+          <td><span class="glyphicon glyphicon-camera" style="font-size: 25px;float: left;" [routerLink]="['/ver_avistamiento', avist.id]"></span></td>
+          <td><span class="glyphicon glyphicon-trash" style="font-size: 25px;float: left;" (click)="deleteAvistamiento(avist.id)"></span></td>
+          <!--<td><span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: left;"></span></td>-->
 
         </tr>
       </tbody>
