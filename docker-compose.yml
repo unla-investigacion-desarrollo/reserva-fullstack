@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reserva_bd
+      MYSQL_USER: usertest
+      MYSQL_PASSWORD: usertest
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network       
+      
+
+  backend:
+    build:
+      context: ./reserva-backend
+      dockerfile: Dockerfile.backend
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/reserva_bd
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network      
+
+  frontend:
+    build:
+      context: ./reserva-frontend
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "4200:4200"
+    networks:
+      - app-network      
+      
+networks:
+  app-network:
+    driver: bridge      

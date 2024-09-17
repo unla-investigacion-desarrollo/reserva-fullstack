@@ -61,4 +61,11 @@ export class AvistamientoService {
     return await lastValueFrom(this.http.delete(url));
 
   }
+
+  async getAvistamientosMapa() {
+
+    const url = 'http://localhost:8000/sighting/getAllForMap';
+
+    return await lastValueFrom(this.http.get(url));
+  }
 }

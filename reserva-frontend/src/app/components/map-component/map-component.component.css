@@ -20,10 +20,34 @@
     height: auto;
   }
 
-  .point {
+  .defaultPoint{
     position: absolute;
     width: 10px;
     height: 10px;
-    background-color: red;
     border-radius: 50%;
+    background-color: black;
+  }
+
+  .rechazado{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+  }
+
+  .pendiente{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: orange;
+  }
+
+  .aprobado{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
   }

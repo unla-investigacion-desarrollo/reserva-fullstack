@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AvistamientoService } from '../../services/avistamiento.service';
 
 @Component({
   selector: 'app-map-component',
@@ -7,7 +8,7 @@ import { Component } from '@angular/core';
 })
 
 export class MapComponentComponent {
-  points: { x: number, y: number }[] = [];
+  points: { x: number, y: number, status: string }[] = [];
 
   latTopLeft = -34.778991;
   longTopLeft = -58.437050;
@@ -24,9 +25,22 @@ export class MapComponentComponent {
     // Añade más coordenadas aquí
   ];
 
-  ngOnInit() {
-    this.coordinates.forEach(coord => {
-      const point = this.calculatePoint(coord.lat, coord.long);
+  avistamientos: any;
+
+  constructor(private avistamientoService: AvistamientoService) {}
+
+
+  async ngOnInit() {
+
+    this.avistamientos = await this.avistamientoService.getAvistamientosMapa();
+
+    // this.coordinates.forEach(coord => {
+    //   const point = this.calculatePoint(coord.lat, coord.long);
+    //   this.points.push(point);
+    // });
+
+    this.avistamientos.forEach(coord => {
+      const point = this.calculatePoint(coord.latitude, coord.longitude, coord.status);
       this.points.push(point);
     });
   }
@@ -43,14 +57,14 @@ export class MapComponentComponent {
     console.log(`Latitud: ${lat}, Longitud: ${long}`);
   }
 
-  calculatePoint(lat: number, long: number): { x: number, y: number } {
+  calculatePoint(lat: number, long: number, status:string): { x: number, y: number, status:string } {
     const width = 1305; // Ancho de la imagen en píxeles
     const height = 500; // Alto de la imagen en píxeles
 
     const x = ((long - this.longTopLeft) / (this.longTopRight - this.longTopLeft)) * width;
     const y = ((lat - this.latTopLeft) / (this.latBottomLeft - this.latTopLeft)) * height;
 
-    return { x, y };
+    return { x, y, status };
   }
 
   calculateLatitude(y: number, height: number): number {
