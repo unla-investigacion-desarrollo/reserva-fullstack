@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.reserva.backend.constants.SightingConstants;
 import com.reserva.backend.constants.UserConstants;
 import com.reserva.backend.dto.FieldRequestDto;
+import com.reserva.backend.dto.SightingMapResponseDto;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
 import com.reserva.backend.dto.SightingUpdateDto;
@@ -26,6 +27,7 @@ import com.reserva.backend.dto.UpdateStatusDto;
 import com.reserva.backend.entities.Field;
 import com.reserva.backend.entities.Image;
 import com.reserva.backend.entities.Sighting;
+import com.reserva.backend.entities.SightingMap;
 import com.reserva.backend.entities.SightingType;
 import com.reserva.backend.entities.User;
 import com.reserva.backend.exceptions.ReservaException;
@@ -111,6 +113,20 @@ public class SightingService implements ISightingService {
         return sightings.stream().map(sighting -> modelMapper.map(sighting, SightingResponseDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<SightingMapResponseDto> getAllForMap() {
+        try {
+            List<Sighting> sightings = sightingRepository.findAllForMap();
+    
+            return sightings.stream().map(sighting -> modelMapper.map(sighting, SightingMapResponseDto.class))
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            
+            throw new ReservaException(e.getMessage(),e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
 
     @Override
     public ResponsePageable<SightingResponseDto> getAll(String name, String status, String type, int page, int size, String orderBy,

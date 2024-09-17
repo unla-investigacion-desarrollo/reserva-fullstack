@@ -1,0 +1,5 @@
+FROM openjdk:17-jdk-slim
+ARG JAR_FILE=target/reserva-backend-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} reserva-backend.jar
+EXPOSE 8000
+ENTRYPOINT ["java","-jar","/reserva-backend.jar"]

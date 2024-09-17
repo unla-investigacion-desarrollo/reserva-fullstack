@@ -34,6 +34,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+
 @RestController
 @RequestMapping("/sighting")
 public class SightingController {
@@ -91,6 +92,13 @@ public class SightingController {
 			@RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
             @RequestParam(value = "active", defaultValue = "1") boolean active){
         return ResponseEntity.ok(sightingService.getAll(name, status, type, page, size, orderBy, sortBy, active));
+    }
+
+
+    @Operation(summary = "Obtiene avistamientos para mapa")
+    @GetMapping("/getAllForMap")
+    public ResponseEntity<?> getAllForMap(){
+        return ResponseEntity.ok(sightingService.getAllForMap());
     }
 
     @Operation(summary = "Actualiza el estado de los avistamientos")
