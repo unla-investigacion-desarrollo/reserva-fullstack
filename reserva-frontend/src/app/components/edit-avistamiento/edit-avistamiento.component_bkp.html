@@ -1,0 +1,41 @@
+<div *ngIf="avistamiento" class="content">
+      <div  class="container">
+        <div class="row">
+            <h1>{{avistamiento.scientificName}}</h1>
+        </div>
+        <div class="row">
+            <a>{{avistamiento.name}}</a>
+        </div>
+
+        <!-- <div class="fill">
+          <img src="assets\images\avistamientos\jacaranda.jpg" alt="a balloon">
+        </div> -->
+
+        <div class="row">
+          <div class="col">
+            <b>Familia:</b> {{avistamiento.type.category}}
+          </div>
+          <div class="col">
+            <b>Tipo:</b> {{avistamiento.type.name}}
+          </div>
+          <div class="col">
+            <b>Zona:</b> {{avistamiento.latitude}} - {{avistamiento.longitude}}
+          </div>
+        </div>
+      </div>
+      <div class="center">
+        <div><h1>Descripción</h1>
+        <span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: right;" ></span></div>
+      </div>
+      <div class="center">
+        {{avistamiento.fields[0]?.description}}
+      </div>
+      <div class="center">
+        <div style="text-align: center;">
+            <button type="button" style="font-size: 24px;" class="btn btn-light" (click)="Aprobar()">Aprobar</button>
+            <button type="button" style="font-size: 24px; background-color: #6b7f1b;" class="btn btn-success" (click)="Rechazar()">Rechazar</button>
+        </div>
+      </div>
+      
+  </div>
+  

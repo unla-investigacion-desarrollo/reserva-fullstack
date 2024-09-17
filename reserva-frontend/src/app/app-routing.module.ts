@@ -11,6 +11,7 @@ import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/shared/header/header.component';
 import { DatePipe } from '@angular/common';
 import { authGuard } from './services/auth-guard';
+import { VerAvistamientoComponent } from './components/avistamiento-ver/ver-avistamiento.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'avistamientos_aprobados', component: AvistamientoAprobadoComponent, canActivate: [authGuard] },
   { path: 'avistamientos_reprobados', component: AvistamientoReprobadoComponent, canActivate: [authGuard] },
   { path: 'edit_avistamiento/:id', component: EditAvistamientoComponent, canActivate: [authGuard] },
+  { path: 'ver_avistamiento/:id', component: VerAvistamientoComponent, canActivate: [authGuard] },
   { path: 'map', component: MapComponentComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
 

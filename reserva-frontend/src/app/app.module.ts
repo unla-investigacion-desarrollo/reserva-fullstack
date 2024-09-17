@@ -21,6 +21,7 @@ import { HttpInterceptorInterceptor } from './http-interceptor.interceptor';
 
 import { FormsModule } from '@angular/forms';
 import { MapComponentComponent } from './components/map-component/map-component.component';
+import { VerAvistamientoComponent } from './components/avistamiento-ver/ver-avistamiento.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MapComponentComponent } from './components/map-component/map-component.
     AvistamientoAprobadoComponent,
     AvistamientoReprobadoComponent,
     EditAvistamientoComponent,
+    VerAvistamientoComponent,
     DialogComponentComponent,
     LoginComponent,
     HeaderComponent,
