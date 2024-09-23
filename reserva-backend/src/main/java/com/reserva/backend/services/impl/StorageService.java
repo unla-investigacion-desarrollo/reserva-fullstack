@@ -114,7 +114,7 @@ public class StorageService implements IStorageService {
             Files.deleteIfExists(path);
             storageRepository.delete(image);
             return Response.success(StorageConstants.IMAGE_DELETE_SUCCESS, null);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new ReservaException(StorageConstants.IMAGE_URL_INVALID, HttpStatus.BAD_REQUEST);
         }
     }

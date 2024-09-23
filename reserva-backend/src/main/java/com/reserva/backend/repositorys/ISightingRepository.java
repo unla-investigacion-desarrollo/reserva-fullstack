@@ -20,12 +20,10 @@ public interface ISightingRepository extends JpaRepository<Sighting, Long>{
     "WHERE s.active =:active " +
     "AND (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%')) OR LOWER(s.scientific_name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
     "AND (:status IS NULL OR s.status =:status) " +
-    "AND (:type IS NULL OR st.name =:type)",
-    nativeQuery = true)
+    "AND (:type IS NULL OR st.name =:type)", nativeQuery = true)
     public Page<Sighting> findAll(@Param("name") String name, @Param("status") String status, @Param("type") String type, @Param("active") boolean active, Pageable pageable);
     
-    @Query(value = "SELECT * FROM sighting s ",
-    nativeQuery = true)
+    @Query(value = "SELECT * FROM sighting s ", nativeQuery = true)
     public List<Sighting> findAllForMap();
     
 }

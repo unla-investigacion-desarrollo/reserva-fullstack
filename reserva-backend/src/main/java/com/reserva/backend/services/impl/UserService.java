@@ -18,15 +18,15 @@ import com.reserva.backend.constants.UserConstants;
 import com.reserva.backend.dto.user.UserRequestDto;
 import com.reserva.backend.dto.user.UserResponseDto;
 import com.reserva.backend.dto.user.UserUpdateDto;
+import com.reserva.backend.entities.Role;
+import com.reserva.backend.entities.User;
+import com.reserva.backend.exceptions.ReservaException;
 import com.reserva.backend.repositorys.IRoleRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IUserService;
 import com.reserva.backend.util.Response;
 import com.reserva.backend.util.ResponsePageable;
 import com.reserva.backend.util.Responses;
-import com.reserva.backend.exceptions.ReservaException;
-import com.reserva.backend.entities.Role;
-import com.reserva.backend.entities.User;
 
 @Service
 public class UserService implements IUserService{
