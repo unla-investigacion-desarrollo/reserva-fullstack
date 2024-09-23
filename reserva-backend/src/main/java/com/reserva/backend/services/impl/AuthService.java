@@ -7,8 +7,8 @@ import javax.mail.MessagingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.reserva.backend.config.security.jwt.JwtAuthResponse;
 import com.reserva.backend.config.security.jwt.JwtTokenProvider;
@@ -49,7 +49,7 @@ public class AuthService implements IAuthService {
 	@Autowired
 	private IEmailInfoService emailInfoService;
 	
-	private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
+	private final BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 	
 	@Autowired
 	private ModelMapper modelMapper;

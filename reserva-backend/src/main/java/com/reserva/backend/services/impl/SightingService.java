@@ -27,7 +27,6 @@ import com.reserva.backend.dto.UpdateStatusDto;
 import com.reserva.backend.entities.Field;
 import com.reserva.backend.entities.Image;
 import com.reserva.backend.entities.Sighting;
-import com.reserva.backend.entities.SightingMap;
 import com.reserva.backend.entities.SightingType;
 import com.reserva.backend.entities.User;
 import com.reserva.backend.exceptions.ReservaException;
@@ -123,7 +122,7 @@ public class SightingService implements ISightingService {
                 .collect(Collectors.toList());
         } catch (Exception e) {
             
-            throw new ReservaException(e.getMessage(),e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ReservaException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
@@ -270,7 +269,7 @@ public class SightingService implements ISightingService {
     }
 
     private boolean isAdmin(User user){
-        return user.getRole().getName().equalsIgnoreCase(UserConstants.ROLE_ADMIN) ? true : false;
+        return user.getRole().getName().equalsIgnoreCase(UserConstants.ROLE_ADMIN);
     }
 
 }
