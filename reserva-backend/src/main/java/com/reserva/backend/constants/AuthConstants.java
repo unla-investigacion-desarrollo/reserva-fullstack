@@ -3,7 +3,7 @@ package com.reserva.backend.constants;
 public class AuthConstants {
 	
 	public static final String USERNAME_OR_EMAIL_NOT_FOUND = "No existe ningún usuario con ese nombre de usuario o email.";
-	public static final String USER_NOT_FOUND_BY_USERNAME = "No se encuentró ningún usuario resgitrado con ese nombre de usuario.";
+	public static final String USER_NOT_FOUND_BY_USERNAME = "No se encontró ningún usuario resgitrado con ese nombre de usuario.";
 	public static final String INVALID_CREDENTIALS = "Nombre de usuario, email o contraseña incorrectos.";
 	public static final String USERNAME_TAKEN = "Ya existe un usuario registrado con ese nombre de usuario.";
 	public static final String EMAIL_TAKEN = "Ya existe un usuario registrado con ese email.";
