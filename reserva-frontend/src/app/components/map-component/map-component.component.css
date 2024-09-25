@@ -9,7 +9,8 @@
     margin-top: 100px;
      width: 100%; 
     height: 500px; 
-    background-image: url('src\assets\images\map\mapa.png');  /*Ruta de la imagen */
+    background-image: url('src\assets\images\map\mapa.png');
+
     background-size: cover; /* Asegura que la imagen cubra el contenedor */
   /* background-position: center;  */
   background-repeat: no-repeat;
@@ -28,7 +29,7 @@
     background-color: black;
   }
 
-  .rechazado{
+  /* .rechazado{
     position: absolute;
     width: 10px;
     height: 10px;
@@ -50,4 +51,22 @@
     height: 10px;
     border-radius: 50%;
     background-color: green;
+  } */
+
+  .rechazado{
+    position: absolute;
+    color: red;
+    font-size: 3rem;
+  }
+
+  .pendiente{
+    position: absolute;
+    color: orange;
+    font-size: 3rem;
+  }
+
+  .aprobado{
+    position: absolute;
+    color: green;
+    font-size: 3rem;
   }
