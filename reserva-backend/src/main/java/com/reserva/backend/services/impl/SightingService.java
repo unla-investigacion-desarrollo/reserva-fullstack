@@ -185,7 +185,8 @@ public class SightingService implements ISightingService {
             sighting.setScientificName(request.getScientificName());
             sighting.setLatitude(request.getLatitude());
             sighting.setLongitude(request.getLongitude());
-            sighting.setType(getType(request.getType()));
+            sighting.setType(getType(request.getSightingTypeId()));
+            //sighting.setType(getType(request.getType()));
             if (isAdmin(user)) {
                 sighting.setStatus(SightingConstants.STATUS_APPROVED);
                 sighting.setApprovedBy(user);
@@ -262,6 +263,14 @@ public class SightingService implements ISightingService {
 
     private SightingType getType(String type) {
         SightingType tipo = sightingTypeRepository.findByName(type);
+        if (tipo == null || !tipo.isActive()) {
+            throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.BAD_REQUEST);
+        }
+        return tipo;
+    }
+
+    private SightingType getType(long typeId) {
+        SightingType tipo = sightingTypeRepository.findById(typeId);
         if (tipo == null || !tipo.isActive()) {
             throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.BAD_REQUEST);
         }

@@ -55,6 +55,22 @@ export class AvistamientoService {
     return await lastValueFrom(this.http.post(url, body, { headers: this.headers }));
   }
 
+  async updateAvistamiento( sightingId: number, userId: number, name: number, scientificName: string, latitude: number, longitude: number, type: string ) {
+
+    const url = 'http://localhost:8000/sighting/update/' + sightingId; //ENDPOINT SWAGGER
+
+    const body = {
+      userId: userId,
+      name: name,
+      scientificName: scientificName,
+      latitude: latitude,
+      longitude: longitude,
+      type: type
+    };
+
+    return await lastValueFrom(this.http.post(url, body, { headers: this.headers }));
+  }
+
   async deleteAvistamiento(avistamientoId){
     const url = 'http://localhost:8000/sighting/delete/' + avistamientoId;
 

@@ -1,0 +1,28 @@
+<div class="content">
+    <div class="container mt-5">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <label for="scientificName">Nombre Científico:</label>
+            <input id="scientificName" [(ngModel)]="avistamiento.scientificName" type="text" />
+
+            <label for="name">Nombre:</label>
+            <input id="name" [(ngModel)]="avistamiento.name" type="text" />
+
+            <label for="category">Categoría:</label>
+            <input id="category" [(ngModel)]="avistamiento.type.category" type="text" />
+
+            <label for="typeName">Tipo de Nombre:</label>
+            <input id="typeName" [(ngModel)]="avistamiento.type.name" type="text" />
+
+            <label for="description">Descripción:</label>
+            <p class="fs-5 mb-4">{{avistamiento.fields[0].description}}</p>
+        <!--<input id="description" [(ngModel)]="avistamiento.fields[0].description" type="text" />-->
+
+        <p class="fs-5 mb-4">{{avistamiento.latitude}}</p>
+        <p class="fs-5 mb-4">{{avistamiento.longitude}}</p>
+
+        <div class="d-flex">
+            <button type="button" style="font-size: 24px;" class="btn btn-success me-2" (click)="updateAvistamiento(avistamiento.id)">Guardar</button>
+            <button type="button" style="font-size: 24px;" class="btn btn-danger" >Descartar</button>
+        </div>
+    </div>
+</div>

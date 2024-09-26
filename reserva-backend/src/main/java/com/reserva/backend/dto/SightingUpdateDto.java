@@ -25,5 +25,5 @@ public class SightingUpdateDto {
     private double longitude;
     @NotBlank(message = "el tipo es obligatorio")
     private String type;
-    
+    private long sightingTypeId;
 }

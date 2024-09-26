@@ -6,6 +6,7 @@ import { AvistamientoPendienteComponent } from './components/avistamiento-pendie
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home/home.component';
 import { AvistamientoAprobadoComponent } from './components/avistamiento-aprobado/avistamiento-aprobado.component';
+import { AvistamientoEditarComponent } from './components/avistamiento-editar/avistamiento-editar.component';
 import { AvistamientoReprobadoComponent } from './components/avistamiento-reprobado/avistamiento-reprobado.component';
 import { EditAvistamientoComponent } from './components/edit-avistamiento/edit-avistamiento.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -29,6 +30,7 @@ import { VerAvistamientoComponent } from './components/avistamiento-ver/ver-avis
     AvistamientoPendienteComponent,
     HomeComponent,
     AvistamientoAprobadoComponent,
+    AvistamientoEditarComponent,
     AvistamientoReprobadoComponent,
     EditAvistamientoComponent,
     VerAvistamientoComponent,

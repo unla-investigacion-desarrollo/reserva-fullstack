@@ -20,4 +20,6 @@ public interface ISightingTypeRepository extends JpaRepository<SightingType, Lon
     "AND (:category IS NULL OR LOWER(st.category) = LOWER(:category))", nativeQuery = true)
 	public Page<SightingType> findAll(@Param("name") String name, @Param("category") String category, @Param("active") boolean active, Pageable pageable);
 
+	@Query(value = "select * from sighting_type where id = (:id)" , nativeQuery = true)
+	public SightingType findById(@Param("id") long id);
 }
