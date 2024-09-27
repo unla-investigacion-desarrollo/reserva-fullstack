@@ -2,6 +2,7 @@ package com.reserva.backend.services;
 
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import com.reserva.backend.dto.SightingTypeRequestDto;
 import com.reserva.backend.dto.SightingTypeResponseDto;
 import com.reserva.backend.entities.SightingType;
@@ -16,5 +17,6 @@ public interface ISightingTypeService {
 	public Responses<SightingTypeResponseDto> delete(long id);
 	public Responses<SightingTypeResponseDto> restore(long id);
 	public ResponsePageable<SightingTypeResponseDto> getAll(String name, String category, int page, int size, String orderBy, String sortBy, boolean active);
+	public List<SightingTypeResponseDto> getTiposAvistamientos();
 	//public SightingType findById(long id);
 }

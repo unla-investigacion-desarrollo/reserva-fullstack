@@ -1,5 +1,6 @@
 package com.reserva.backend.services.impl;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -12,8 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.reserva.backend.constants.SightingConstants;
+import com.reserva.backend.dto.SightingMapResponseDto;
 import com.reserva.backend.dto.SightingTypeRequestDto;
 import com.reserva.backend.dto.SightingTypeResponseDto;
+import com.reserva.backend.entities.Sighting;
 import com.reserva.backend.entities.SightingType;
 import com.reserva.backend.repositorys.ISightingTypeRepository;
 import com.reserva.backend.services.ISightingTypeService;
@@ -123,6 +126,20 @@ public class SightingTypeService implements ISightingTypeService{
 		} catch (Exception e) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_LIST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+ 
+	public List<SightingTypeResponseDto> getTiposAvistamientos(){
+		try {
+            List<SightingType> sightingTypes = sightingTypeRepository.getTiposAvistamientos();
+    
+            return sightingTypes.stream().map(sightingType -> modelMapper.map(sightingType, SightingTypeResponseDto.class))
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            
+            throw new ReservaException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+		
+		//Page<SightingType> pageTipo = sightingTypeRepository.findAll();
 	}
 
 }

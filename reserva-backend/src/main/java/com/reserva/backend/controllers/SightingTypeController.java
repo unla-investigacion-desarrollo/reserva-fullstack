@@ -56,6 +56,11 @@ public class SightingTypeController {
         return ResponseEntity.ok(sightingTypeService.getById(id));
     }
 
+    @GetMapping("/getTiposAvistamientos")
+    public ResponseEntity<?> getTiposAvistamientos() {
+        return ResponseEntity.ok(sightingTypeService.getTiposAvistamientos());
+    }
+
     @Operation(summary = "Actualiza un tipo de avistamiento existente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTINGTYPE_UPDATE_SUCCESS, content = @Content),

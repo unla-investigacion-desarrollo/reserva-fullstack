@@ -5,7 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import java.util.List;
+import com.reserva.backend.entities.Sighting;
 import com.reserva.backend.entities.SightingType;
 
 public interface ISightingTypeRepository extends JpaRepository<SightingType, Long>{
@@ -22,4 +23,8 @@ public interface ISightingTypeRepository extends JpaRepository<SightingType, Lon
 
 	@Query(value = "select * from sighting_type where id = (:id)" , nativeQuery = true)
 	public SightingType findById(@Param("id") long id);
+
+	@Query(value = "SELECT * FROM sighting_type", nativeQuery = true)
+	public List<SightingType> getTiposAvistamientos();
+
 }
