@@ -13,6 +13,8 @@ import { HeaderComponent } from './components/shared/header/header.component';
 import { DatePipe } from '@angular/common';
 import { authGuard } from './services/auth-guard';
 import { VerAvistamientoComponent } from './components/avistamiento-ver/ver-avistamiento.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -29,7 +31,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes),HttpClientModule],
+  imports: [RouterModule.forRoot(routes),
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatTooltipModule],
   exports: [RouterModule],
   providers: [
     DatePipe 

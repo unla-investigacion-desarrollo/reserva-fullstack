@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.reserva.backend.dto.user.UserResponseDto;
+import com.reserva.backend.entities.Field;
 import com.reserva.backend.entities.Image;
 
 import lombok.Getter;
@@ -20,5 +21,7 @@ public class SightingMapResponseDto {
     private double longitude;
 
     private String status;
+
+    private List<Field> fields;
 
 }

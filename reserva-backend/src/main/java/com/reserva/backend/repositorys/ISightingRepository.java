@@ -23,7 +23,8 @@ public interface ISightingRepository extends JpaRepository<Sighting, Long>{
     "AND (:type IS NULL OR st.name =:type)", nativeQuery = true)
     public Page<Sighting> findAll(@Param("name") String name, @Param("status") String status, @Param("type") String type, @Param("active") boolean active, Pageable pageable);
     
-    @Query(value = "SELECT * FROM sighting s ", nativeQuery = true)
+    @Query(value = "SELECT * FROM sighting s INNER JOIN field f on s.id = f.sighting_id",
+    nativeQuery = true)
     public List<Sighting> findAllForMap();
     
 }
