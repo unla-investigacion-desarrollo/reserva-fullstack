@@ -183,10 +183,10 @@ public class SightingService implements ISightingService {
         try {
             sighting.setName(request.getName());
             sighting.setScientificName(request.getScientificName());
-            sighting.setLatitude(request.getLatitude());
-            sighting.setLongitude(request.getLongitude());
-            sighting.setType(getType(request.getSightingTypeId()));
-            //sighting.setType(getType(request.getType()));
+            sighting.getFields().get(0).setDescription(request.getDescripcion()); //AGREGO DESCRIPCION
+            //sighting.setLatitude(request.getLatitude());
+            //sighting.setLongitude(request.getLongitude());
+            sighting.setType(getType(request.getSightingTypeId())); //AGREGO EL TIPO
             if (isAdmin(user)) {
                 sighting.setStatus(SightingConstants.STATUS_APPROVED);
                 sighting.setApprovedBy(user);

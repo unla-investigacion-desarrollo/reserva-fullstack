@@ -38,10 +38,23 @@ export class AvistamientoEditarComponent {
     ];*/
   }
 
-  async updateAvistamiento(avistamientoId){
+  /*async updateAvistamiento(avistamientoId){
     this.avistamiento = await this.avistamientoService.getAvistamientoById(this.id);
-    await this.avistamientoService.updateAvistamiento( Number(this.id), JSON.parse(localStorage.getItem("userData")).data.id, this.avistamiento.name, this.avistamiento.scientificName, this.avistamiento.latitude, this.avistamiento.longitude, "nueva descripcion" )
+    await this.avistamientoService.updateAvistamiento( Number(this.id), JSON.parse(localStorage.getItem("userData")).data.id, this.avistamiento.name, this.avistamiento.scientificName, 
+    //this.avistamiento.latitude, this.avistamiento.longitude,
+    this.avistamiento.fields[0].descripcion , Number(this.avistamiento.type.id));
     
+    this.dialog.open(DialogComponentComponent, {
+      data: { type:0, dialog: this.dialog},
+    });
+  }*/
+
+  async updateAvistamiento(avistamientoId, scientificName, name, description, typeId){
+    //avistamiento.id, avistamiento.scientificName, avistamiento.name, avistamiento.fields[0].description, avistamiento.type.id
+    this.avistamiento = await this.avistamientoService.getAvistamientoById(this.id);      
+    await this.avistamientoService.updateAvistamiento( Number(avistamientoId), JSON.parse(localStorage.getItem("userData")).data.id, name, scientificName, description, Number(typeId));
+    //this.avistamiento.latitude, this.avistamiento.longitude
+      
     this.dialog.open(DialogComponentComponent, {
       data: { type:0, dialog: this.dialog},
     });

@@ -7,30 +7,32 @@
             <label for="name">Nombre:</label>
             <input id="name" [(ngModel)]="avistamiento.name" type="text" />
 
-            <label for="category">Categoría:</label>
+            <!--<label for="category">Categoría:</label>
             <input id="category" [(ngModel)]="avistamiento.type.category" type="text" />
 
             <label for="typeName">Tipo de Nombre:</label>
-            <input id="typeName" [(ngModel)]="avistamiento.type.name" type="text" />
+            <input id="typeName" [(ngModel)]="avistamiento.type.name" type="text" />-->
 
             <label for="description">Descripción:</label>
-            <p class="fs-5 mb-4">{{avistamiento.fields[0].description}}</p>
-        <!--<input id="description" [(ngModel)]="avistamiento.fields[0].description" type="text" />-->
+            <input id="name" [(ngModel)]="avistamiento.fields[0].description" type="text" />
+            <!--<input id="description" [(ngModel)]="avistamiento.fields[0].description" type="text" />-->
 
-        <select class="form-select" aria-label="Default select example">
-            <option selected>Open this select menu</option>
-            <option *ngFor="let avist of avistamientos" [value]="avist.name">{{avist.name}} - {{avist.category}}</option>
-        </select>
+            <!--<select class="form-select" aria-label="Default select example">
+                <option selected>Open this select menu</option>
+                <option *ngFor="let avist of avistamientos" [value]="avist.name">{{avist.name}} - {{avist.category}}</option>
+            </select>-->
 
+            <label for="categorySelect">Selecciona una categoría:</label>
+            <select id="categorySelect" class="form-select" [(ngModel)]="avistamiento.type.id" aria-label="Default select example">
+                <option selected disabled>Selecciona una categoría</option>
+                <option *ngFor="let avist of avistamientos" [value]="avist.id">{{avist.name}} - {{avist.category}}</option>
+            </select>
 
-
-        
-
-        <p class="fs-5 mb-4">{{avistamiento.latitude}}</p>
-        <p class="fs-5 mb-4">{{avistamiento.longitude}}</p>
+            <!--<p class="fs-5 mb-4">{{avistamiento.latitude}}</p>
+            <p class="fs-5 mb-4">{{avistamiento.longitude}}</p>-->
 
         <div class="d-flex">
-            <button type="button" style="font-size: 24px;" class="btn btn-success me-2" (click)="updateAvistamiento(avistamiento.id)">Guardar</button>
+            <button type="button" style="font-size: 24px;" class="btn btn-success me-2" (click)="updateAvistamiento(avistamiento.id, avistamiento.scientificName, avistamiento.name, avistamiento.fields[0].description, avistamiento.type.id)">Guardar</button>
             <button type="button" style="font-size: 24px;" class="btn btn-danger" >Descartar</button>
         </div>
     </div>
