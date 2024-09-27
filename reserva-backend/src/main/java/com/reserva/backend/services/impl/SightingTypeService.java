@@ -52,16 +52,18 @@ public class SightingTypeService implements ISightingTypeService{
 
 	@Override
 	public SightingTypeResponseDto getById(long id) {
-		SightingType tipo = sightingTypeRepository.findById(id).orElseThrow(
-				() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
+		//SightingType tipo = sightingTypeRepository.findById(id).orElseThrow(
+		//		() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
+		SightingType tipo = sightingTypeRepository.findById(id);
 		SightingTypeResponseDto response = modelMapper.map(tipo, SightingTypeResponseDto.class);
 		return response;
 	}
 
 	@Override
 	public Responses<SightingTypeResponseDto> update(long id, SightingTypeRequestDto request) {
-		SightingType tipo = sightingTypeRepository.findById(id)
-			.orElseThrow(() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
+		//SightingType tipo = sightingTypeRepository.findById(id)
+		//	.orElseThrow(() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
+		SightingType tipo = sightingTypeRepository.findById(id);
 		if (!tipo.isActive()) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
@@ -78,8 +80,9 @@ public class SightingTypeService implements ISightingTypeService{
 
 	@Override
 	public Responses<SightingTypeResponseDto> delete(long id) {
-		SightingType tipo = sightingTypeRepository.findById(id)
-			.orElseThrow(() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
+		//SightingType tipo = sightingTypeRepository.findById(id)
+		//	.orElseThrow(() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
+		SightingType tipo = sightingTypeRepository.findById(id);
 		if (!tipo.isActive()) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
@@ -93,8 +96,9 @@ public class SightingTypeService implements ISightingTypeService{
 
 	@Override
 	public Responses<SightingTypeResponseDto> restore(long id) {
-		SightingType tipo = sightingTypeRepository.findById(id)
-			.orElseThrow(() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
+		//SightingType tipo = sightingTypeRepository.findById(id)
+		//	.orElseThrow(() -> new ReservaException(SightingConstants.SIGHTINGTYPE_NOT_FOUND, HttpStatus.NOT_FOUND));
+		SightingType tipo = sightingTypeRepository.findById(id);
 		if (tipo.isActive()) {
 			throw new ReservaException(SightingConstants.SIGHTINGTYPE_IS_ACTIVE, HttpStatus.BAD_REQUEST);
 		}

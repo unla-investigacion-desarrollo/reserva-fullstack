@@ -13,6 +13,7 @@ import { DialogComponentComponent } from '../../components/dialog-component/dial
 export class AvistamientoEditarComponent {
   private id: string;
   avistamiento: any;
+  avistamientos: any;
 
   constructor(private avistamientoService: AvistamientoService, 
     private dialog: MatDialog,
@@ -26,6 +27,15 @@ export class AvistamientoEditarComponent {
       }
     });
     this.avistamiento = await this.avistamientoService.getAvistamientoById(this.id);
+    this.avistamientos = await this.avistamientoService.getCategorias();
+    console.log(this.avistamientos.name);
+    
+    /*this.avistamientos = [
+      { name: 'Uno' },
+      { name: 'Dos' },
+      { name: 'Tres' },
+      { name: 'Cuatro'}
+    ];*/
   }
 
   async updateAvistamiento(avistamientoId){

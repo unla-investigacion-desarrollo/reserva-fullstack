@@ -42,6 +42,13 @@ export class AvistamientoService {
     return await lastValueFrom(this.http.get(url));
   }
 
+  async getCategorias() {
+
+    const url = 'http://localhost:8000/sighting/type/getTiposAvistamientos';
+
+    return await lastValueFrom(this.http.get(url));
+  }
+
   async updateStatusAvistamiento( userId: number, sightingId: number, status: string) {
 
     const url = 'http://localhost:8000/sighting/status';
