@@ -1,39 +1,40 @@
 <div class="content">
     <div class="container mt-5">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <label for="scientificName">Nombre Científico:</label>
-            <input id="scientificName" [(ngModel)]="avistamiento.scientificName" type="text" />
+        <div class="card p-4 shadow">
+            <h2 class="card-title mb-4 text-center">Editar Avistamiento</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="scientificName" class="form-label">Nombre Científico:</label>
+                    <input id="scientificName" [(ngModel)]="avistamiento.scientificName" name="scientificName" type="text" class="form-control" placeholder="Ingrese nombre científico" required />
+                </div>
 
-            <label for="name">Nombre:</label>
-            <input id="name" [(ngModel)]="avistamiento.name" type="text" />
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre:</label>
+                    <input id="name" [(ngModel)]="avistamiento.name" name="name" type="text" class="form-control" placeholder="Ingrese nombre" required />
+                </div>
 
-            <!--<label for="category">Categoría:</label>
-            <input id="category" [(ngModel)]="avistamiento.type.category" type="text" />
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción:</label>
+                    <textarea id="description" [(ngModel)]="avistamiento.fields[0].description" name="description" class="form-control" placeholder="Ingrese descripción" required></textarea>
+                </div>
 
-            <label for="typeName">Tipo de Nombre:</label>
-            <input id="typeName" [(ngModel)]="avistamiento.type.name" type="text" />-->
+                <div class="mb-3">
+                    <label for="categorySelect" class="form-label">Selecciona una categoría:</label>
+                    <select id="categorySelect" class="form-select" [(ngModel)]="avistamiento.type.id" name="categorySelect" aria-label="Selecciona una categoría" required>
+                        <option selected disabled>Selecciona una categoría</option>
+                        <option *ngFor="let avist of avistamientos" [value]="avist.id">{{ avist.name }} - {{ avist.category }}</option>
+                    </select>
+                </div>
 
-            <label for="description">Descripción:</label>
-            <input id="name" [(ngModel)]="avistamiento.fields[0].description" type="text" />
-            <!--<input id="description" [(ngModel)]="avistamiento.fields[0].description" type="text" />-->
-
-            <!--<select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option *ngFor="let avist of avistamientos" [value]="avist.name">{{avist.name}} - {{avist.category}}</option>
-            </select>-->
-
-            <label for="categorySelect">Selecciona una categoría:</label>
-            <select id="categorySelect" class="form-select" [(ngModel)]="avistamiento.type.id" aria-label="Default select example">
-                <option selected disabled>Selecciona una categoría</option>
-                <option *ngFor="let avist of avistamientos" [value]="avist.id">{{avist.name}} - {{avist.category}}</option>
-            </select>
-
-            <!--<p class="fs-5 mb-4">{{avistamiento.latitude}}</p>
-            <p class="fs-5 mb-4">{{avistamiento.longitude}}</p>-->
-
-        <div class="d-flex">
-            <button type="button" style="font-size: 24px;" class="btn btn-success me-2" (click)="updateAvistamiento(avistamiento.id, avistamiento.scientificName, avistamiento.name, avistamiento.fields[0].description, avistamiento.type.id)">Guardar</button>
-            <button type="button" style="font-size: 24px;" class="btn btn-danger" >Descartar</button>
+                <div class="d-flex justify-content-start mt-4">
+                    <button type="button" class="btn btn-success me-2" (click)="updateAvistamiento(avistamiento.id, avistamiento.scientificName, avistamiento.name, avistamiento.fields[0].description, avistamiento.type.id)">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i> Descartar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

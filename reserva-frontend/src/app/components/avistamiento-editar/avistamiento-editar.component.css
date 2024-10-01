@@ -93,6 +93,14 @@
 
 .content{
   margin-top: 100px;
+  background-image: url('J31_531.jpg'); /* Reemplaza con la ruta de tu imagen */
+  background-size: cover; /* La imagen cubrirá todo el contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+  display: flex; /* Usar flex para centrar el contenido */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
 }
 
 body {
