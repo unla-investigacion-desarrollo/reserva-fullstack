@@ -120,7 +120,7 @@ public class SightingController {
             @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTING_NOT_FOUND, content = @Content),
             @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content)
         })
-    @PutMapping("/update/{id}")
+    @PostMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") long id, @Valid @RequestBody SightingUpdateDto request){
         return ResponseEntity.ok(sightingService.update(id, request));
     }

@@ -28,7 +28,7 @@ export class AvistamientoEditarComponent {
     });
     this.avistamiento = await this.avistamientoService.getAvistamientoById(this.id);
     this.avistamientos = await this.avistamientoService.getCategorias();
-    console.log(this.avistamientos.name);
+    //console.log(this.avistamientos.name);
     
     /*this.avistamientos = [
       { name: 'Uno' },
@@ -49,10 +49,10 @@ export class AvistamientoEditarComponent {
     });
   }*/
 
-  async updateAvistamiento(avistamientoId, scientificName, name, description, typeId){
+  async updateAvistamiento(avistamientoId, scientificName, name, descripcion, typeId){
     //avistamiento.id, avistamiento.scientificName, avistamiento.name, avistamiento.fields[0].description, avistamiento.type.id
     this.avistamiento = await this.avistamientoService.getAvistamientoById(this.id);      
-    await this.avistamientoService.updateAvistamiento( Number(avistamientoId), JSON.parse(localStorage.getItem("userData")).data.id, name, scientificName, description, Number(typeId));
+    await this.avistamientoService.updateAvistamiento( Number(avistamientoId), JSON.parse(localStorage.getItem("userData")).data.id, name, scientificName, descripcion, Number(typeId));
     //this.avistamiento.latitude, this.avistamiento.longitude
       
     this.dialog.open(DialogComponentComponent, {
