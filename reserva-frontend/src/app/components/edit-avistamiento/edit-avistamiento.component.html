@@ -1,41 +1,31 @@
-<div class="content">
-      <div class="container">
-        <div class="row">
-            <h1>{{avistamiento.scientificName}}</h1>
-        </div>
-        <div class="row">
-            <a>{{avistamiento.name}}</a>
-        </div>
+<div class="content-container">
+  <div class="card">
+    <h1 class="title">{{ avistamiento.scientificName }}</h1>
+    <h2 class="subtitle">{{ avistamiento.name }}</h2>
 
-        <!-- <div class="fill">
-          <img src="assets\images\avistamientos\jacaranda.jpg" alt="a balloon">
-        </div> -->
+    <div class="info-grid">
+      <div class="info-item">
+        <b>Familia:</b> <span>{{ avistamiento.type.category }}</span>
+      </div>
+      <div class="info-item">
+        <b>Tipo:</b> <span>{{ avistamiento.type.name }}</span>
+      </div>
+      <div class="info-item">
+        <b>Zona:</b> <span>{{ avistamiento.latitude }} - {{ avistamiento.longitude }}</span>
+      </div>
+    </div>
 
-        <div class="row">
-          <div class="col">
-            <b>Familia:</b> {{avistamiento.type.category}}
-          </div>
-          <div class="col">
-            <b>Tipo:</b> {{avistamiento.type.name}}
-          </div>
-          <div class="col">
-            <b>Zona:</b> {{avistamiento.latitude}} - {{avistamiento.longitude}}
-          </div>
-        </div>
+    <div class="description-section">
+      <div class="description-header">
+        <h3>Descripción</h3>
+        <span class="glyphicon glyphicon-pencil edit-icon"></span>
       </div>
-      <div class="center">
-        <div><h1>Descripción</h1>
-        <span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: right;" ></span></div>
-      </div>
-      <div class="center">
-        {{avistamiento.fields[0].description}}
-      </div>
-      <div class="center">
-        <div style="text-align: center;">
-            <button type="button" style="font-size: 24px;" class="btn btn-light" (click)="Aprobar()">Aprobar</button>
-            <button type="button" style="font-size: 24px; background-color: #6b7f1b;" class="btn btn-success" (click)="Rechazar()">Rechazar</button>
-        </div>
-      </div>
-      
+      <p class="description-text">{{ avistamiento.fields[0].description }}</p>
+    </div>
+
+    <div class="actions">
+      <button class="btn approve" (click)="Aprobar()">Aprobar</button>
+      <button class="btn reject" (click)="Rechazar()">Rechazar</button>
+    </div>
   </div>
-  
+</div>

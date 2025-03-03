@@ -9,19 +9,14 @@ import { Router, NavigationStart } from '@angular/router';
 export class AppComponent {
   title = 'reserva-frontend';
 
-  showHead: boolean = false;
-
-  ngOnInit() {
-  }
+  showHead: boolean = false; // Controla la visibilidad del navbar
 
   constructor(private router: Router) {
+    // Escuchamos los eventos de navegación
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
-        if (event['url'] != '/login') {
-          this.showHead = true;
-        } else {
-          this.showHead = false;
-        }
+        // Oculta el navbar en las rutas de login y "olvidaste tu contraseña"
+        this.showHead = !(event.url === '/login' || event.url === '/forgot-password');
       }
     });
   }

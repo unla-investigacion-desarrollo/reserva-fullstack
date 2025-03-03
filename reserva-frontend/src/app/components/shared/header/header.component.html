@@ -1,39 +1,39 @@
 <div class="toolbar" role="banner">
+  <!-- Logo y título -->
+  <div class="logo-container">
     <img
       width="80"
       alt="Reserva Logo"
-      src="assets\navbar\reserva_icon.png" 
+      src="assets/navbar/reserva_icon.png"
       routerLink="/home" routerLinkActive="active"
     />
     <p class="navbar-title" routerLink="/home" routerLinkActive="active">Reserva Santa Catalina</p>
-  
-    <div style="text-align: right;" class="container">
-      <div style="display: inline-block;width: 400px;">
-        <div class="col-md-12">
-          <div class="form">
-            <i class="fa fa-search"></i>
-            <input type="text" style="font-size: 20px;" class="form-control form-input" placeholder="Inicia tu búsqueda">
-          </div>
-        </div>
-      </div>
+  </div>
+
+  <!-- Barra de búsqueda -->
+  <div class="search-container">
+    <div class="search-bar">
+      <i class="fa fa-search"></i>
+      <input type="text" class="form-control form-input" placeholder="Inicia tu búsqueda">
     </div>
-  
-    <div class="offcanvas offcanvas-end" id="demo">
-      <div class="offcanvas-header">
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
-      </div>
-      <div class="offcanvas-body">
-        <p routerLink="/home" routerLinkActive="active">Volver al inicio</p>
-        <p>Mi usuario</p>
-        <p>Configuración</p>
-        <p (click)="logout()">Salir de la plataforma</p>
-      </div>
+  </div>
+
+  <!-- Menú desplegable -->
+  <div class="offcanvas offcanvas-end" id="demo">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Menú</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
     </div>
-  
-    <div style="width: 100px; margin-right: 20px;">
-      
-      <span class="glyphicon glyphicon-camera" style="font-size: 25px;float: left;"></span>
-      <span class="glyphicon glyphicon-align-justify" style="font-size: 25px;float: right;" data-bs-toggle="offcanvas" data-bs-target="#demo"></span>
+    <div class="offcanvas-body">
+      <p routerLink="/home" routerLinkActive="active"><i class="fa fa-home"></i> Volver al inicio</p>
+      <p><i class="fa fa-user"></i> Mi usuario</p>
+      <p><i class="fa fa-cog"></i> Configuración</p>
+      <p (click)="logout()"><i class="fa fa-sign-out"></i> Salir de la plataforma</p>
     </div>
-  
-  </div> 
+  </div>
+
+  <!-- Íconos de cámara y menú -->
+  <div class="icons-container">
+    <span class="glyphicon glyphicon-align-justify" data-bs-toggle="offcanvas" data-bs-target="#demo"></span>
+  </div>
+</div>

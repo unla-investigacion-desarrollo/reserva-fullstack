@@ -1,7 +1,18 @@
 import { Injectable } from '@angular/core';
-import { LoremIpsum, loremIpsum } from "lorem-ipsum";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+
+// Definimos la estructura de un avistamiento
+interface Avistamiento {
+  id: number;
+  scientificName: string;
+  createdBy: {
+    username: string;
+  };
+  latitude: number;
+  longitude: number;
+  createdAt: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -14,51 +25,47 @@ export class AvistamientoService {
 
   constructor(private http: HttpClient) { }
 
-  async getAvistamientosPendientes() {
-
+  // Obtener avistamientos pendientes
+  async getAvistamientosPendientes(): Promise<Avistamiento[]> {
     const url = 'http://localhost:8000/sighting?status=pendiente&page=1&size=999999&orderBy=asc&sortBy=id';
-
-    return await lastValueFrom(this.http.get(url));
+    const response = await lastValueFrom(this.http.get<{ data: Avistamiento[] }>(url));
+    return response.data;  // Ahora devolvemos directamente el array de avistamientos
   }
 
-  async getAvistamientosAprobados() {
-
+  // Obtener avistamientos aprobados
+  async getAvistamientosAprobados(): Promise<Avistamiento[]> {
     const url = 'http://localhost:8000/sighting?status=aprobado&page=1&size=999999&orderBy=asc&sortBy=id';
-
-    return await lastValueFrom(this.http.get(url));
+    const response = await lastValueFrom(this.http.get<{ data: Avistamiento[] }>(url));
+    return response.data;
   }
 
-  async getAvistamientosReprobados() {
-
+  // Obtener avistamientos reprobados
+  async getAvistamientosReprobados(): Promise<Avistamiento[]> {
     const url = 'http://localhost:8000/sighting?status=reprobado&page=1&size=999999&orderBy=asc&sortBy=id';
-
-    return await lastValueFrom(this.http.get(url));
+    const response = await lastValueFrom(this.http.get<{ data: Avistamiento[] }>(url));
+    return response.data;
   }
 
-  async getAvistamientoById(id: string) {
-
+  // Obtener un avistamiento por ID
+  async getAvistamientoById(id: string): Promise<Avistamiento> {
     const url = 'http://localhost:8000/sighting/' + id;
-
-    return await lastValueFrom(this.http.get(url));
+    return await lastValueFrom(this.http.get<Avistamiento>(url));
   }
 
-  async updateStatusAvistamiento( userId: number, sightingId: number, status: string) {
-
+  // Actualizar el estado del avistamiento
+  async updateStatusAvistamiento(userId: number, sightingId: number, status: string) {
     const url = 'http://localhost:8000/sighting/status';
-
     const body = {
       idSighting: sightingId,
       approvedById: userId,
       status: status
     };
-
     return await lastValueFrom(this.http.post(url, body, { headers: this.headers }));
   }
 
-  async deleteAvistamiento(avistamientoId){
+  // Eliminar un avistamiento
+  async deleteAvistamiento(avistamientoId: number) {
     const url = 'http://localhost:8000/sighting/delete/' + avistamientoId;
-
     return await lastValueFrom(this.http.delete(url));
-
   }
 }

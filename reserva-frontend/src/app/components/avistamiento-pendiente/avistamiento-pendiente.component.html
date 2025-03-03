@@ -1,30 +1,46 @@
 <div class="content">
-  <table class="table align-middle mb-0 bg-white" >
-    <thead class="bg-light">
-      <tr>
-        <th scope="col">Avistamiento</th>
-        <th scope="col">Numero</th>
-        <th scope="col">Usuario</th>
-        <th scope="col">Ubicación</th>
-        <th scope="col">Fecha</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let avist of avistamientos">
-        <td>{{avist.scientificName}}</td>
-        <td>{{avist.id}}</td>
-        <td>{{avist.createdBy.username}}</td>
-        <td>{{avist.latitude}} - {{avist.longitude}}</td>
-        <td>{{datePipe.transform(avist.createdAt, 'yyyy-MM-dd HH:mm:ss')}}</td>
-        <td><span class="glyphicon glyphicon-camera" style="font-size: 25px;float: left;"></span></td>
-        <td><span class="glyphicon glyphicon-trash" style="font-size: 25px;float: left;" (click)="deleteAvistamiento(avist.id)"></span></td>
-        <td><span class="glyphicon glyphicon-pencil" style="font-size: 25px;float: left;" [routerLink]="['/edit_avistamiento', avist.id]"></span></td>
-
-      </tr>
-    </tbody>
+  <div class="table-container">
+    <table *ngIf="avistamientos.length > 0" class="table align-middle">
+      <thead>
+        <tr>
+          <th scope="col">Avistamiento</th>
+          <th scope="col">Número</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Ubicación</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let avist of avistamientos">
+          <td>{{ avist.scientificName }}</td>
+          <td>{{ avist.id }}</td>
+          <td>{{ avist.createdBy.username }}</td>
+          <td>{{ avist.latitude }} - {{ avist.longitude }}</td>
+          <td>{{ datePipe.transform(avist.createdAt, 'yyyy-MM-dd') }}</td>
+          <td class="actions">
+            <span class="icon-button" (click)="viewImage(avist.id)" title="Ver imagen">
+              <i class="fas fa-camera"></i>
+            </span>
+            <span class="icon-button" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
+              <i class="glyphicon glyphicon-trash"></i>
+            </span>
+            <span class="icon-button edit" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
+              <i class="fas fa-edit"></i>
+            </span>
+          </td>
+        </tr>
+      </tbody>
     </table>
+
+    <!-- Mensaje cuando no hay avistamientos -->
+    <div *ngIf="avistamientos.length === 0 && !isLoading" class="no-data-message">
+      <p>No hay avistamientos pendientes.</p>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <p>Cargando...</p>
+    </div>
+  </div>
 </div>

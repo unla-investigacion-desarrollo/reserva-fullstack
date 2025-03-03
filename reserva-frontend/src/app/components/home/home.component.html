@@ -1,21 +1,33 @@
 <div class="content" role="main">
-    <div class="cardsContainer">
-        
-      <a routerLink="/avistamientos_pendientes" routerLinkActive="active" class="left" rel="noopener">
-        <img class="homeImage" src="assets\images\home\avist_pendiente.png">
-        <span>Avistamientos pendientes</span>
-      </a>
-  
-      <a routerLink="/avistamientos_aprobados" routerLinkActive="active" class="center" rel="noopener">
-        <img class="homeImage" src="assets\images\home\avist_aprobados.png">
-        <span>Avistamientos aprobados</span>
-      </a>
-  
-      <a routerLink="/avistamientos_reprobados" class="right" rel="noopener">
-        <img class="homeImage" src="assets\images\home\avist_rechazado.png">
-        <span>Avistamientos reprobados</span>
-      </a>
-  
-    </div>
-  
+  <div class="cardsContainer">
+    <!-- Tarjeta de avistamientos pendientes -->
+    <a routerLink="/avistamientos_pendientes" routerLinkActive="active" class="card" rel="noopener">
+      <div class="card-image">
+        <img class="homeImage" src="assets/images/home/avist_pendiente.png" alt="Avistamientos pendientes">
+      </div>
+      <div class="card-content">
+        <span class="card-title">Avistamientos pendientes</span>
+      </div>
+    </a>
+
+    <!-- Tarjeta de avistamientos aprobados -->
+    <a routerLink="/avistamientos_aprobados" routerLinkActive="active" class="card" rel="noopener">
+      <div class="card-image">
+        <img class="homeImage" src="assets/images/home/avist_aprobados.png" alt="Avistamientos aprobados">
+      </div>
+      <div class="card-content">
+        <span class="card-title">Avistamientos aprobados</span>
+      </div>
+    </a>
+
+    <!-- Tarjeta de avistamientos reprobados -->
+    <a routerLink="/avistamientos_reprobados" routerLinkActive="active" class="card" rel="noopener">
+      <div class="card-image">
+        <img class="homeImage" src="assets/images/home/avist_rechazado.png" alt="Avistamientos reprobados">
+      </div>
+      <div class="card-content">
+        <span class="card-title">Avistamientos reprobados</span>
+      </div>
+    </a>
   </div>
+</div>
