@@ -32,12 +32,12 @@ export class AvistamientoService {
     return response.data;  // Ahora devolvemos directamente el array de avistamientos
   }
 
-  // Obtener avistamientos aprobados
   async getAvistamientosAprobados(): Promise<Avistamiento[]> {
     const url = 'http://localhost:8000/sighting?status=aprobado&page=1&size=999999&orderBy=asc&sortBy=id';
     const response = await lastValueFrom(this.http.get<{ data: Avistamiento[] }>(url));
-    return response.data;
+    return response.data;  // Devuelve directamente el array de avistamientos aprobados
   }
+  
 
   // Obtener avistamientos reprobados
   async getAvistamientosReprobados(): Promise<Avistamiento[]> {
