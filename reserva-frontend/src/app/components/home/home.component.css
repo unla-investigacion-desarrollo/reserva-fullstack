@@ -2,6 +2,7 @@
 /* Ajustar el margen superior para evitar que el contenido quede detrás del navbar */
 .content {
   padding-top: 80px; /* Ajusta este valor según la altura del navbar */
+  margin-top: 70px; /* ajustá según la altura del navbar */
   padding: 40px;
   display: flex;
   justify-content: center;
