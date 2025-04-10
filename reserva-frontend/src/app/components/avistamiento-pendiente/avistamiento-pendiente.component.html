@@ -1,46 +1,55 @@
 <div class="content">
-  <div class="table-container">
-    <table *ngIf="avistamientos.length > 0" class="table align-middle">
-      <thead>
-        <tr>
-          <th scope="col">Avistamiento</th>
-          <th scope="col">Número</th>
-          <th scope="col">Usuario</th>
-          <th scope="col">Ubicación</th>
-          <th scope="col">Fecha</th>
-          <th scope="col">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let avist of avistamientos">
-          <td>{{ avist.scientificName }}</td>
-          <td>{{ avist.id }}</td>
-          <td>{{ avist.createdBy.username }}</td>
-          <td>{{ avist.latitude }} - {{ avist.longitude }}</td>
-          <td>{{ datePipe.transform(avist.createdAt, 'yyyy-MM-dd') }}</td>
-          <td class="actions">
-            <span class="icon-button" (click)="viewImage(avist.id)" title="Ver imagen">
-              <i class="fas fa-camera"></i>
-            </span>
-            <span class="icon-button" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
-              <i class="glyphicon glyphicon-trash"></i>
-            </span>
-            <span class="icon-button edit" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
-              <i class="fas fa-edit"></i>
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Mensaje cuando no hay avistamientos -->
-    <div *ngIf="avistamientos.length === 0 && !isLoading" class="no-data-message">
-      <p>No hay avistamientos pendientes.</p>
+  <div class="table-wrapper">
+    <div class="back-button">
+      <a [routerLink]="['/home']" class="back-link">
+        <i class="fas fa-arrow-left back-icon"></i>
+        Volver al menú principal
+      </a>
     </div>
 
-    <!-- Indicador de carga -->
-    <div *ngIf="isLoading" class="loading-spinner">
-      <p>Cargando...</p>
-    </div>
-  </div>
-</div>
+    <div class="table-container">
+      <table *ngIf="avistamientos.length > 0" class="table align-middle">
+        <thead>
+          <tr>
+            <th scope="col">Avistamiento</th>
+            <th scope="col">Número</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Ubicación</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let avist of avistamientos">
+            <td>{{ avist.scientificName }}</td>
+            <td>{{ avist.id }}</td>
+            <td>{{ avist.createdBy.username }}</td>
+            <td>{{ avist.latitude }} - {{ avist.longitude }}</td>
+            <td>{{ datePipe.transform(avist.createdAt, 'yyyy-MM-dd') }}</td>
+            <td class="actions">
+              <span class="icon-button" (click)="viewImage(avist.id)" title="Ver imagen">
+                <i class="fas fa-camera"></i>
+              </span>
+              <span class="icon-button" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
+                <i class="glyphicon glyphicon-trash"></i>
+              </span>
+              <span class="icon-button edit" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
+                <i class="fas fa-edit"></i>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Mensaje cuando no hay avistamientos -->
+      <div *ngIf="avistamientos.length === 0 && !isLoading" class="no-data-message">
+        <p>No hay avistamientos pendientes.</p>
+      </div>
+
+      <!-- Indicador de carga -->
+      <div *ngIf="isLoading" class="loading-spinner">
+        <p>Cargando...</p>
+      </div>
+    </div> <!-- Cierre de .table-container -->
+  </div> <!-- Cierre de .table-wrapper -->
+</div> <!-- Cierre de .content -->

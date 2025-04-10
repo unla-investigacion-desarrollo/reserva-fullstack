@@ -2,10 +2,12 @@
 .content {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 80vh; /* Centrado en la pantalla */
-  padding-top: 20px; /* Separación del navbar */
+  align-items: flex-start; /* <-- CAMBIO CLAVE */
+  min-height: 80vh;        /* opcional: más espacio si hay muchos registros */
+  padding-top: 80px;
+
 }
+
 
 /* Contenedor de la tabla con sombra */
 .table-container {
@@ -50,6 +52,41 @@
 .table td {
   padding: 15px;
   border-bottom: 1px solid #e9ecef;
+}
+
+/* Wrapper que contiene la flecha + la tabla */
+.table-wrapper {
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Aumenta el espacio entre el botón y la tabla */
+  margin-top: 30px; /* Espacio desde el header o top */
+}
+
+/* Botón Volver */
+.back-button {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px; /* Espacio entre el botón y la tabla */
+}
+
+.back-link {
+  font-size: 14px;
+  color: #7f8c8d;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: #2c3e50;
+}
+
+.back-icon {
+  font-size: 16px;
 }
 
 /* Acciones */
