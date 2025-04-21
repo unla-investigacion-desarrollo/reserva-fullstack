@@ -1,47 +1,56 @@
-<div class="content">
-  <div class="table-container">
-    <!-- Tabla de avistamientos aprobados -->
-    <table *ngIf="avistamientos.length > 0" class="table align-middle">
-      <thead>
-        <tr>
-          <th scope="col">Avistamiento</th>
-          <th scope="col">Número</th>
-          <th scope="col">Usuario</th>
-          <th scope="col">Ubicación</th>
-          <th scope="col">Fecha</th>
-          <th scope="col">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let avist of avistamientos">
-          <td>{{ avist.scientificName }}</td>
-          <td>{{ avist.id }}</td>
-          <td>{{ avist.createdBy.username }}</td>
-          <td>{{ avist.latitude }} - {{ avist.longitude }}</td>
-          <td>{{ datePipe.transform(avist.createdAt, 'yyyy-MM-dd') }}</td>
-          <td class="actions">
-            <span class="icon-button" (click)="viewImage(avist.id)" title="Ver imagen">
-              <i class="fas fa-camera"></i>
-            </span>
-            <span class="icon-button" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
-              <i class="glyphicon glyphicon-trash"></i>
-            </span>
-            <span class="icon-button edit" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
-              <i class="fas fa-edit"></i>
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Mensaje cuando no hay avistamientos -->
-    <div *ngIf="avistamientos.length === 0 && !isLoading" class="no-data-message">
-      <p>No hay avistamientos aprobados.</p>
+<div class="content p-4">
+  <div class="table-wrapper mb-4">
+    <div class="back-button mb-3">
+      <a [routerLink]="['/home']" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left me-2"></i>Volver al menú principal
+      </a>
     </div>
 
-    <!-- Indicador de carga -->
-    <div *ngIf="isLoading" class="loading-spinner">
-      <p>Cargando...</p>
+    <div class="table-responsive shadow rounded">
+      <table *ngIf="avistamientos.length > 0" class="table table-striped table-hover table-bordered align-middle mb-0">
+        <thead class="custom-table-header">
+          <tr>
+            <th scope="col">Avistamiento</th>
+            <th scope="col">Número</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Ubicación</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let avist of avistamientos">
+            <td>{{ avist.scientificName }}</td>
+            <td>{{ avist.id }}</td>
+            <td>{{ avist.createdBy.username }}</td>
+            <td>{{ avist.latitude }} - {{ avist.longitude }}</td>
+            <td>{{ datePipe.transform(avist.createdAt, 'yyyy-MM-dd') }}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-secondary me-1" (click)="viewImage(avist.id)" title="Ver imagen">
+                <i class="fas fa-camera"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger me-1" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
+                <i class="glyphicon glyphicon-trash"></i>
+              </button>
+              <a class="btn btn-sm btn-outline-primary" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
+                <i class="fas fa-edit"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Sin registros -->
+      <div *ngIf="avistamientos.length === 0 && !isLoading" class="p-3 text-center text-muted">
+        <p>No hay avistamientos aprobados.</p>
+      </div>
+
+      <!-- Cargando -->
+      <div *ngIf="isLoading" class="p-3 text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

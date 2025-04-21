@@ -1,31 +1,46 @@
 <div class="content-container">
-  <div class="card">
-    <h1 class="title">{{ avistamiento.scientificName }}</h1>
-    <h2 class="subtitle">{{ avistamiento.name }}</h2>
+  <div class="card shadow-lg">
+    <h1 class="title mb-3">{{ avistamiento.scientificName }}</h1>
+    <h2 class="subtitle mb-4 text-muted">{{ avistamiento.name }}</h2>
 
-    <div class="info-grid">
-      <div class="info-item">
-        <b>Familia:</b> <span>{{ avistamiento.type.category }}</span>
+    <div class="row text-center mb-4">
+      <div class="col-md-4 mb-3">
+        <div class="bg-light p-3 rounded border">
+          <i class="fas fa-leaf fa-lg text-success mb-2"></i><br>
+          <strong>Familia:</strong><br>
+          <span>{{ avistamiento.type.category }}</span>
+        </div>
       </div>
-      <div class="info-item">
-        <b>Tipo:</b> <span>{{ avistamiento.type.name }}</span>
+      <div class="col-md-4 mb-3">
+        <div class="bg-light p-3 rounded border">
+          <i class="fas fa-tag fa-lg text-info mb-2"></i><br>
+          <strong>Tipo:</strong><br>
+          <span>{{ avistamiento.type.name }}</span>
+        </div>
       </div>
-      <div class="info-item">
-        <b>Zona:</b> <span>{{ avistamiento.latitude }} - {{ avistamiento.longitude }}</span>
+      <div class="col-md-4 mb-3">
+        <div class="bg-light p-3 rounded border">
+          <i class="fas fa-map-marker-alt fa-lg text-danger mb-2"></i><br>
+          <strong>Zona:</strong><br>
+          <span>{{ avistamiento.latitude }} - {{ avistamiento.longitude }}</span>
+        </div>
       </div>
     </div>
 
-    <div class="description-section">
-      <div class="description-header">
-        <h3>Descripción</h3>
-        <span class="glyphicon glyphicon-pencil edit-icon"></span>
+    <div class="description-section mb-4">
+      <div class="description-header d-flex justify-content-between align-items-center mb-2">
+        <h3 class="mb-0">Descripción</h3>
       </div>
       <p class="description-text">{{ avistamiento.fields[0].description }}</p>
     </div>
 
-    <div class="actions">
-      <button class="btn approve" (click)="Aprobar()">Aprobar</button>
-      <button class="btn reject" (click)="Rechazar()">Rechazar</button>
+    <div class="d-flex justify-content-end gap-3">
+      <button class="btn btn-outline-danger btn-lg px-4" (click)="Rechazar()">
+        <i class="fas fa-times me-2"></i>Rechazar
+      </button>
+      <button class="btn btn-success btn-lg px-4" (click)="Aprobar()">
+        <i class="fas fa-check me-2"></i>Aprobar
+      </button>
     </div>
   </div>
 </div>

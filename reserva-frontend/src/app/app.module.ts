@@ -53,3 +53,4 @@ import { HttpInterceptorInterceptor } from './http-interceptor.interceptor';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+export class YourModule{}

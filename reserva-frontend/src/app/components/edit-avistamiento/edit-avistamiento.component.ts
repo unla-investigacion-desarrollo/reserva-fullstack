@@ -32,7 +32,7 @@ export class EditAvistamientoComponent {
     await this.avistamientoService.updateStatusAvistamiento(JSON.parse(localStorage.getItem("userData")).data.id, Number(this.id), "aprobado");
 
     this.dialog.open(DialogComponentComponent, {
-      data: { type:0, dialog: this.dialog},
+      data: { type:0},
     });
   }
 

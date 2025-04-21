@@ -1,16 +1,14 @@
 <div class="content">
   <div class="table-wrapper">
-    <div class="back-button">
-      <a [routerLink]="['/home']" class="back-link">
-        <i class="fas fa-arrow-left back-icon"></i>
-        Volver al menú principal
+    <div class="back-button mb-3">
+      <a [routerLink]="['/home']" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left me-2"></i> Volver al menú principal
       </a>
     </div>
 
-    <div class="table-container">
-      <!-- Tabla de avistamientos reprobados -->
-      <table *ngIf="avistamientos.length > 0" class="table align-middle">
-        <thead>
+    <div class="table-responsive shadow rounded">
+      <table *ngIf="avistamientos.length > 0" class="table table-striped table-hover table-bordered align-middle mb-0">
+        <thead class="custom-table-header">
           <tr>
             <th scope="col">Avistamiento</th>
             <th scope="col">Número</th>
@@ -27,26 +25,28 @@
             <td>{{ avist.createdBy.username }}</td>
             <td>{{ avist.latitude }} - {{ avist.longitude }}</td>
             <td>{{ datePipe.transform(avist.createdAt, 'yyyy-MM-dd') }}</td>
-            <td class="actions">
-              <span class="icon-button" (click)="viewImage(avist.id)" title="Ver imagen">
+            <td class="text-center">
+              <span class="btn btn-sm btn-outline-primary me-1" (click)="viewImage(avist.id)" title="Ver imagen">
                 <i class="fas fa-camera"></i>
               </span>
-              <span class="icon-button" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
+              <span class="btn btn-sm btn-outline-danger me-1" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
                 <i class="glyphicon glyphicon-trash"></i>
               </span>
-              <span class="icon-button edit" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
+              <a class="btn btn-sm btn-outline-success" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
                 <i class="fas fa-edit"></i>
-              </span>
+              </a>
             </td>
           </tr>
         </tbody>
       </table>
 
-      <div *ngIf="avistamientos.length === 0 && !isLoading" class="no-data-message">
+      <!-- Mensaje cuando no hay datos -->
+      <div *ngIf="avistamientos.length === 0 && !isLoading" class="no-data-message text-center p-4">
         <p>No hay avistamientos reprobados.</p>
       </div>
 
-      <div *ngIf="isLoading" class="loading-spinner">
+      <!-- Indicador de carga -->
+      <div *ngIf="isLoading" class="loading-spinner text-center p-4">
         <p>Cargando...</p>
       </div>
     </div>

@@ -8,57 +8,77 @@
   min-height: 100vh;
 }
 
-/* Tarjeta */
+/* Tarjeta principal */
 .card {
-  background: #fff;
+  background: #ffffff;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-  padding: 50px 60px;
+  border-radius: 1.5rem;
+  padding: 50px;
   max-width: 900px;
   width: 100%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  border: none;
+  margin-top: 150px;
 }
 
 .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
 }
 
 /* Títulos */
 .title {
   font-family: 'Montserrat', sans-serif;
-  font-size: 4rem; /* Aumentamos más el tamaño del título */
+  font-size: 3rem;
   font-weight: 700;
-  color: #333;
-  margin-bottom: 15px;
-  letter-spacing: 1px; /* Aumentamos el espaciado entre letras */
+  color: #2c3e50;
+  margin-bottom: 10px;
 }
 
 .subtitle {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem; /* Aumentamos el tamaño del subtítulo */
-  color: #666;
+  font-size: 1.8rem;
+  color: #6c757d;
   margin-bottom: 30px;
-  font-weight: 600;
 }
 
-/* Información */
+/* Información en cards */
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 35px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-bottom: 35px;
 }
 
 .info-item {
-  font-family: 'Roboto', sans-serif;
-  font-size: 1.5rem; /* Aumentamos el tamaño de la fuente */
-  color: #555;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 1rem;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-3px);
+}
+
+.info-item i {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  display: block;
+  color: #0d6efd;
 }
 
 .info-item b {
-  font-weight: 700;
-  color: #333;
+  display: block;
+  margin-bottom: 5px;
+  color: #343a40;
+  font-size: 1.1rem;
+}
+
+.info-item span {
+  color: #495057;
+  font-size: 1rem;
 }
 
 /* Descripción */
@@ -70,58 +90,62 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .description-header h3 {
-  font-family: 'Roboto', sans-serif;
-  font-size: 2rem; /* Aumentamos el tamaño de la fuente */
-  color: #333;
+  font-size: 1.5rem;
+  color: #2c3e50;
   font-weight: 600;
 }
 
 .edit-icon {
-  color: #007bff;
+  color: #0d6efd;
   cursor: pointer;
-  font-size: 1.6rem; /* Aumentamos el tamaño del ícono */
+  font-size: 1.3rem;
+  transition: transform 0.2s ease;
 }
 
-/* Descripción del texto */
+.edit-icon:hover {
+  transform: scale(1.1);
+}
+
 .description-text {
-  font-family: 'Roboto', sans-serif;
-  font-size: 1.5rem; /* Aumentamos el tamaño de la fuente */
-  color: #666;
-  line-height: 1.7; /* Mejoramos el espaciado entre líneas */
-  letter-spacing: 0.5px;
-  margin-top: 15px;
+  font-size: 1.15rem;
+  color: #6c757d;
+  line-height: 1.8;
+  letter-spacing: 0.4px;
+  margin-top: 10px;
 }
 
 /* Botones */
 .actions {
   display: flex;
-  justify-content: space-between;
-  margin-top: 35px;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
 }
 
 .btn {
-  font-family: 'Roboto', sans-serif;
-  padding: 18px 40px;
-  font-size: 1.4rem;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 1.15rem;         /* Aumentamos el tamaño de letra */
+  padding: 14px 32px;         /* Más espacio interno para que se vean más grandes */
   font-weight: 600;
+  border-radius: 0.75rem;     /* Más redondeado para suavizar el estilo */
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .approve {
-  background-color: #28a745;
+  background-color: #198754;
   color: white;
 }
 
 .approve:hover {
-  background-color: #218838;
-  transform: scale(1.05);
+  background-color: #157347;
+  transform: scale(1.04);
 }
 
 .reject {
@@ -130,23 +154,6 @@
 }
 
 .reject:hover {
-  background-color: #c82333;
-  transform: scale(1.05);
+  background-color: #bb2d3b;
+  transform: scale(1.04);
 }
-
-/* Información */
-.info-item {
-  font-family: 'Roboto', sans-serif;
-  font-size: 2rem; /* Aumentamos el tamaño de la fuente */
-  color: #555;
-}
-
-.info-item b {
-  font-weight: 700;
-  color: #333;
-}
-
-.info-item span {
-  font-size: 2rem; /* Aumentamos el tamaño de los valores */
-}
-

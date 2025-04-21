@@ -1,25 +1,30 @@
 .content {
-    position: fixed;
-    border-radius: 25px;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    width: 400px;height: 500px;
-    background-color: white;
-    text-align:center;
-  }
-
-.img{
-    width: 250px;
-    height: 250px;
-    left: 50%;
-    display:inline-block;
+  padding: 30px;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-.popupBody{
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    font-size: 14px;
+.img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.popupBody {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button.btn {
+  font-size: 18px;
+  padding: 12px;
+  width: 100%;
 }
