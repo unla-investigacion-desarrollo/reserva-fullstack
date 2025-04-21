@@ -1,30 +1,59 @@
 .content {
-  padding: 30px;
+  padding: 30px; /* Increased padding for more space */
   text-align: center;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.img {
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 20px;
+  min-height: 200px; /* Increased min-height for larger content */
 }
 
 .popupBody {
-  font-size: 18px;
-  color: #333;
-  margin-bottom: 30px;
+  margin-bottom: 30px; /* Increased margin for better spacing */
+}
+
+.popupBody b {
+  font-size: 1.5em; /* Increased from 1.2em to 1.5em */
+  color: #2c3e50;
+}
+
+.popupBody p {
+  font-size: 1.2em; /* Increased from 1em to 1.2em */
+  color: #555;
+  margin-top: 15px; /* Increased margin for better spacing */
+}
+
+.img {
+  max-width: 150px; /* Increased from 100px to 150px */
+  margin-bottom: 20px; /* Increased margin */
 }
 
 .button-group {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: center;
+  gap: 20px; /* Increased gap between buttons */
 }
 
-button.btn {
-  font-size: 18px;
-  padding: 12px;
-  width: 100%;
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  padding: 10px 25px; /* Increased padding for larger buttons */
+  font-size: 1.1em; /* Increased font size for buttons */
+}
+
+.btn-outline-success {
+  border-color: #28a745;
+  color: #28a745;
+  padding: 10px 25px; /* Increased padding for larger buttons */
+  font-size: 1.1em; /* Increased font size for buttons */
+}
+
+.btn-success:hover,
+.btn-outline-success:hover {
+  opacity: 0.9;
+}
+
+/* Ensure dialog is visible */
+:host {
+  display: block !important;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
 }

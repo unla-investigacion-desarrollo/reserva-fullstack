@@ -1,10 +1,11 @@
-<div class="content p-4">
-  <div class="table-wrapper mb-4">
-    <div class="back-button mb-3">
+<div class="content">
+  <div class="table-wrapper">
+    <div class="back-button">
       <a [routerLink]="['/home']" class="btn btn-outline-primary">
-        <i class="fas fa-arrow-left me-2"></i>Volver al menú principal
+        <i class="fas fa-arrow-left me-2"></i> Volver al menú principal
       </a>
     </div>
+    <h1 class="title">Avistamientos Aprobados</h1>
 
     <div class="table-responsive shadow rounded">
       <table *ngIf="avistamientos.length > 0" class="table table-striped table-hover table-bordered align-middle mb-0">
@@ -26,13 +27,13 @@
             <td>{{ avist.latitude }} - {{ avist.longitude }}</td>
             <td>{{ datePipe.transform(avist.createdAt, 'yyyy-MM-dd') }}</td>
             <td class="text-center">
-              <button class="btn btn-sm btn-outline-secondary me-1" (click)="viewImage(avist.id)" title="Ver imagen">
+              <span class="btn btn-sm btn-outline-primary me-1" (click)="viewImage(avist.id)" title="Ver imagen">
                 <i class="fas fa-camera"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-danger me-1" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
+              </span>
+              <span class="btn btn-sm btn-outline-danger me-1" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
                 <i class="glyphicon glyphicon-trash"></i>
-              </button>
-              <a class="btn btn-sm btn-outline-primary" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
+              </span>
+              <a class="btn btn-sm btn-outline-success" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
                 <i class="fas fa-edit"></i>
               </a>
             </td>
@@ -40,16 +41,14 @@
         </tbody>
       </table>
 
-      <!-- Sin registros -->
-      <div *ngIf="avistamientos.length === 0 && !isLoading" class="p-3 text-center text-muted">
+      <!-- Mensaje cuando no hay avistamientos -->
+      <div *ngIf="avistamientos.length === 0 && !isLoading" class="no-data-message text-center p-4">
         <p>No hay avistamientos aprobados.</p>
       </div>
 
-      <!-- Cargando -->
-      <div *ngIf="isLoading" class="p-3 text-center">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Cargando...</span>
-        </div>
+      <!-- Indicador de carga -->
+      <div *ngIf="isLoading" class="loading-spinner text-center p-4">
+        <p>Cargando...</p>
       </div>
     </div>
   </div>

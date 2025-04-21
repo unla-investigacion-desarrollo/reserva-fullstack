@@ -2,21 +2,37 @@
 .content {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* <-- CAMBIO CLAVE */
-  min-height: 80vh;        /* opcional: más espacio si hay muchos registros */
+  align-items: flex-start;
+  min-height: 80vh;
   padding-top: 80px;
-
 }
 
-
 /* Contenedor de la tabla con sombra */
-.table-container {
+.table-wrapper {
   width: 90%;
   max-width: 1200px;
   background: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between button, title, and table */
+  margin-top: 30px; /* Space from the header or top */
+}
+
+/* Botón Volver */
+.back-button {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Estilo del título */
+.title {
+  font-size: 2em;
+  color: #2c3e50;
+  text-align: center; /* Center the title */
+  margin: 0; /* Remove default margin */
 }
 
 /* Tabla estilizada */
@@ -40,7 +56,6 @@
   vertical-align: middle;
 }
 
-
 .table th {
   padding: 15px;
   text-align: left;
@@ -60,47 +75,38 @@
 .table td {
   padding: 15px;
   border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
 }
 
-/* Wrapper que contiene la flecha + la tabla */
-.table-wrapper {
-  width: 90%;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* Aumenta el espacio entre el botón y la tabla */
-  margin-top: 30px; /* Espacio desde el header o top */
+/* Estilos para los botones de acción */
+.btn-outline-primary {
+  border-color: #007bff;
+  color: #007bff;
 }
 
-/* Botón Volver */
-.back-button {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 10px; /* Espacio entre el botón y la tabla */
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
 }
 
-.back-link {
-  font-size: 14px;
-  color: #7f8c8d;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: color 0.3s ease;
+.btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
 }
 
-.back-link:hover {
-  color: #2c3e50;
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
 }
 
-.back-icon {
-  font-size: 16px;
+.btn-outline-success {
+  border-color: #28a745;
+  color: #28a745;
 }
 
-/* Acciones */
-.actions {
-  display: flex;
-  gap: 10px;
+.btn-outline-success:hover {
+  background-color: #28a745;
+  color: white;
 }
 
 /* Estilos para los iconos */
@@ -131,6 +137,17 @@
   color: #2980b9;
 }
 
+/* Icono de eliminar (basura) en gris */
+.icon-button .glyphicon-trash {
+  color: gray;
+  transition: color 0.3s ease-in-out 0.1s;
+}
+
+/* Cambia a rojo con delay */
+.icon-button .glyphicon-trash:hover {
+  color: red;
+}
+
 /* Mensaje de no hay datos */
 .no-data-message {
   text-align: center;
@@ -146,37 +163,23 @@
   color: #555;
 }
 
-/* Estilo base para los iconos */
-.icon-button {
-  cursor: pointer;
-  font-size: 20px;
-  transition: color 0.3s ease;
-}
-
-/* Icono de eliminar (basura) en gris */
-.icon-button .glyphicon-trash {
-  color: gray;
-  transition: color 0.3s ease-in-out 0.1s; /* Retraso de 0.2s */
-}
-
-/* Cambia a rojo con delay */
-.icon-button .glyphicon-trash:hover {
-  color: red;
-}
-
-
 /* Responsividad */
 @media (max-width: 768px) {
-  .table-container {
-      width: 95%;
-      padding: 15px;
+  .table-wrapper {
+    width: 95%;
+    padding: 15px;
   }
 
-  .table th, .table td {
-      padding: 10px;
+  .table th,
+  .table td {
+    padding: 10px;
   }
 
   .icon-button {
-      font-size: 18px;
+    font-size: 18px;
+  }
+
+  .title {
+    font-size: 1.5em; /* Smaller title on mobile */
   }
 }

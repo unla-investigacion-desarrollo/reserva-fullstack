@@ -1,23 +1,33 @@
 <div class="content">
-  <div *ngIf="dialogType === 0">
+  <div *ngIf="dialogType === 0; else otherType">
     <div class="popupBody">
       <b>¡Felicitaciones! Aprobaste el avistamiento</b>
       <p>El avistamiento estará disponible en la app y en la lista de avistamientos de la reserva.</p>
     </div>
     <div class="button-group">
-      <button type="button" class="btn btn-success" (click)="closeDialog(0)">Continuar</button>
+      <button #firstButton type="button" class="btn btn-success" (click)="closeDialog(0)">Continuar</button>
       <button type="button" class="btn btn-outline-success" (click)="closeDialog(1)">Ver avistamiento en la lista</button>
     </div>
   </div>
 
-  <div *ngIf="dialogType === 1">
-    <img class="img" src="assets/images/home/avist_rechazado.png" alt="Rechazado">
-    <div class="popupBody">
-      <b>Reprobaste el avistamiento</b>
-      <p>Le avisarás al usuario sobre su avistamiento.</p>
+  <ng-template #otherType>
+    <div *ngIf="dialogType === 1">
+      <img class="img" src="assets/images/home/avist_rechazado.png" alt="Rechazado">
+      <div class="popupBody">
+        <b>Reprobaste el avistamiento</b>
+        <p>Le avisarás al usuario sobre su avistamiento.</p>
+      </div>
+      <div class="button-group">
+        <button #firstButton type="button" class="btn btn-success" (click)="closeDialog(0)">Continuar</button>
+      </div>
     </div>
-    <div class="button-group">
-      <button type="button" class="btn btn-success" (click)="closeDialog(0)">Continuar</button>
+
+    <div *ngIf="dialogType !== 0 && dialogType !== 1">
+      <div class="popupBody">
+        <b>Error: Tipo de diálogo no reconocido</b>
+        <p>DialogType: {{ dialogType }}</p>
+      </div>
+      <div class="button-group">
+        <button #firstButton type="button" class="btn btn-secondary" (click)="closeDialog(0)">Cerrar</button>
+      </div>
     </div>
-  </div>
-</div>
