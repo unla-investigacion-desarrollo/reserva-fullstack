@@ -1,9 +1,18 @@
 <div class="content-container">
+  <!-- Spinner de carga -->
   <div *ngIf="isLoading" class="loading-spinner text-center p-4">
     <p>Cargando...</p>
   </div>
 
-  <div *ngIf="!isLoading && avistamiento" class="card shadow-lg">
+  <!-- Botón Volver al menú principal -->
+  <div class="back-button-container mb-4">
+    <a [routerLink]="['/avistamientos_pendientes']" class="btn btn-outline-primary">
+      <i class="fas fa-arrow-left me-2"></i>Volver a Avistmientos Pendientes
+    </a>
+  </div>
+
+  <!-- Card con detalles del avistamiento, centrada -->
+  <div *ngIf="!isLoading && avistamiento" class="card shadow-lg mx-auto">
     <h1 class="title mb-3">{{ avistamiento?.scientificName }}</h1>
     <h2 class="subtitle mb-4 text-muted">{{ avistamiento?.name }}</h2>
 

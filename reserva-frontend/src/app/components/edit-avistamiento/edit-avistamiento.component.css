@@ -1,7 +1,7 @@
 .content-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column; /* Apila los elementos verticalmente */
+  align-items: flex-start; /* Alinea el botón a la izquierda */
   min-height: 80vh;
   padding: 20px;
   margin-top: 60px;
@@ -27,6 +27,12 @@
   font-size: 1.5em;
   color: #7f8c8d;
   text-align: center;
+}
+
+.back-button-container {
+  margin-bottom: 1.5rem; /* Espaciado entre el botón y la card */
+  padding-top: 40px;
+  padding-left: 30px;
 }
 
 .info-box {
