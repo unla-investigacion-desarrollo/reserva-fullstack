@@ -12,17 +12,39 @@ export class LoginService {
   });
 
   private rta: any;
-  isLoggedIn = false;
 
   constructor(private http: HttpClient) { }
 
   async login(usernameOrEmail, password){
+    try{
+      const url = 'http://localhost:8000/account/login';
+      const body = {
+        // usernameOrEmail: "nfiasche",
+        // password: "nfiasche"
+        usernameOrEmail: usernameOrEmail,
+        password: password
+      };
+      this.rta = await lastValueFrom(this.http.post(url, body, { headers: this.headers }));
+      localStorage.setItem('userData', JSON.stringify(this.rta));
+  
+      if(this.rta.success){
+        localStorage.setItem('isLoggedIn', "true");
+        return this.rta.success;
+      }
+  
+      return false;
+    }catch(ex){
+      console.log(ex);
+    }
+    
+  }
 
-    const url = 'http://localhost:8000/account/login';
+  async register(name, username, email, password){
+    const url = 'http://localhost:8000/account/register';
     const body = {
-      // usernameOrEmail: "nfiasche",
-      // password: "nfiasche"
-      usernameOrEmail: usernameOrEmail,
+      name: name,
+      username: username,
+      email: email,
       password: password
     };
 
@@ -31,11 +53,14 @@ export class LoginService {
     localStorage.setItem('userData', JSON.stringify(this.rta));
 
     if(this.rta.success){
-      this.isLoggedIn = true;
+      localStorage.setItem('isLoggedIn', "true");
       return this.rta.success;
-
     }
 
     return false;
+  }
+
+  checkLogin(){
+    return localStorage.getItem("isLoggedIn") == "true";
   }
 }

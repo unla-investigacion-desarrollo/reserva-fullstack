@@ -112,10 +112,10 @@ Successful response body:
 Responses:
 | Code      |  Description                |
 | :-------- | :------------------------- |
-| `200` | SIGN_UP_SUCCESSFUL |
+| `200` | SIGN_UP_SUCCESS |
 | `400` | ROLE_NOT_FOUND |
-| `404` | USERNAME_OR_EMAIL_ALREADY_EXIST |
-| `500` | DATABASE_SAVE_ERROR |
+| `404` | USERNAME_TAKEN or EMAIL_TAKEN |
+| `500` | DATABASE_SAVE_FAILED |
 
 ---
 #### Realizar el inicio de sesion de un usuario ya registrado:
@@ -140,8 +140,8 @@ Successful response body:
 Responses:
 | Code      |  Description                |
 | :-------- | :------------------------- |
-| `200` | SIGN_IN_SUCCESSFUL |
-| `500` | USERNAME_OR_PASSWORD_INCORRECT |
+| `200` | SIGN_IN_SUCCESS |
+| `500` | INVALID_CREDENTIALS |
 
 ---
 #### Enviar una solicitud de recuperacion de contraseña al email:
@@ -170,9 +170,9 @@ Reserva.
 Responses:
 | Code      |  Description                |
 | :-------- | :------------------------- |
-| `200` | EMAIL_SEND_OK |
+| `200` | EMAIL_SENT_SUCCESSFULLY |
 | `404` | EMAIL_NOT_FOUND |
-| `500` | EMAIL_SEND_ERROR |
+| `500` | EMAIL_SEND_FAILED |
 
 ---
 #### Realizar el cambio de contraseña previamente el token verificado:
@@ -187,13 +187,13 @@ Request:
 }
 ```
 Successful response body:
-``` body: "PASSWORD_HAS_BEEN_CHANGED" ``` ```code: 200 ```
+``` body: "PASSWORD_CHANGED" ``` ```code: 200 ```
 
 Responses:
 | Code      |  Description                |
 | :-------- | :------------------------- |
-| `200` | PASSWORD_HAS_BEEN_CHANGED |
-| `400` | TOKEN_BAD_REQUEST |
-| `400` | PASSWORD_NOT_MATCH |
-| `403` | TOKEN_INVALID |
-| `500` | DATABASE_SAVE_ERROR |
+| `200` | PASSWORD_CHANGED |
+| `400` | TOKEN_REQUEST_INVALID |
+| `400` | PASSWORD_MISMATCH |
+| `403` | INVALID_TOKEN |
+| `500` | DATABASE_SAVE_FAILED |

@@ -38,11 +38,11 @@ public class TokenVerification {
 		super();
 		this.token = generateToken();
 		this.createdAt = new Date();
-		this.expiratedAt = getEpirationTime(10);
+		this.expiratedAt = getExpirationTime(10);
 		this.user = user;
 	}
 	
-	public Date getEpirationTime(int expiration) {
+	public Date getExpirationTime(int expiration) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Timestamp(calendar.getTime().getTime()));
 		calendar.add(Calendar.MINUTE, expiration);

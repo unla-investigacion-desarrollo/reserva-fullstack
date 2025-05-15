@@ -1,0 +1,40 @@
+<div class="content">
+    <div class="container mt-5">
+        <div class="card p-4 shadow">
+            <h2 class="card-title mb-4 text-center">Editar Avistamiento</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="scientificName" class="form-label">Nombre Científico:</label>
+                    <input id="scientificName" [(ngModel)]="avistamiento.scientificName" name="scientificName" type="text" class="form-control" placeholder="Ingrese nombre científico" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre:</label>
+                    <input id="name" [(ngModel)]="avistamiento.name" name="name" type="text" class="form-control" placeholder="Ingrese nombre" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción:</label>
+                    <textarea id="description" [(ngModel)]="avistamiento.fields[0].description" name="description" class="form-control" placeholder="Ingrese descripción" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="categorySelect" class="form-label">Selecciona una categoría:</label>
+                    <select id="categorySelect" class="form-select" [(ngModel)]="avistamiento.type.id" name="categorySelect" aria-label="Selecciona una categoría" required>
+                        <option selected disabled>Selecciona una categoría</option>
+                        <option *ngFor="let avist of avistamientos" [value]="avist.id">{{ avist.name }} - {{ avist.category }}</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-start mt-4">
+                    <button type="button" class="btn btn-success me-2" (click)="updateAvistamiento(avistamiento.id, avistamiento.scientificName, avistamiento.name, avistamiento.fields[0].description, avistamiento.type.id)">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i> Descartar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

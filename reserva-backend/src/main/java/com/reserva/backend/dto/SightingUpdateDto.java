@@ -21,9 +21,10 @@ public class SightingUpdateDto {
     @NotBlank(message = "el nombre cientifico no debe estar vacio")
 	@Size(max = 250, message = "el nombre cientifico no debe tener más de {max} caracteres")
     private String scientificName;
-    private double latitude;
-    private double longitude;
-    @NotBlank(message = "el tipo es obligatorio")
-    private String type;
-    
+    //private double latitude;
+    //private double longitude;
+    //@NotBlank(message = "el tipo es obligatorio")
+    //private String type;
+    private String descripcion;
+    private long sightingTypeId;
 }

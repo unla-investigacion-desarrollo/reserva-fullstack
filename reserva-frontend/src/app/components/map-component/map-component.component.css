@@ -1,0 +1,72 @@
+.content{
+    margin-top: 100px;
+}
+
+.map-container {
+    position: relative;
+    display: inline-block;
+    
+    margin-top: 100px;
+     width: 100%; 
+    height: 500px; 
+    background-image: url('src\assets\images\map\mapa.png');
+
+    background-size: cover; /* Asegura que la imagen cubra el contenedor */
+  /* background-position: center;  */
+  background-repeat: no-repeat;
+  }
+  
+  .map-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .defaultPoint{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black;
+  }
+
+  /* .rechazado{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+  }
+
+  .pendiente{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: orange;
+  }
+
+  .aprobado{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
+  } */
+
+  .reprobado{
+    position: absolute;
+    color: red;
+    font-size: 3rem;
+  }
+
+  .pendiente{
+    position: absolute;
+    color: orange;
+    font-size: 3rem;
+  }
+
+  .aprobado{
+    position: absolute;
+    color: green;
+    font-size: 3rem;
+  }

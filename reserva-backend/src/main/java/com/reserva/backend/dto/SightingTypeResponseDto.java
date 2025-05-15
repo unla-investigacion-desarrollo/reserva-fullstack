@@ -14,5 +14,5 @@ public class SightingTypeResponseDto {
 	private String name;
 	private String category;
 	private boolean active;
-	
+	private int id;
 }

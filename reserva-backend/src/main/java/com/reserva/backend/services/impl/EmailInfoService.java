@@ -16,19 +16,16 @@ import org.springframework.stereotype.Component;
 import com.reserva.backend.dto.email.EmailInfoDto;
 import com.reserva.backend.services.IEmailInfoService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class EmailInfoService implements IEmailInfoService {
 	
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
-	List<EmailInfoDto> lst = new ArrayList<>();
-	
-	/*
-	 * CON ESA CLASE MANDAMOS CORREOS AUTOMATICAMENTE O EN SU DEFECTO LOS EMAILS SE
-	 * ENCOLAN EN SEGUNDO PLANO PARA POSTERIORMENTE SER MANDADOS CON LA FUNCION
-	 * RUN() QUE SE EJECUTA PERIODICAMENTE PARA IR MANANDO LOS CORREOS ENCOLADOS
-	 */
+	private final List<EmailInfoDto> lst = new ArrayList<>();
 
 	@Override
 	public void send(EmailInfoDto email) throws MessagingException {
@@ -83,8 +80,8 @@ public class EmailInfoService implements IEmailInfoService {
 			EmailInfoDto mail = lst.remove(0);
 			try {
 				this.send(mail);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (MessagingException e) {
+				log.error(e.getMessage());
 			}
 		}
 	}
