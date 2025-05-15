@@ -7,7 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -33,6 +35,9 @@ public class StorageService implements IStorageService {
 
     @Autowired
     private IStorageRepository storageRepository;
+    
+     @Autowired
+     private IStorageRepository imageRepository;
 
     /*
      * Para asegurarnos que vamos a guardar correctamente las imagenes en una ubicacion valida
@@ -117,6 +122,13 @@ public class StorageService implements IStorageService {
         } catch (Exception e) {
             throw new ReservaException(StorageConstants.IMAGE_URL_INVALID, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public List<String> getImageUrlsBySightingId(Long sightingId) {
+        return imageRepository.findBySightingId(sightingId)
+                .stream()
+                .map(Image::getUrl)
+                .collect(Collectors.toList());
     }
 
 }

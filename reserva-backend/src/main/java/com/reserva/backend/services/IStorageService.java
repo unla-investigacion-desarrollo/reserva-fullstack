@@ -1,6 +1,7 @@
 package com.reserva.backend.services;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,5 +15,7 @@ public interface IStorageService {
     public Resource getImage(String url);
     public Resource getImage(long id);
     public Responses<String> delete(long id);
+
+    List<String> getImageUrlsBySightingId(Long sightingId);
     
 }

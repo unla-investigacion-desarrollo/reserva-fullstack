@@ -1,6 +1,10 @@
 package com.reserva.backend.controllers;
 
+import java.net.URI;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,13 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.reserva.backend.services.IStorageService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/storage")
+@Tag(name = "Storage", description = "Gestión de imágenes de avistamientos")
 public class StorageController {
 
     @Autowired
@@ -59,5 +67,28 @@ public class StorageController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") long id){
         return ResponseEntity.ok(storageService.delete(id));
+    }
+
+    @Operation(summary = "Redirige a la imagen original")
+    @GetMapping("/redirect/{url:.+}")
+    public ResponseEntity<Void> redirectToImage(@PathVariable String url) {
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(url))
+                .build();
+    }
+
+    @Operation(summary = "Obtener imágenes por ID de avistamiento", description = "Devuelve las URLs de las imágenes asociadas a un avistamiento específico", responses = {
+        @ApiResponse(responseCode = "200", description = "URLs de imágenes encontradas", 
+        content = @Content(mediaType = "application/json", 
+        schema = @Schema(implementation = String[].class))),
+        @ApiResponse(responseCode = "404", description = "Avistamiento no encontrado")
+    })
+    
+    @GetMapping("/by-sighting/{sightingId}")
+    public ResponseEntity<List<String>> getImagesBySighting(
+            @Parameter(description = "ID del avistamiento", required = true, example = "17" // 👈 Ejemplo de valor
+            ) @PathVariable Long sightingId) {
+        List<String> urls = storageService.getImageUrlsBySightingId(sightingId);
+        return ResponseEntity.ok(urls);
     }
 }

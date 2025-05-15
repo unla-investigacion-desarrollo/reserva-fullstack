@@ -8,8 +8,10 @@ import { HomeComponent } from './components/home/home.component';
 import { AvistamientoAprobadoComponent } from './components/avistamiento-aprobado/avistamiento-aprobado.component';
 import { AvistamientoReprobadoComponent } from './components/avistamiento-reprobado/avistamiento-reprobado.component';
 import { EditAvistamientoComponent } from './components/edit-avistamiento/edit-avistamiento.component';
+import { ImageModalComponent } from './components/image-modal/image-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { DialogComponentComponent } from './components/dialog-component/dialog-component.component';
 import { DialogService } from './services/dialog-service.service';
@@ -27,7 +29,8 @@ import { HttpInterceptorInterceptor } from './http-interceptor.interceptor';
     EditAvistamientoComponent,
     DialogComponentComponent,
     LoginComponent,
-    HeaderComponent
+    HeaderComponent,
+    ImageModalComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,7 @@ import { HttpInterceptorInterceptor } from './http-interceptor.interceptor';
     BrowserAnimationsModule,
     HttpClientModule,
     MatDialogModule,
+    MatIconModule,
     MatButtonModule
     // Optional: Add FormsModule, ReactiveFormsModule, or other Material modules if needed
     // e.g., FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule

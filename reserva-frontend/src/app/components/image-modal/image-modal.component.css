@@ -1,0 +1,103 @@
+:host ::ng-deep .mat-dialog-container {
+  border-radius: 16px !important;
+  padding: 32px 40px !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  width: 90vw !important;
+  max-width: none !important;
+  text-align: center;
+}
+
+/* Título del modal */
+:host ::ng-deep .modal-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+/* Contenido del modal */
+:host ::ng-deep .modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Contenedor para centrar la imagen */
+:host ::ng-deep .image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  padding: 20px 0;
+}
+
+/* Estilo de la imagen con borde */
+:host ::ng-deep .image {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 10px;
+  border: 4px solid #6c757d; /* borde más oscuro para mejor contraste */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+:host ::ng-deep .image:hover {
+  transform: scale(1.02);
+}
+
+/* Navegación */
+:host ::ng-deep .nav-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+  color: #6c757d;
+}
+
+:host ::ng-deep .nav-arrow {
+  color: #007bff;
+  transition: background-color 0.2s ease;
+}
+
+:host ::ng-deep .nav-arrow:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  border-radius: 50%;
+}
+
+:host ::ng-deep .image-index {
+  font-size: 0.95rem;
+  color: #2c3e50;
+}
+
+/* Estado sin imágenes */
+:host ::ng-deep .no-images {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+
+:host ::ng-deep .no-images mat-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  color: #ccc;
+}
+
+/* Botón de cerrar */
+:host ::ng-deep .btn-outline-primary {
+  border-color: #007bff;
+  color: #007bff;
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 6px 18px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+}

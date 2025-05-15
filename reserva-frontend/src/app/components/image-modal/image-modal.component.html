@@ -1,0 +1,35 @@
+<ng-container>
+  <h2 mat-dialog-title class="modal-title text-center">
+    Imágenes del Avistamiento
+  </h2>
+
+  <div class="image-wrapper">
+    <img [src]="currentImage.url"
+         alt="Imagen del avistamiento"
+         class="image"
+         (click)="hasMultipleImages && nextImage()" />
+  </div>
+
+  <div *ngIf="hasMultipleImages" class="nav-controls">
+    <button mat-icon-button (click)="prevImage()" class="nav-arrow">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <span class="image-index">{{activeImageIndex + 1}} / {{data.images.length}}</span>
+    <button mat-icon-button (click)="nextImage()" class="nav-arrow">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+
+  <ng-template #noImages>
+    <div class="no-images">
+      <mat-icon>image_not_supported</mat-icon>
+      <p>No hay imágenes disponibles</p>
+    </div>
+  </ng-template>
+
+  <mat-dialog-actions align="end" class="modal-actions">
+    <button mat-flat-button mat-dialog-close class="btn btn-outline-primary">
+      Cerrar
+    </button>
+  </mat-dialog-actions>
+</ng-container>
