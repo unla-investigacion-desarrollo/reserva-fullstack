@@ -18,15 +18,15 @@ import com.reserva.backend.constants.UserConstants;
 import com.reserva.backend.dto.user.UserRequestDto;
 import com.reserva.backend.dto.user.UserResponseDto;
 import com.reserva.backend.dto.user.UserUpdateDto;
-import com.reserva.backend.entities.Role;
-import com.reserva.backend.entities.User;
-import com.reserva.backend.exceptions.ReservaException;
 import com.reserva.backend.repositorys.IRoleRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IUserService;
 import com.reserva.backend.util.Response;
 import com.reserva.backend.util.ResponsePageable;
 import com.reserva.backend.util.Responses;
+import com.reserva.backend.exceptions.ReservaException;
+import com.reserva.backend.entities.Role;
+import com.reserva.backend.entities.User;
 
 @Service
 public class UserService implements IUserService{
@@ -43,10 +43,10 @@ public class UserService implements IUserService{
 	@Override
 	public Responses<UserResponseDto> create(UserRequestDto request) {
 		if (userRepository.existsByUsername(request.getUsername())) {
-			throw new ReservaException(UserConstants.USERNAME_TAKEN, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(UserConstants.USERNAME_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
 		if (userRepository.existsByEmail(request.getEmail())) {
-			throw new ReservaException(UserConstants.EMAIL_TAKEN, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(UserConstants.EMAIL_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
 		try {
 			User newUser = modelMapper.map(request, User.class);
@@ -60,9 +60,9 @@ public class UserService implements IUserService{
 			newUser.setRole(newRole.get());
 			userRepository.save(newUser);
 			UserResponseDto response = modelMapper.map(newUser, UserResponseDto.class);
-			return Response.success(UserConstants.USER_CREATE_SUCCESS, response);
+			return Response.success(UserConstants.USER_CREATED, response);
 		} catch (MappingException e) {
-			throw new ReservaException(UserConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
@@ -80,18 +80,18 @@ public class UserService implements IUserService{
 	public Responses<UserResponseDto> update(long id, UserUpdateDto request) {
 		Optional<User> user = userRepository.findById(id);
 		if (id != request.getId()) {// SI PATH ES DIFERENTE DE LO QUE SE MANDAN EN EL JSON
-			throw new ReservaException(UserConstants.RESOURCE_ID_MISMATCH, HttpStatus.UNAUTHORIZED);
+			throw new ReservaException(UserConstants.RESOURCE_ERROR_ID_MISMATCH, HttpStatus.UNAUTHORIZED);
 		}
 		if (!user.get().isActive()) {
 			throw new ReservaException(UserConstants.USER_INACTIVE, HttpStatus.BAD_REQUEST);
 		}
 		if (userRepository.existsByUsername(request.getUsername())
 				&& !user.get().getUsername().equalsIgnoreCase(request.getUsername())) {
-			throw new ReservaException(UserConstants.USERNAME_TAKEN, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(UserConstants.USERNAME_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
 		if (userRepository.existsByEmail(request.getEmail())
 				&& !user.get().getEmail().equalsIgnoreCase(request.getEmail())) {
-			throw new ReservaException(UserConstants.EMAIL_TAKEN, HttpStatus.BAD_REQUEST);
+			throw new ReservaException(UserConstants.EMAIL_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
 		}
 		try {
 			User updateUser = user.get();
@@ -105,11 +105,11 @@ public class UserService implements IUserService{
 			}
 			updateUser.setRole(updateRole.get());
 			userRepository.save(updateUser);
-			return Response.success(UserConstants.USER_UPDATE_SUCCESS, getById(id));
+			return Response.success(UserConstants.USER_UPDATE_SUCCESSFUL, getById(id));
 		} catch (ReservaException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ReservaException(UserConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
@@ -122,9 +122,9 @@ public class UserService implements IUserService{
 		}
 		try {
 			userRepository.delete(user);
-			return Response.success(UserConstants.USER_DELETE_SUCCESS, null);
+			return Response.success(UserConstants.USER_DELETE_SUCCESSFUL, null);
 		} catch (Exception e) {
-			throw new ReservaException(UserConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
@@ -138,9 +138,9 @@ public class UserService implements IUserService{
 		try {
 			user.setActive(true);
 			userRepository.save(user);
-			return Response.success(UserConstants.USER_RESTORE_SUCCESS, getById(id));
+			return Response.success(UserConstants.USER_RESTORE_SUCCESSFUL, getById(id));
 		} catch (Exception e) {
-			throw new ReservaException(UserConstants.REQUEST_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
@@ -156,7 +156,7 @@ public class UserService implements IUserService{
 							.map(user -> modelMapper.map(user, UserResponseDto.class))
 							.collect(Collectors.toList()));
 		} catch (Exception e) {
-			throw new ReservaException(UserConstants.USER_RETRIEVE_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new ReservaException(UserConstants.USER_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 

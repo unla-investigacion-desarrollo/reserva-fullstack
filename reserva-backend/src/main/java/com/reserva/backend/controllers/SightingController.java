@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.reserva.backend.constants.SightingConstants;
-import com.reserva.backend.constants.StorageConstants;
-import com.reserva.backend.constants.UserConstants;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingUpdateDto;
 import com.reserva.backend.dto.UpdateStatusDto;
@@ -33,7 +30,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/sighting")
@@ -42,45 +39,44 @@ public class SightingController {
     @Autowired
     private ISightingService sightingService;
 
-    @Operation(summary = "Crea un nuevo avistamiento completo")
+    @Operation(summary = "realiza la creacion completa de un avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = SightingConstants.SIGHTING_CREATE_SUCCESS, content = @Content),
-            @ApiResponse(responseCode = "400", description = SightingConstants.SIGHTINGTYPE_NOT_FOUND, content = @Content),
-            @ApiResponse(responseCode = "404", description = UserConstants.USER_NOT_FOUND, content = @Content),
-            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content)
+            @ApiResponse(responseCode = "201", description = "created", content = @Content),
+            @ApiResponse(responseCode = "400", description = "el Tipo_Avistamiento no es valido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "el usuario no fue encontrado", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
         })
     @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestPart SightingRequestDto request, @RequestPart List<MultipartFile> files){
         if(files.size() > 3){
-            return new ResponseEntity<>(StorageConstants.IMAGE_UPLOAD_MAX_LIMIT, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("No se puede subir mas de 3 imagenes por avistamiento", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(sightingService.create(request, files), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtiene un avistamiento por su ID")
+    @Operation(summary = "trae el avistamiento dado su id", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTING_OK, content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTING_NOT_FOUND, content = @Content(mediaType = "application/json"))
+            @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "no hay ningun avistamiento con ese id", content = @Content(mediaType = "application/json"))
         })
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable(name = "id") long id){
         return ResponseEntity.ok(sightingService.getById(id));
     }
 
-    @Operation(summary = "Obtiene avistamientos completos asociados a un ID de usuario")
+    @Operation(summary = "trae el avistamiento completo por idUsuario", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTING_OK, content = @Content(mediaType = "application/json")) 
+            @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")) 
     })
     @GetMapping("/getByUser/{userId}")
     public ResponseEntity<?> getByUserId(@PathVariable(name = "userId") long userId){
         return ResponseEntity.ok(sightingService.getByUserId(userId));
     }
 
-    
-    @Operation(summary = "Obtiene avistamientos completos con paginación")
+    @Operation(summary = "trae todos los avistamientos con paginacion, filtros de estado y tipo", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTING_OK, content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = SightingConstants.SIGHTING_RETRIEVE_ERROR, content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "no se pudieron listar los avistamientos", content = @Content(mediaType = "application/json")),
     })
     @GetMapping
     public ResponseEntity<?> getAll(@RequestParam(value = "name", defaultValue = "") String name,
@@ -94,18 +90,11 @@ public class SightingController {
         return ResponseEntity.ok(sightingService.getAll(name, status, type, page, size, orderBy, sortBy, active));
     }
 
-
-    @Operation(summary = "Obtiene avistamientos para mapa")
-    @GetMapping("/getAllForMap")
-    public ResponseEntity<?> getAllForMap(){
-        return ResponseEntity.ok(sightingService.getAllForMap());
-    }
-
-    @Operation(summary = "Actualiza el estado de los avistamientos")
+    @Operation(summary = "realiza la actualizacion de el estado de los avistamientos", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTING_UPDATE_SUCCESS, content = @Content),
-            @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTING_NOT_FOUND, content = @Content),
-            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content)
+            @ApiResponse(responseCode = "200", description = "ok", content = @Content),
+            @ApiResponse(responseCode = "404", description = "usuario o avistamiento no enecontrado", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
     })
     @PostMapping("/status")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
@@ -113,23 +102,23 @@ public class SightingController {
         return ResponseEntity.ok(sightingService.updateStatus(request));
     }
 
-    @Operation(summary = "Actualiza un avistamiento existente")
+    @Operation(summary = "realiza la actualizacion de un avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTING_UPDATE_SUCCESS, content = @Content),
-            @ApiResponse(responseCode = "400", description = SightingConstants.SIGHTINGTYPE_NOT_FOUND, content = @Content),
-            @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTING_NOT_FOUND, content = @Content),
-            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content)
+            @ApiResponse(responseCode = "200", description = "avistamiento actualizado correctamente", content = @Content),
+            @ApiResponse(responseCode = "400", description = "el Tipo_Avistamiento no es valido o no se puede actualizar un avistamiento que no te pertenece", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Avistamiento o usuario no encontrado", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
         })
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") long id, @Valid @RequestBody SightingUpdateDto request){
         return ResponseEntity.ok(sightingService.update(id, request));
     }
     
-    @Operation(summary = "Elimina un avistamiento de manera lógica (borrado lógico)")
+    @Operation(summary = "realiza el borrado logico de un avistamiento", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTING_DELETE_SUCCESS, content = @Content),
-            @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTING_NOT_FOUND, content = @Content),
-            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content)
+            @ApiResponse(responseCode = "200", description = "ok", content = @Content),
+            @ApiResponse(responseCode = "404", description = "no existe ese avistamiento", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
     })
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
@@ -137,12 +126,12 @@ public class SightingController {
         return ResponseEntity.ok(sightingService.delete(id));
     }
 
-    @Operation(summary = "Restaura un avistamiento previamente eliminado")
+    @Operation(summary = "realiza el alta logico de un avistamiento borrado", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = SightingConstants.SIGHTING_RESTORE_SUCCESS, content = @Content),
-            @ApiResponse(responseCode = "400", description = SightingConstants.SIGHTING_IS_ACTIVE, content = @Content),
-            @ApiResponse(responseCode = "404", description = SightingConstants.SIGHTING_NOT_FOUND, content = @Content),
-            @ApiResponse(responseCode = "500", description = SightingConstants.REQUEST_ERROR, content = @Content)
+            @ApiResponse(responseCode = "200", description = "ok", content = @Content),
+            @ApiResponse(responseCode = "400", description = "avistamiento ya se encuentra dado de alta", content = @Content),
+            @ApiResponse(responseCode = "404", description = "no existe ese avistamiento", content = @Content),
+            @ApiResponse(responseCode = "417", description = "Algo salió mal durante la solicitud", content = @Content)
     })
     @PatchMapping("/restore/{id}")
     @PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")

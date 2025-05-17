@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-header',
@@ -9,10 +8,9 @@ import { LoginService } from '../../../services/login.service';
 })
 export class HeaderComponent {
 
-  constructor(private router: Router, private loginService: LoginService) {}
+  constructor(private router: Router) {}
 
   logout(){
-    localStorage.setItem('isLoggedIn', "false");
     localStorage.removeItem('userData');
     this.router.navigate(['/login']);
   }

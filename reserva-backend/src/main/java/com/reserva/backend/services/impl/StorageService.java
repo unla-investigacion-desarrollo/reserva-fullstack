@@ -71,7 +71,7 @@ public class StorageService implements IStorageService {
             }
             return nameImage;
         } catch (IOException e) {
-            throw new ReservaException(SightingConstants.IMAGE_UPLOAD_FAILED, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ReservaException(SightingConstants.IMAGE_UPLOAD_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -118,8 +118,8 @@ public class StorageService implements IStorageService {
             Path path = getPath(image.getUrl());
             Files.deleteIfExists(path);
             storageRepository.delete(image);
-            return Response.success(StorageConstants.IMAGE_DELETE_SUCCESS, null);
-        } catch (IOException e) {
+            return Response.success(StorageConstants.IMAGE_SUCCESSFUL_DELETED, null);
+        } catch (Exception e) {
             throw new ReservaException(StorageConstants.IMAGE_URL_INVALID, HttpStatus.BAD_REQUEST);
         }
     }

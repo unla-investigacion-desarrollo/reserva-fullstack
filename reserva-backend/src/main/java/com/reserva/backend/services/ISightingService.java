@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.reserva.backend.dto.SightingMapResponseDto;
 import com.reserva.backend.dto.SightingRequestDto;
 import com.reserva.backend.dto.SightingResponseDto;
 import com.reserva.backend.dto.SightingUpdateDto;
@@ -18,7 +17,6 @@ public interface ISightingService {
     public SightingResponseDto getById(long id);
     public List<SightingResponseDto> getByUserId(long id);
     public ResponsePageable<SightingResponseDto> getAll(String name, String status, String type, int page, int size, String orderBy, String sortBy, boolean active);
-    public List<SightingMapResponseDto> getAllForMap();
     public Responses<SightingResponseDto> updateStatus(UpdateStatusDto request);
     public Responses<SightingResponseDto> update(long id, SightingUpdateDto request);
     public Responses<SightingResponseDto> delete(long id);

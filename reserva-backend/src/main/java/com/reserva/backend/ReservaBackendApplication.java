@@ -1,6 +1,5 @@
 package com.reserva.backend;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,12 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.http.HttpStatus;
 
 import com.reserva.backend.config.StorageProperties;
+import com.reserva.backend.exceptions.ReservaException;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 public class ReservaBackendApplication {
@@ -35,8 +33,8 @@ public class ReservaBackendApplication {
 			if (!Files.exists(storageLocation)) {
 				Files.createDirectories(storageLocation);
 			}
-		} catch (IOException e) {
-			log.error("Error al crear el directorio de imagenes: {}", e.getMessage());
+		} catch (Exception e) {
+			throw new ReservaException("Error al iniciar el storage de imagenes " + e, HttpStatus.BAD_REQUEST);
 		}
 	}
 
