@@ -1,59 +1,79 @@
-<!-- Login Section -->
-<section class="vh-100 d-flex justify-content-center align-items-center" [ngClass]="{'hide-navbar': isLoginPage()}" style="background-color: #f8f9fa;">
-  <div class="container">
-    <div class="row d-flex justify-content-center">
-      <div class="col-md-10 col-lg-8 col-xl-6">
-        <div class="card shadow-lg border-0 rounded-4">
-          <div class="row g-0">
-            <!-- Imagen lateral solo en pantallas grandes -->
-            <div class="col-lg-5 d-none d-lg-block">
-              <img src="https://th.bing.com/th/id/OIP.59HVfNWYKMtR2gGQTQdamwHaE8?w=279&h=186&c=7&r=0&o=5&pid=1.7"
-                class="img-fluid h-100 rounded-start-4" alt="Login Image">
-            </div>
-            <div class="col-lg-7">
-              <div class="card-body p-5">
-                <!-- Título con color personalizado -->
-                <h3 class="text-center mb-4 text-primary fw-bold">Reserva Santa Catalina</h3>
-                
-                <!-- Formulario -->
-                <form>
-                  <!-- Email input -->
-                  <div class="mb-3">
-                    <label for="email" class="form-label">Correo Electrónico</label>
-                    <input type="email" #usernameOrEmail id="email" class="form-control" placeholder="Ingrese su correo" required>
-                  </div>
+<!-- Hero Section con Efecto Parallax -->
+<div class="parallax">
+  <div class="parallax-content">
+    <h1 class="hero-title">
+      <i class="fas fa-tree"></i> Reserva Natural Santa Catalina
+    </h1>
+    <p class="hero-subtitle">Bienvenido de vuelta</p>
+  </div>
+</div>
 
-                  <!-- Password input -->
-                  <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" #password id="password" class="form-control" placeholder="Ingrese su contraseña" required>
-                  </div>
-
-                  <!-- Mensaje de error con espacio reservado -->
-                  <div class="mb-3" style="min-height: 24px;">
-                    <span *ngIf="!rtaLogin" class="text-danger">Usuario o contraseña inválidos.</span>
-                  </div>
-
-                  <!-- Recordar y Olvidé mi contraseña -->
-                  <div class="d-flex justify-content-between mb-4">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="rememberMe">
-                      <label class="form-check-label" for="rememberMe">Recordarme</label>
-                    </div>
-                    <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
-                  </div>
-
-                  <!-- Botón de inicio de sesión -->
-                  <div class="d-grid">
-                    <button type="button" class="btn btn-primary btn-lg" (click)="login(usernameOrEmail.value, password.value)">Ingresar</button>
-                  </div>
-                </form>
-                <!-- Fin Formulario -->
-              </div>
-            </div>
-          </div>
+<div class="container form-container">
+  <div class="login-card animated-card">
+    <h2 class="text-center mb-4">Inicio de Sesión</h2>
+    
+    <form (ngSubmit)="login()" #loginForm="ngForm">
+      <!-- Email/Usuario -->
+      <div class="form-group">
+        <label for="usernameOrEmail">Correo o Usuario:</label>
+        <input
+          type="text"
+          id="usernameOrEmail"
+          name="usernameOrEmail"
+          [(ngModel)]="usernameOrEmail"
+          required
+          #usernameOrEmailInput="ngModel"
+          class="form-control"
+        />
+        <div *ngIf="usernameOrEmailInput.invalid && usernameOrEmailInput.touched" class="error">
+          Este campo es obligatorio
         </div>
       </div>
-    </div>
+
+      <!-- Contraseña -->
+      <div class="form-group">
+        <label for="password">Contraseña:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="userPassword"
+          required
+          #passwordInput="ngModel"
+          class="form-control" />
+        <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
+          La contraseña es obligatoria
+        </div>
+      </div>
+
+      <!-- Recordarme -->
+      <div class="form-group form-check">
+        <input type="checkbox" id="rememberMe" class="form-check-input" [(ngModel)]="rememberMe" name="rememberMe">
+        <label for="rememberMe" class="form-check-label">Recordarme</label>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="!rtaLogin" class="alert alert-danger">
+        Usuario o contraseña incorrectos
+      </div>
+
+      <!-- Botón de Login -->
+      <button 
+        type="submit" 
+        [disabled]="loginForm.invalid || loading" 
+        class="btn btn-primary btn-block"
+      >
+        <span *ngIf="!loading">Ingresar</span>
+        <span *ngIf="loading">
+          <i class="fas fa-spinner fa-spin"></i> Cargando...
+        </span>
+      </button>
+
+      <!-- Enlaces adicionales -->
+      <div class="text-center mt-3">
+        <a routerLink="/forgot-password" class="d-block mb-2">¿Olvidaste tu contraseña?</a>
+        <span>¿No tienes cuenta? <a routerLink="/register" class="text-primary">Regístrate</a></span>
+      </div>
+    </form>
   </div>
-</section>
+</div>

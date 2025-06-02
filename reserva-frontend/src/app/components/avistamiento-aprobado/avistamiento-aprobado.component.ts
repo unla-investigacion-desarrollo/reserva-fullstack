@@ -14,20 +14,23 @@ interface Avistamiento {
   latitude: number;
   longitude: number;
   createdAt: string;
-  images?: {id: number, url: string}[]; // Añadimos la propiedad de imágenes
+  images?: { id: number; url: string }[];
 }
-
 
 @Component({
   selector: 'app-avistamiento-aprobado',
   templateUrl: './avistamiento-aprobado.component.html',
   styleUrls: ['./avistamiento-aprobado.component.css'],
-  providers: [DatePipe], // Proveer DatePipe para usarlo en la plantilla
+  providers: [DatePipe],
 })
 export class AvistamientoAprobadoComponent implements OnInit {
-  avistamientos: Avistamiento[] = []; // Inicializar como un arreglo vacío
+  avistamientos: Avistamiento[] = [];
+  pagedAvistamientos: Avistamiento[] = [];
   isLoading: boolean = true;
   errorMessage: string | null = null;
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalPages: number = 1;
 
   constructor(
     private avistamientoService: AvistamientoService,
@@ -44,8 +47,8 @@ export class AvistamientoAprobadoComponent implements OnInit {
     this.errorMessage = null;
 
     try {
-      // La respuesta ahora es directamente el array de avistamientos aprobados
       this.avistamientos = await this.avistamientoService.getAvistamientosAprobados();
+      this.updatePagedAvistamientos();
     } catch (error) {
       console.error('Error al cargar avistamientos aprobados:', error);
       this.errorMessage = 'No se pudieron cargar los avistamientos aprobados. Inténtelo de nuevo más tarde.';
@@ -54,26 +57,76 @@ export class AvistamientoAprobadoComponent implements OnInit {
     }
   }
 
+  updatePagedAvistamientos(): void {
+    this.totalPages = Math.ceil(this.avistamientos.length / this.itemsPerPage);
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.pagedAvistamientos = this.avistamientos.slice(startIndex, endIndex);
+  }
+
+  getPages(): number[] {
+    const pages = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  goToPage(page: number, event: Event): void {
+    event.preventDefault();
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePagedAvistamientos();
+    }
+  }
+
+  previousPage(event: Event): void {
+    event.preventDefault();
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagedAvistamientos();
+    }
+  }
+
+  nextPage(event: Event): void {
+    event.preventDefault();
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePagedAvistamientos();
+    }
+  }
+
   async viewImage(sightingId: number) {
+    try {
+      const urls = await lastValueFrom(
+        this.avistamientoService.getImageUrlsBySighting(sightingId)
+      );
+
+      if (!urls || urls.length === 0) {
+        throw new Error('No hay imágenes disponibles para este avistamiento');
+      }
+
+      this.dialog.open(ImageModalComponent, {
+        width: '40vw',
+        maxWidth: 'none',
+        panelClass: 'custom-image-modal',
+        data: { images: urls.map(url => ({ url })) }
+      });
+    } catch (error: any) {
+      alert(error.message);
+    }
+  }
+
+  async deleteAvistamiento(id: number): Promise<void> {
+    if (confirm('¿Estás seguro de que deseas eliminar este avistamiento?')) {
       try {
-        const urls = await lastValueFrom(
-          this.avistamientoService.getImageUrlsBySighting(sightingId)
-        );
-  
-        if (!urls || urls.length === 0) {
-          throw new Error('No hay imágenes disponibles para este avistamiento');
-        }
-  
-        this.dialog.open(ImageModalComponent, {
-          width: '40vw', // o más si querés
-          maxWidth: 'none', // quita el límite de 80% o 600px
-          panelClass: 'custom-image-modal',
-          data: { images: urls.map(url => ({ url })) }
-        });
-  
+        await this.avistamientoService.deleteAvistamiento(id);
+        this.avistamientos = this.avistamientos.filter(avist => avist.id !== id);
+        this.updatePagedAvistamientos();
       } catch (error) {
-        alert(error.message);
+        console.error('Error al eliminar avistamiento:', error);
+        alert('No se pudo eliminar el avistamiento. Inténtelo de nuevo más tarde.');
       }
     }
-
+  }
 }

@@ -18,6 +18,7 @@ import com.reserva.backend.constants.UserConstants;
 import com.reserva.backend.dto.user.UserRequestDto;
 import com.reserva.backend.dto.user.UserResponseDto;
 import com.reserva.backend.dto.user.UserUpdateDto;
+import com.reserva.backend.dto.user.PublicRegisterRequestDto; // New DTO
 import com.reserva.backend.repositorys.IRoleRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IUserService;
@@ -29,7 +30,7 @@ import com.reserva.backend.entities.Role;
 import com.reserva.backend.entities.User;
 
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
 	
 	@Autowired
 	private IUserRepository userRepository;
@@ -67,6 +68,33 @@ public class UserService implements IUserService{
 	}
 
 	@Override
+	public Responses<UserResponseDto> registerPublicUser(PublicRegisterRequestDto request) {
+		if (userRepository.existsByUsername(request.getUsername())) {
+			throw new ReservaException(UserConstants.USERNAME_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
+		}
+		if (userRepository.existsByEmail(request.getEmail())) {
+			throw new ReservaException(UserConstants.EMAIL_ALREADY_EXIST, HttpStatus.BAD_REQUEST);
+		}
+		try {
+			User newUser = modelMapper.map(request, User.class);
+			newUser.setActive(true);
+			BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
+			newUser.setPassword(passEncoder.encode(request.getPassword()));
+			// Hardcode role_id = 2
+			Optional<Role> defaultRole = roleRepository.findById(2L);
+			if (!defaultRole.isPresent()) {
+				throw new ReservaException(UserConstants.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
+			}
+			newUser.setRole(defaultRole.get());
+			userRepository.save(newUser);
+			UserResponseDto response = modelMapper.map(newUser, UserResponseDto.class);
+			return Response.success(UserConstants.USER_CREATED, response);
+		} catch (MappingException e) {
+			throw new ReservaException(UserConstants.REQUEST_FAILURE, HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
+	@Override
 	public UserResponseDto getById(long id) {
 		Optional<User> user = userRepository.findById(id);
 		if (!user.isPresent() || !user.get().isActive()) {
@@ -79,7 +107,7 @@ public class UserService implements IUserService{
 	@Override
 	public Responses<UserResponseDto> update(long id, UserUpdateDto request) {
 		Optional<User> user = userRepository.findById(id);
-		if (id != request.getId()) {// SI PATH ES DIFERENTE DE LO QUE SE MANDAN EN EL JSON
+		if (id != request.getId()) {
 			throw new ReservaException(UserConstants.RESOURCE_ERROR_ID_MISMATCH, HttpStatus.UNAUTHORIZED);
 		}
 		if (!user.get().isActive()) {
@@ -159,5 +187,4 @@ public class UserService implements IUserService{
 			throw new ReservaException(UserConstants.USER_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
-
 }

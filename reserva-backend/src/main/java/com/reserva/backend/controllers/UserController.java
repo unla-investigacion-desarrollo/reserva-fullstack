@@ -1,5 +1,7 @@
 package com.reserva.backend.controllers;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.reserva.backend.dto.user.UserRequestDto;
 import com.reserva.backend.dto.user.UserUpdateDto;
+import com.reserva.backend.dto.user.PublicRegisterRequestDto;
 import com.reserva.backend.services.IUserService;
+import com.reserva.backend.util.Responses;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,7 +33,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("/users")
-@PreAuthorize("hasRole('ROLE_PERSONAL_RESERVA')")
+@PreAuthorize("hasAuthority('ROLE_PERSONAL_RESERVA')")
 public class UserController {
 
 	@Autowired
@@ -46,6 +50,20 @@ public class UserController {
 		return new ResponseEntity<>(userService.create(request), HttpStatus.CREATED);
 	}
 
+	@Operation(summary = "registra un nuevo usuario público con rol de usuario", description = "Permite a usuarios no autenticados registrarse con username, name, email y password")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Usuario registrado correctamente", content = @Content),
+			@ApiResponse(responseCode = "400", description = "Email o username ya existen", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Rol predeterminado no encontrado", content = @Content),
+			@ApiResponse(responseCode = "417", description = "Error en la solicitud", content = @Content) })
+	@PostMapping("/register")
+	@PreAuthorize("permitAll()") // Permitir acceso público
+	public ResponseEntity<?> register(@Valid @RequestBody PublicRegisterRequestDto request) {
+		Responses<?> response = userService.registerPublicUser(request);
+		return new ResponseEntity<>(Map.of("success", response.isSuccess()), HttpStatus.CREATED);
+	}
+
+	// Resto de los métodos sin cambios
 	@Operation(summary = "trae un usuario por su id", security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = "application/json")),
@@ -101,5 +119,4 @@ public class UserController {
 			@RequestParam(value = "sortBy", defaultValue = "id") String soryBy) {
 		return ResponseEntity.ok(userService.getAll(name, page, size, orderBy, soryBy));
 	}
-
 }

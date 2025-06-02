@@ -9,24 +9,37 @@ import { LoginService } from '../../services/login.service';
 })
 export class LoginComponent {
   rtaLogin: boolean = true;
+  loading: boolean = false;
+  usernameOrEmail: string = '';
+  userPassword: string = '';
+  rememberMe: boolean = false;
 
   constructor(private router: Router, private loginService: LoginService) {}
 
-  async login(usernameOrEmail: string, password: string) {
+  async login() {
+    if (!this.usernameOrEmail?.trim() || !this.userPassword?.trim()) {
+      this.rtaLogin = false;
+      return;
+    }
+    this.loading = true;
     try {
-      this.rtaLogin = await this.loginService.login(usernameOrEmail, password);
+      this.rtaLogin = await this.loginService.login(
+        this.usernameOrEmail.trim(), 
+        this.userPassword.trim()
+      );
       if (this.rtaLogin) {
-        this.router.navigate(['/', 'home']);
-      } else {
-        this.rtaLogin = false;
+        this.router.navigate(['/home']);
       }
     } catch (ex) {
       this.rtaLogin = false;
+      console.error('Login error:', ex);
+    } finally {
+      this.loading = false;
     }
   }
 
-  // Método para verificar si estamos en la vista de login
-  isLoginPage(): boolean {
-    return this.router.url === '/login' || this.router.url === '/forgot-password';
+  // Asegura que el navbar se oculte
+  shouldHideNavbar(): boolean {
+    return this.router.url.includes('/login');
   }
 }

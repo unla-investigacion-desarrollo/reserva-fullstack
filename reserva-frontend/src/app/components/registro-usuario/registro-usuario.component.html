@@ -1,0 +1,128 @@
+<!-- Hero Section con Efecto Parallax -->
+<div class="parallax">
+  <div class="parallax-content">
+    <h1 class="hero-title">
+      <i class="fas fa-tree"></i> Reserva Natural Santa Catalina
+    </h1>
+    <p class="hero-subtitle">Únase a nuestra comunidad de conservación</p>
+  </div>
+</div>
+
+<!-- Formulario de Registro Animado -->
+<div class="container form-container">
+  <div class="registration-card animated-card" @cardAnimation>
+    <h2 class="text-center mb-4">Registro de Usuario</h2>
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm" @formAnimation>
+      <!-- Nombre de Usuario -->
+      <div class="form-group" @fieldAnimation>
+        <label for="username">Nombre de usuario:</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          [(ngModel)]="username"
+          required
+          minlength="3"
+          #usernameInput="ngModel"
+          class="form-control"
+        />
+        <div *ngIf="usernameInput.invalid && usernameInput.touched" class="error">
+          <div *ngIf="usernameInput.errors?.['required']">El nombre de usuario es obligatorio.</div>
+          <div *ngIf="usernameInput.errors?.['minlength']">Debe tener al menos 3 caracteres.</div>
+        </div>
+      </div>
+
+      <!-- Nombre Completo -->
+      <div class="form-group" @fieldAnimation>
+        <label for="name">Nombre completo:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          [(ngModel)]="name"
+          required
+          minlength="2"
+          #nameInput="ngModel"
+          class="form-control"
+        />
+        <div *ngIf="nameInput.invalid && nameInput.touched" class="error">
+          <div *ngIf="nameInput.errors?.['required']">El nombre es obligatorio.</div>
+          <div *ngIf="nameInput.errors?.['minlength']">Debe tener al menos 2 caracteres.</div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group" @fieldAnimation>
+        <label for="email">Correo electrónico:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          email
+          #emailInput="ngModel"
+          class="form-control"
+        />
+        <div *ngIf="emailInput.invalid && emailInput.touched" class="error">
+          <div *ngIf="emailInput.errors?.['required']">El correo es obligatorio.</div>
+          <div *ngIf="emailInput.errors?.['email']">Ingrese un correo válido.</div>
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="form-group" @fieldAnimation>
+        <label for="password">Contraseña:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          minlength="6"
+          #passwordInput="ngModel"
+          class="form-control"
+        />
+        <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
+          <div *ngIf="passwordInput.errors?.['required']">La contraseña es obligatoria.</div>
+          <div *ngIf="passwordInput.errors?.['minlength']">Debe tener al menos 6 caracteres.</div>
+        </div>
+      </div>
+
+      <!-- Confirmar Contraseña -->
+      <div class="form-group" @fieldAnimation>
+        <label for="confirmPassword">Confirmar contraseña:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          required
+          #confirmPasswordInput="ngModel"
+          class="form-control"
+        />
+        <div *ngIf="confirmPasswordInput.invalid && confirmPasswordInput.touched" class="error">
+          <div *ngIf="confirmPasswordInput.errors?.['required']">Confirme la contraseña.</div>
+        </div>
+      </div>
+
+      <!-- Validación de Contraseña -->
+      <div *ngIf="password !== confirmPassword && confirmPassword" class="error mb-3">
+        Las contraseñas no coinciden.
+      </div>
+
+      <!-- Botón de Submit -->
+      <button 
+        type="submit" 
+        [disabled]="registerForm.invalid || password !== confirmPassword" 
+        class="btn btn-primary btn-block pulse"
+      >
+        Registrarse
+      </button>
+
+      <!-- Mensajes de Estado -->
+      <div *ngIf="errorMessage" class="error mt-3">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="success mt-3">{{ successMessage }}</div>
+    </form>
+  </div>
+</div>

@@ -16,7 +16,7 @@ export class AppComponent {
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         // Oculta el navbar en las rutas de login y "olvidaste tu contraseña"
-        this.showHead = !(event.url === '/login' || event.url === '/forgot-password');
+        this.showHead = !(event.url === '/login' || event.url === '/forgot-password' || event.url === '/register');
       }
     });
   }

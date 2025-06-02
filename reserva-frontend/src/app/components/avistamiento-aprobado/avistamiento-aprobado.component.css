@@ -1,4 +1,4 @@
-/* Estilos generales para centrar la tabla */
+/* General styles for centering the table */
 .content {
   display: flex;
   justify-content: center;
@@ -7,7 +7,7 @@
   padding-top: 80px;
 }
 
-/* Contenedor de la tabla con sombra */
+/* Table wrapper with shadow */
 .table-wrapper {
   width: 90%;
   max-width: 1200px;
@@ -21,21 +21,28 @@
   margin-top: 30px;
 }
 
-/* Botón Volver */
+/* Contenedor para scroll vertical */
+.table-scroll-container {
+  max-height: 500px; /* Ajusta según necesites */
+  overflow-y: auto; /* Habilita scroll vertical */
+  width: 100%;
+}
+
+/* Back button */
 .back-button {
   display: flex;
   justify-content: flex-start;
 }
 
-/* Estilo del título */
+/* Title style */
 .title {
   font-size: 2em;
   color: #2c3e50;
-  text-align: center; /* Center the title */
-  margin: 0; /* Remove default margin */
+  text-align: center;
+  margin: 0;
 }
 
-/* Tabla estilizada */
+/* Styled table */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -43,10 +50,13 @@
   overflow: hidden;
 }
 
-/* Cabecera */
+/* Header */
 .table thead {
   background-color: #2c3e50;
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .custom-table-header th {
@@ -62,7 +72,7 @@
   font-weight: bold;
 }
 
-/* Filas */
+/* Rows */
 .table tbody tr {
   transition: background-color 0.3s ease;
 }
@@ -71,14 +81,14 @@
   background-color: #f8f9fa;
 }
 
-/* Celdas */
+/* Cells */
 .table td {
   padding: 15px;
   border-bottom: 1px solid #e9ecef;
   vertical-align: middle;
 }
 
-/* Estilos para los botones de acción */
+/* Action buttons */
 .btn-outline-primary {
   border-color: #007bff;
   color: #007bff;
@@ -109,7 +119,7 @@
   color: white;
 }
 
-/* Estilos para los iconos */
+/* Icon styles */
 .icon-button {
   cursor: pointer;
   font-size: 20px;
@@ -120,7 +130,6 @@
   color: #34495e;
 }
 
-/* Colores específicos */
 .icon-button.delete {
   color: #e74c3c;
 }
@@ -137,18 +146,18 @@
   color: #2980b9;
 }
 
-/* Icono de eliminar (basura) en gris */
+/* Trash icon in gray */
 .icon-button .glyphicon-trash {
   color: gray;
   transition: color 0.3s ease-in-out 0.1s;
 }
 
-/* Cambia a rojo con delay */
+/* Change to red with delay */
 .icon-button .glyphicon-trash:hover {
   color: red;
 }
 
-/* Mensaje de no hay datos */
+/* No data message */
 .no-data-message {
   text-align: center;
   font-size: 1.5em;
@@ -156,14 +165,42 @@
   margin-top: 20px;
 }
 
-/* Indicador de carga */
+/* Loading spinner */
 .loading-spinner {
   text-align: center;
   font-size: 1.5em;
   color: #555;
 }
 
-/* Responsividad */
+/* Pagination styles */
+.pagination {
+  margin: 0;
+}
+
+.page-item.active .page-link {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.page-link {
+  color: #007bff;
+  border-radius: 5px;
+  margin: 0 3px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.page-link:hover {
+  background-color: #e9ecef;
+  color: #0056b3;
+}
+
+.page-item.disabled .page-link {
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Responsivity */
 @media (max-width: 768px) {
   .table-wrapper {
     width: 95%;
@@ -180,6 +217,10 @@
   }
 
   .title {
-    font-size: 1.5em; /* Smaller title on mobile */
+    font-size: 1.5em;
+  }
+
+  .pagination {
+    font-size: 0.9em;
   }
 }

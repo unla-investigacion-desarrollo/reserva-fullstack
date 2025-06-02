@@ -1,32 +1,39 @@
 <div class="content" role="main">
   <div class="cardsContainer">
-    <!-- Tarjeta de avistamientos pendientes -->
-    <a routerLink="/avistamientos_pendientes" routerLinkActive="active" class="card" rel="noopener">
+    <!-- 1. Avistamientos Pendientes (Reloj de arena) -->
+    <a routerLink="/avistamientos_pendientes" class="card" rel="noopener">
       <div class="card-image">
-        <img class="homeImage" src="assets/images/home/avist_pendiente.png" alt="Avistamientos pendientes">
+        <svg class="homeIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
+          <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
       </div>
       <div class="card-content">
         <span class="card-title">Avistamientos pendientes</span>
       </div>
     </a>
 
-    <!-- Tarjeta de avistamientos aprobados -->
-    <a routerLink="/avistamientos_aprobados" routerLinkActive="active" class="card" rel="noopener">
+    <!-- 2. Avistamientos Aprobados (Check) -->
+    <a routerLink="/avistamientos_aprobados" class="card" rel="noopener">
       <div class="card-image">
-        <img class="homeImage" src="assets/images/home/avist_aprobados.png" alt="Avistamientos aprobados">
+        <svg class="homeIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
       </div>
       <div class="card-content">
         <span class="card-title">Avistamientos aprobados</span>
       </div>
     </a>
 
-    <!-- Tarjeta de avistamientos reprobados -->
-    <a routerLink="/avistamientos_reprobados" routerLinkActive="active" class="card" rel="noopener">
+    <!-- 3. Avistamientos Rechazados (Cruz) -->
+    <a routerLink="/avistamientos_reprobados" class="card" rel="noopener">
       <div class="card-image">
-        <img class="homeImage" src="assets/images/home/avist_rechazado.png" alt="Avistamientos reprobados">
+        <svg class="homeIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
       </div>
       <div class="card-content">
-        <span class="card-title">Avistamientos reprobados</span>
+        <span class="card-title">Avistamientos rechazados</span>
       </div>
     </a>
   </div>

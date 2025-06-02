@@ -1,5 +1,6 @@
 package com.reserva.backend.services;
 
+import com.reserva.backend.dto.user.PublicRegisterRequestDto;
 import com.reserva.backend.dto.user.UserRequestDto;
 import com.reserva.backend.dto.user.UserResponseDto;
 import com.reserva.backend.dto.user.UserUpdateDto;
@@ -14,5 +15,6 @@ public interface IUserService {
 	public Responses<UserResponseDto> delete(long id);
 	public Responses<UserResponseDto> restore(long id);
 	public ResponsePageable<UserResponseDto> getAll(String name, int page, int size, String orderBy, String sortBy);
+	public Responses<UserResponseDto> registerPublicUser(PublicRegisterRequestDto request);
 
 }
