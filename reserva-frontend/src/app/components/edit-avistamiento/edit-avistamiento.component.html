@@ -1,59 +1,103 @@
-<div class="content-container">
+<div class="content">
   <!-- Spinner de carga -->
-  <div *ngIf="isLoading" class="loading-spinner text-center p-4">
-    <p>Cargando...</p>
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando avistamiento...</p>
   </div>
 
-  <!-- Botón Volver al menú principal -->
-  <div class="back-button-container mb-4">
-    <a [routerLink]="['/avistamientos_pendientes']" class="btn btn-outline-primary">
-      <i class="fas fa-arrow-left me-2"></i>Volver a Avistmientos Pendientes
-    </a>
-  </div>
-
-  <!-- Card con detalles del avistamiento, centrada -->
-  <div *ngIf="!isLoading && avistamiento" class="card shadow-lg mx-auto">
-    <h1 class="title mb-3">{{ avistamiento?.scientificName }}</h1>
-    <h2 class="subtitle mb-4 text-muted">{{ avistamiento?.name }}</h2>
-
-    <div class="row text-center mb-4">
-      <div class="col-md-4 mb-3">
-        <div class="info-box p-3 rounded border">
-          <i class="fas fa-leaf fa-lg text-success mb-2"></i><br>
-          <strong>Familia:</strong><br>
-          <span>{{ avistamiento?.type?.category || 'N/A' }}</span>
-        </div>
-      </div>
-      <div class="col-md-4 mb-3">
-        <div class="info-box p-3 rounded border">
-          <i class="fas fa-tag fa-lg text-info mb-2"></i><br>
-          <strong>Tipo:</strong><br>
-          <span>{{ avistamiento?.type?.name || 'N/A' }}</span>
-        </div>
-      </div>
-      <div class="col-md-4 mb-3">
-        <div class="info-box p-3 rounded border">
-          <i class="fas fa-map-marker-alt fa-lg text-danger mb-2"></i><br>
-          <strong>Zona:</strong><br>
-          <span>{{ avistamiento?.latitude }} - {{ avistamiento?.longitude }}</span>
-        </div>
-      </div>
+  <!-- Contenido principal -->
+  <div *ngIf="!isLoading && avistamiento" class="edit-container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <button [routerLink]="['/avistamientos_pendientes']" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h1 class="hero-title">
+        <i class="fas fa-edit"></i> Revisión de Avistamiento
+      </h1>
+      <p class="hero-subtitle">ID: #{{avistamiento.id}}</p>
     </div>
 
-    <div class="description-section mb-4">
-      <div class="description-header d-flex justify-content-between align-items-center mb-2">
-        <h3 class="mb-0">Descripción</h3>
-      </div>
-      <p class="description-text">{{ avistamiento?.fields?.[0]?.description || 'Sin descripción' }}</p>
-    </div>
+    <!-- Tarjeta de información -->
+    <div class="card-container">
+      <div class="sighting-card">
+        <div class="sighting-header">
+          <div class="scientific-name">
+            <h2>{{ avistamiento.scientificName }}</h2>
+            <p class="common-name">{{ avistamiento.name }}</p>
+          </div>
+          <div class="status-badge pending">
+            <i class="fas fa-clock"></i> Pendiente
+          </div>
+        </div>
 
-    <div class="d-flex justify-content-end gap-3">
-      <button class="btn btn-outline-danger btn-lg px-4" (click)="Rechazar()">
-        <i class="fas fa-times me-2"></i>Rechazar
-      </button>
-      <button class="btn btn-success btn-lg px-4" (click)="Aprobar()">
-        <i class="fas fa-check me-2"></i>Aprobar
-      </button>
+        <div class="sighting-body">
+          <!-- Información básica -->
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div class="info-content">
+                <h3>Familia</h3>
+                <p>{{ avistamiento?.type?.category || 'No especificado' }}</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-tag"></i>
+              </div>
+              <div class="info-content">
+                <h3>Tipo</h3>
+                <p>{{ avistamiento?.type?.name || 'No especificado' }}</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="info-content">
+                <h3>Ubicación</h3>
+                <p>
+                  {{ avistamiento.latitude | number:'1.4-4' }}°, 
+                  {{ avistamiento.longitude | number:'1.4-4' }}°
+                </p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+              <div class="info-content">
+                <h3>Fecha</h3>
+                <p>{{ avistamiento.createdAt | date:'mediumDate' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="description-section">
+            <h3 class="section-title">
+              <i class="fas fa-align-left"></i> Descripción
+            </h3>
+            <div class="description-content">
+              <p>{{ avistamiento?.fields?.[0]?.description || 'No se proporcionó descripción' }}</p>
+            </div>
+          </div>
+
+        <!-- Acciones -->
+        <div class="actions-section">
+          <button class="action-btn reject-btn" (click)="Rechazar()">
+            <i class="fas fa-times"></i> Rechazar
+          </button>
+          <button class="action-btn approve-btn" (click)="Aprobar()">
+            <i class="fas fa-check"></i> Aprobar
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

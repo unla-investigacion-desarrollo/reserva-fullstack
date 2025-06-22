@@ -1,29 +1,38 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+// image-modal.component.ts
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-image-modal',
   templateUrl: './image-modal.component.html',
   styleUrls: ['./image-modal.component.css']
 })
-export class ImageModalComponent {
-  activeImageIndex = 0;
+export class ImageModalComponent implements OnInit {
+  images: any[] = [];
+  currentIndex = 0;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {images: {id: number, url: string}[]}) {}
+  constructor(
+    public dialogRef: MatDialogRef<ImageModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
-  get currentImage(): {id: number, url: string} | null {
-    return this.data.images.length > 0 ? this.data.images[this.activeImageIndex] : null;
+  ngOnInit(): void {
+    this.images = this.data.images || [];
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
   nextImage(): void {
-    this.activeImageIndex = (this.activeImageIndex + 1) % this.data.images.length;
+    this.currentIndex = (this.currentIndex + 1) % this.images.length;
   }
 
   prevImage(): void {
-    this.activeImageIndex = (this.activeImageIndex - 1 + this.data.images.length) % this.data.images.length;
+    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
   }
 
-  get hasMultipleImages(): boolean {
-    return this.data.images.length > 1;
+  selectImage(index: number): void {
+    this.currentIndex = index;
   }
 }

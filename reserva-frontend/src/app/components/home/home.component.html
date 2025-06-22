@@ -1,7 +1,15 @@
 <div class="content" role="main">
+  <!-- Hero section inspirada en el login -->
+  <div class="hero-section">
+    <h1 class="hero-title">
+      <i class="fas fa-binoculars"></i> Panel de Avistamientos
+    </h1>
+    <p class="hero-subtitle">Gestión de observaciones de flora y fauna</p>
+  </div>
+
   <div class="cardsContainer">
-    <!-- 1. Avistamientos Pendientes (Reloj de arena) -->
-    <a routerLink="/avistamientos_pendientes" class="card" rel="noopener">
+    <!-- 1. Avistamientos Pendientes -->
+    <a routerLink="/avistamientos_pendientes" class="card card-pending" rel="noopener">
       <div class="card-image">
         <svg class="homeIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
@@ -10,11 +18,13 @@
       </div>
       <div class="card-content">
         <span class="card-title">Avistamientos pendientes</span>
+        <p class="card-description">Revisa las observaciones en espera de aprobación</p>
+        <div class="card-badge">Nuevos: 5</div>
       </div>
     </a>
 
-    <!-- 2. Avistamientos Aprobados (Check) -->
-    <a routerLink="/avistamientos_aprobados" class="card" rel="noopener">
+    <!-- 2. Avistamientos Aprobados -->
+    <a routerLink="/avistamientos_aprobados" class="card card-approved" rel="noopener">
       <div class="card-image">
         <svg class="homeIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -22,11 +32,12 @@
       </div>
       <div class="card-content">
         <span class="card-title">Avistamientos aprobados</span>
+        <p class="card-description">Observaciones validadas y publicadas</p>
       </div>
     </a>
 
-    <!-- 3. Avistamientos Rechazados (Cruz) -->
-    <a routerLink="/avistamientos_reprobados" class="card" rel="noopener">
+    <!-- 3. Avistamientos Rechazados -->
+    <a routerLink="/avistamientos_reprobados" class="card card-rejected" rel="noopener">
       <div class="card-image">
         <svg class="homeIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -34,6 +45,7 @@
       </div>
       <div class="card-content">
         <span class="card-title">Avistamientos rechazados</span>
+        <p class="card-description">Observaciones que no cumplen los criterios</p>
       </div>
     </a>
   </div>

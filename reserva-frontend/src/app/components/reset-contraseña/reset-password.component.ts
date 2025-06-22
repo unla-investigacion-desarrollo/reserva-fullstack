@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { 
-  trigger,
-  transition,
-  style,
-  animate
-} from '@angular/animations';
-import { NgForm } from '@angular/forms'; // Importación añadida
+import { trigger, transition, style, animate } from '@angular/animations';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-reset-password',
@@ -23,7 +18,7 @@ import { NgForm } from '@angular/forms'; // Importación añadida
     ])
   ]
 })
-export class ResetPasswordComponent { // Nombre cambiado
+export class ResetPasswordComponent {
   email: string = '';
   loading: boolean = false;
   successMessage: string = '';
@@ -34,31 +29,36 @@ export class ResetPasswordComponent { // Nombre cambiado
     private router: Router
   ) {}
 
-  onSubmit(form: NgForm) { // Añade NgForm como parámetro
-    if (form.invalid) return;
-    
-    this.loading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
-
-    this.authService.sendPasswordResetEmail(this.email).subscribe({
-      next: (success) => {
-        if (success) {
-          this.successMessage = '¡Correo enviado! Revisa tu bandeja de entrada.';
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 3000);
-        } else {
-          this.errorMessage = 'No encontramos una cuenta con ese correo.';
-        }
-      },
-      error: (error) => {
-        this.errorMessage = 'Error al enviar el correo. Intenta nuevamente.';
-        console.error('Error:', error);
-      },
-      complete: () => {
-        this.loading = false;
-      }
-    });
+  onSubmit(form: NgForm) {
+  console.log('Form submitted:', { email: this.email, valid: form.valid, errors: form.controls['email'].errors });
+  if (form.invalid) {
+    this.errorMessage = 'Por favor ingresa un correo electrónico válido';
+    return;
   }
+  this.loading = true;
+  this.errorMessage = '';
+  this.successMessage = '';
+  this.authService.sendPasswordResetEmail(this.email).subscribe({
+    next: (success) => {
+      console.log('Auth service response:', success);
+      if (success) {
+        this.successMessage = '¡Correo enviado! Revisa tu bandeja de entrada.';
+        form.resetForm();
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 3000);
+      } else {
+        this.errorMessage = 'No encontramos una cuenta con ese correo.';
+      }
+    },
+    error: (error) => {
+      console.error('Error:', error);
+      this.errorMessage = error.error?.message || 'Error al enviar el correo. Intenta nuevamente.';
+    },
+    complete: () => {
+      console.log('Request completed');
+      this.loading = false;
+    }
+  });
+}
 }

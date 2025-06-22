@@ -1,0 +1,121 @@
+<div class="content">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <button routerLink="/home" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h1 class="hero-title">
+        <i class="fas fa-user-circle"></i> Mi Perfil
+      </h1>
+      <p class="hero-subtitle">Mis datos y avistamientos</p>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="profile-container">
+    <!-- Tarjeta de información del usuario -->
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="profile-info">
+            <h2>{{ user.name }}</h2>
+            <p class="username">{{ user.username }}</p>
+          </div>
+        </div>
+
+        <div class="profile-details">
+          <div class="detail-item">
+            <i class="fas fa-envelope"></i>
+            <span>{{ user.email }}</span>
+          </div>
+        </div>
+
+        <div class="profile-stats">
+          <div class="stat-item">
+            <div class="stat-value">{{ userStats.totalSightings }}</div>
+            <div class="stat-label">Avistamientos</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ userStats.approvedSightings }}</div>
+            <div class="stat-label">Aprobados</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ userStats.pendingSightings }}</div>
+            <div class="stat-label">Pendientes</div>
+          </div>
+        </div>
+      </div>
+
+    <div class="sightings-section">
+      <div class="section-header">
+        <h2>
+          <i class="fas fa-binoculars"></i> Mis Avistamientos
+        </h2>
+        <div class="tabs">
+          <button class="tab-btn" [class.active]="activeTab === 'all'" (click)="onTabChange('all')">
+            Todos ({{ userStats.totalSightings }})
+          </button>
+          <button class="tab-btn" [class.active]="activeTab === 'approved'" (click)="onTabChange('approved')">
+            Aprobados ({{ userStats.approvedSightings }})
+          </button>
+          <button class="tab-btn" [class.active]="activeTab === 'pending'" (click)="onTabChange('pending')">
+            Pendientes ({{ userStats.pendingSightings }})
+          </button>
+        </div>
+      </div>
+    
+      <!-- Listado de avistamientos -->
+      <div class="sightings-list">
+        <!-- Mensaje de carga -->
+        <div *ngIf="isLoading" class="loading-state">
+          <div class="spinner"></div>
+          <p>Cargando avistamientos...</p>
+        </div>
+
+        <!-- Mensaje sin datos -->
+        <div *ngIf="!isLoading && filteredSightings.length === 0" class="empty-state">
+          <i class="fas fa-binoculars"></i>
+          <h3>No hay avistamientos</h3>
+          <p *ngIf="activeTab === 'all'">No has registrado ningún avistamiento aún</p>
+          <p *ngIf="activeTab === 'approved'">No tienes avistamientos aprobados</p>
+          <p *ngIf="activeTab === 'pending'">No tienes avistamientos pendientes</p>
+        </div>
+
+        <!-- Lista de avistamientos -->
+        <div *ngIf="!isLoading && filteredSightings.length > 0">
+          <div *ngFor="let sighting of filteredSightings; trackBy: trackBySightingId" class="sighting-card">
+            <div class="sighting-header">
+              <span class="sighting-id">#{{sighting.id}}</span>
+              <span class="sighting-date">{{ sighting.date | date:'dd/MM/yyyy' }}</span>
+              <span class="sighting-status" [ngClass]="sighting.status">
+                <i [class]="getStatusIcon(sighting.status)"></i> 
+                {{ getStatusText(sighting.status) }}
+              </span>
+            </div>
+            
+            <div class="sighting-body">
+              <div class="sighting-info">
+                <h3 class="sighting-title">{{ sighting.scientificName }}</h3>
+                <p class="sighting-location">
+                  <i class="fas fa-map-marker-alt"></i> 
+                  {{ sighting.latitude | number:'1.4-4' }}°, {{ sighting.longitude | number:'1.4-4' }}°
+                </p>
+              </div>
+              
+              <div class="sighting-actions">
+                <button class="action-btn view-btn" (click)="viewSighting(sighting.id)">
+                  <i class="fas fa-eye"></i> Ver
+                </button>
+                <button *ngIf="sighting.status === 'pending'" 
+                        class="action-btn edit-btn" 
+                        [routerLink]="['/editar-avistamiento', sighting.id]">
+                  <i class="fas fa-edit"></i> Editar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -121,4 +121,8 @@ export class AvistamientoService {
       )
     );
   }
+
+  getSightingsByUser(userId: number): Observable<Avistamiento[]> {
+  return this.http.get<Avistamiento[]>(`${this.apiUrl}/sighting/user/${userId}`);
+}
 }

@@ -1,55 +1,116 @@
 <div class="content">
-  <div class="table-wrapper">
-    <div class="back-button">
-      <a [routerLink]="['/home']" class="btn btn-outline-primary">
-        <i class="fas fa-arrow-left me-2"></i> Volver al menú principal
-      </a>
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <button [routerLink]="['/home']" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h1 class="hero-title">
+        <i class="fas fa-times-circle"></i> Avistamientos Reprobados
+      </h1>
+      <p class="hero-subtitle">Observaciones no aprobadas</p>
     </div>
-    <h1 class="title">Avistamientos Reprobados</h1>
+  </div>
 
-    <div class="table-responsive shadow rounded">
-      <table *ngIf="avistamientos.length > 0" class="table table-striped table-hover table-bordered align-middle mb-0">
-        <thead class="custom-table-header">
-          <tr>
-            <th scope="col">Avistamiento</th>
-            <th scope="col">Número</th>
-            <th scope="col">Usuario</th>
-            <th scope="col">Ubicación</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let avist of avistamientos">
-            <td>{{ avist.scientificName }}</td>
-            <td>{{ avist.id }}</td>
-            <td>{{ avist.createdBy.username }}</td>
-            <td>{{ avist.latitude }} - {{ avist.longitude }}</td>
-            <td>{{ datePipe.transform(avist.createdAt, 'yyyy-MM-dd') }}</td>
-            <td class="text-center">
-              <span class="btn btn-sm btn-outline-primary me-1" (click)="viewImage(avist.id)" title="Ver imagen">
-                <i class="fas fa-camera"></i>
-              </span>
-              <span class="btn btn-sm btn-outline-danger me-1" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
-                <i class="glyphicon glyphicon-trash"></i>
-              </span>
-              <a class="btn btn-sm btn-outline-success" [routerLink]="['/edit_avistamiento', avist.id]" title="Editar">
-                <i class="fas fa-edit"></i>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- Contenido principal -->
+  <div class="card-container">
+    <!-- Tarjeta de filtros -->
+    <div class="filter-card">
+      <div class="filter-group">
+        <label for="searchInput"><i class="fas fa-search"></i> Buscar:</label>
+        <input id="searchInput" type="text" placeholder="Filtrar avistamientos..." [(ngModel)]="searchTerm">
+      </div>
+      <div class="filter-group">
+        <label for="reasonFilter"><i class="fas fa-filter"></i> Motivo:</label>
+        <select id="reasonFilter" [(ngModel)]="reasonFilter">
+          <option value="all">Todos los motivos</option>
+          <option value="calidad">Calidad de imagen</option>
+          <option value="identificacion">Identificación incorrecta</option>
+          <option value="ubicacion">Ubicación improbable</option>
+        </select>
+      </div>
+    </div>
 
-      <!-- Mensaje cuando no hay avistamientos -->
-      <div *ngIf="avistamientos.length === 0 && !isLoading" class="no-data-message text-center p-4">
-        <p>No hay avistamientos reprobados.</p>
+    <!-- Listado de avistamientos -->
+    <div class="sightings-container">
+      <!-- Mensaje de carga -->
+      <div *ngIf="isLoading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando avistamientos...</p>
       </div>
 
-      <!-- Indicador de carga -->
-      <div *ngIf="isLoading" class="loading-spinner text-center p-4">
-        <p>Cargando...</p>
+      <!-- Mensaje sin datos -->
+      <div *ngIf="avistamientos.length === 0 && !isLoading" class="empty-state">
+        <i class="fas fa-ban"></i>
+        <h3>No hay avistamientos reprobados</h3>
+        <p>No se encontraron observaciones rechazadas</p>
+      </div>
+
+      <!-- Lista de avistamientos -->
+      <div *ngIf="avistamientos.length > 0 && !isLoading" class="sightings-list">
+        <div *ngFor="let avist of filteredAvistamientos" class="sighting-card">
+          <div class="sighting-header">
+            <span class="sighting-id">#{{avist.id}}</span>
+            <span class="sighting-date">{{ datePipe.transform(avist.createdAt, 'dd/MM/yyyy') }}</span>
+            <span class="sighting-status rejected">
+              <i class="fas fa-times-circle"></i> Reprobado
+            </span>
+          </div>
+          
+          <div class="sighting-body">
+            <div class="sighting-info">
+              <h3 class="sighting-title">{{ avist.scientificName }}</h3>
+              <div class="sighting-meta">
+                <p class="sighting-user">
+                  <i class="fas fa-user"></i> {{ avist.createdBy.username }}
+                </p>
+                <p class="sighting-location">
+                  <i class="fas fa-map-marker-alt"></i> 
+                  {{ avist.latitude | number:'1.4-4' }}°, {{ avist.longitude | number:'1.4-4' }}°
+                </p>
+              </div>
+              <div class="rejection-reason" *ngIf="avist.rejectionReason">
+                <p><strong>Motivo:</strong> {{ avist.rejectionReason }}</p>
+              </div>
+            </div>
+            
+            <div class="sighting-actions">
+              <button class="action-btn view-btn" (click)="viewImage(avist.id)" title="Ver imagen">
+                <i class="fas fa-camera"></i> Imagen
+              </button>
+              <button class="action-btn edit-btn" [routerLink]="['/edit_avistamiento', avist.id]" title="Reenviar">
+                <i class="fas fa-redo"></i> Reenviar
+              </button>
+              <button class="action-btn delete-btn" (click)="deleteAvistamiento(avist.id)" title="Eliminar">
+                <i class="fas fa-trash"></i> Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Modal para visualización de imágenes -->
+        <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Imagen del avistamiento #{{selectedAvistamiento?.id}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body text-center">
+                <img *ngIf="selectedAvistamiento?.imageUrl" [src]="selectedAvistamiento.imageUrl" alt="Imagen del avistamiento"
+                  class="img-fluid modal-image">
+                <div *ngIf="!selectedAvistamiento?.imageUrl" class="no-image">
+                  <i class="fas fa-image"></i>
+                  <p>No hay imagen disponible</p>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>

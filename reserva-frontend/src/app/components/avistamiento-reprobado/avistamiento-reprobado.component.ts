@@ -13,7 +13,12 @@ import { ImageModalComponent } from '../image-modal/image-modal.component';
 })
 export class AvistamientoReprobadoComponent {
   avistamientos: any = [];
-  isLoading: boolean = false;
+  filteredAvistamientos: any[] = [];
+  isLoading: boolean = true;
+  searchTerm: string = '';
+  reasonFilter: string = 'all';
+  selectedAvistamiento: any = null;
+
 
   constructor(
     private avistamientoService: AvistamientoService,
@@ -22,15 +27,19 @@ export class AvistamientoReprobadoComponent {
     private dialog: MatDialog // Inyectar MatDialog
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    this.isLoading = true;
+  ngOnInit(): void {
+    this.loadAvistamientos();
+  }
 
+  async loadAvistamientos(): Promise<void> {
+    this.isLoading = true;
     try {
-      const response = await this.avistamientoService.getAvistamientosReprobados();
-      this.avistamientos = response;
+      const data = await this.avistamientoService.getAvistamientosReprobados();
+      this.avistamientos = data;
+      this.filteredAvistamientos = [...data];
+      this.isLoading = false;
     } catch (error) {
-      console.error('Error cargando avistamientos reprobados:', error);
-    } finally {
+      console.error('Error loading rejected sightings:', error);
       this.isLoading = false;
     }
   }
@@ -39,26 +48,42 @@ export class AvistamientoReprobadoComponent {
     this.router.navigate(['/home']); // Ruta al menú principal
   }
 
+
   async viewImage(sightingId: number) {
-        try {
-          const urls = await lastValueFrom(
-            this.avistamientoService.getImageUrlsBySighting(sightingId)
-          );
-    
-          if (!urls || urls.length === 0) {
-            throw new Error('No hay imágenes disponibles para este avistamiento');
-          }
-    
-          this.dialog.open(ImageModalComponent, {
-            width: '40vw', // o más si querés
-            maxWidth: 'none', // quita el límite de 80% o 600px
-            panelClass: 'custom-image-modal',
-            data: { images: urls.map(url => ({ url })) }
-          });
-    
-        } catch (error) {
-          alert(error.message);
-        }
+    try {
+      const imageUrls = await lastValueFrom(
+        this.avistamientoService.getImageUrlsBySighting(sightingId)
+      );
+
+      if (!imageUrls || imageUrls.length === 0) {
+        throw new Error('No hay imágenes disponibles para este avistamiento');
       }
-  
+
+      this.dialog.open(ImageModalComponent, {
+        width: '80vw',
+        maxWidth: '1200px',
+        panelClass: 'custom-image-modal',
+        data: {
+          images: imageUrls.map(url => ({ url })),
+          sightingId: sightingId
+        }
+      });
+    } catch (error: any) {
+      console.error('Error al cargar imágenes:', error);
+      alert(error.message);
+    }
+  }
+
+  applyFilters(): void {
+    this.filteredAvistamientos = this.avistamientos.filter(avist => {
+      const matchesSearch = avist.scientificName.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
+                          avist.createdBy.username.toLowerCase().includes(this.searchTerm.toLowerCase());
+      
+      const matchesReason = this.reasonFilter === 'all' || 
+                          (avist.rejectionReason && avist.rejectionReason.toLowerCase().includes(this.reasonFilter));
+      
+      return matchesSearch && matchesReason;
+    });
+  }
+
 }

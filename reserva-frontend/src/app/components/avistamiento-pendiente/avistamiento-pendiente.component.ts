@@ -24,10 +24,11 @@ interface Avistamiento {
   providers: [DatePipe],
 })
 export class AvistamientoPendienteComponent implements OnInit {
-  avistamientos: Avistamiento[] = [];
+  avistamientos: any[] = [];
   isLoading: boolean = true;
-  errorMessage: string | null = null;
-
+  searchTerm: string = '';
+  dateFilter: string = 'all';
+  
   constructor(
     private avistamientoService: AvistamientoService,
     private datePipe: DatePipe,
@@ -40,37 +41,70 @@ export class AvistamientoPendienteComponent implements OnInit {
 
   async cargarAvistamientos(): Promise<void> {
     this.isLoading = true;
-    this.errorMessage = null;
-
-    try {
-      this.avistamientos = await this.avistamientoService.getAvistamientosPendientes();
-    } catch (error) {
-      console.error('Error al cargar avistamientos:', error);
-      this.errorMessage = 'No se pudieron cargar los avistamientos. Inténtelo de nuevo más tarde.';
-    } finally {
-      this.isLoading = false;
-    }
+    this.avistamientoService.getAvistamientosPendientes()
+      .then((data) => {
+        this.avistamientos = data;
+        this.isLoading = false;
+      })
+      .catch((error) => {
+        console.error('Error loading sightings:', error);
+        this.isLoading = false;
+      });
   }
 
   async viewImage(sightingId: number) {
     try {
-      const urls = await lastValueFrom(
+      const imageUrls = await lastValueFrom(
         this.avistamientoService.getImageUrlsBySighting(sightingId)
       );
 
-      if (!urls || urls.length === 0) {
+      if (!imageUrls || imageUrls.length === 0) {
         throw new Error('No hay imágenes disponibles para este avistamiento');
       }
 
       this.dialog.open(ImageModalComponent, {
-        width: '40vw', // o más si querés
-        maxWidth: 'none', // quita el límite de 80% o 600px
+        width: '80vw',
+        maxWidth: '1200px',
         panelClass: 'custom-image-modal',
-        data: { images: urls.map(url => ({ url })) }
+        data: {
+          images: imageUrls.map(url => ({ url })),
+          sightingId: sightingId
+        }
       });
-
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Error al cargar imágenes:', error);
       alert(error.message);
+    }
+  }
+
+  get filteredAvistamientos(): any[] {
+    return this.avistamientos.filter(avist => {
+      const matchesSearch = avist.scientificName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        avist.createdBy.username.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+      const matchesDate = this.filterByDate(avist.createdAt);
+
+      return matchesSearch && matchesDate;
+    });
+  }
+
+  private filterByDate(date: string): boolean {
+    const sightingDate = new Date(date);
+    const today = new Date();
+
+    switch (this.dateFilter) {
+      case 'today':
+        return sightingDate.toDateString() === today.toDateString();
+      case 'week':
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(today.getDate() - 7);
+        return sightingDate >= oneWeekAgo;
+      case 'month':
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(today.getMonth() - 1);
+        return sightingDate >= oneMonthAgo;
+      default:
+        return true;
     }
   }
 }

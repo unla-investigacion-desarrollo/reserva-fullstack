@@ -1,144 +1,191 @@
 /* Estilos generales */
 .content {
-  padding-top: 80px;
-  margin-top: 70px;
-  padding: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh;
-  background-color: #f8f9fa;
+  padding: 2rem;
+  min-height: calc(100vh - 120px);
+  background-color: #f5f5f5;
+  background-image: linear-gradient(to bottom, rgba(245, 245, 245, 0.9), rgba(245, 245, 245, 0.95));
 }
 
+.hero-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  margin-top: 65px;
+}
+
+.hero-title {
+  font-size: 2.2rem;
+  color: #2E7D32;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 400;
+}
+
+.fa-binoculars {
+  margin-right: 10px;
+  color: #4CAF50;
+}
+
+/* Contenedor de tarjetas */
 .cardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Estilos de las tarjetas */
+/* Tarjetas */
 .card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
   text-decoration: none;
-  color: inherit;
-  background-color: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 350px;
-  height: 400px;
-  overflow: hidden;
+  color: #333;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  height: 350px;
 }
 
 .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
 }
 
-.card-image {
+/* Efecto de borde superior con color */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 250px;
-  overflow: hidden;
+  height: 6px;
+}
+
+.card-pending::before {
+  background: linear-gradient(90deg, #FFC107, #FF9800);
+}
+
+.card-approved::before {
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+}
+
+.card-rejected::before {
+  background: linear-gradient(90deg, #F44336, #E91E63);
+}
+
+/* Contenido de tarjetas */
+.card-image {
+  flex: 1;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
-/* Estilos base para todos los íconos */
 .homeIcon {
-  width: 120px;
-  height: 120px;
-  margin: 20px auto;
-  transition: all 0.4s ease;
-  transform-origin: center center;
+  width: 100px;
+  height: 100px;
+  transition: all 0.3s ease;
 }
 
-/* 1. PENDIENTE - Reloj de arena animado */
-a[routerLink="/avistamientos_pendientes"] .homeIcon {
-  color: #FFC107; /* Amarillo */
-  animation: hourglassFlip 1s ease-in-out both;
-}
-
-@keyframes hourglassFlip {
-  0% { transform: rotate(0deg) scale(0.9); opacity: 0.8; }
-  50% { transform: rotate(180deg) scale(1.05); }
-  100% { transform: rotate(360deg) scale(1); opacity: 1; }
-}
-
-/* 2. APROBADO - Check que "aparece" */
-a[routerLink="/avistamientos_aprobados"] .homeIcon {
-  color: #4CAF50; /* Verde */
-  animation: checkPop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-}
-
-@keyframes checkPop {
-  0% { transform: scale(0.5); opacity: 0; }
-  70% { transform: scale(1.1); }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-/* 3. RECHAZADO - Cruz que vibra sutilmente */
-a[routerLink="/avistamientos_reprobados"] .homeIcon {
-  color: #F44336; /* Rojo */
-  animation: gentleShake 1s ease-in-out both;
-}
-
-@keyframes gentleShake {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  25% { transform: rotate(-3deg) scale(1.03); }
-  50% { transform: rotate(3deg) scale(1.03); }
-  75% { transform: rotate(-1deg); }
-}
-
-/* Efectos hover (se activan al pasar el mouse) */
 .card:hover .homeIcon {
-  filter: drop-shadow(0 0 8px rgba(0,0,0,0.2));
-}
-
-/* Ajustes para móvil */
-@media (max-width: 768px) {
-  .homeIcon {
-    width: 80px;
-    height: 80px;
-    animation-duration: 1s !important;
-  }
-  
-  .cardsContainer {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .card {
-    width: 90%;
-    height: auto;
-  }
-
-  .card-image {
-    height: 200px;
-  }
-
-  .card-title {
-    font-size: 20px;
-  }
+  transform: scale(1.1);
 }
 
 .card-content {
-  padding: 20px;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 1rem;
+  text-align: center;
 }
 
 .card-title {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #333333;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.card-description {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.card-badge {
+  display: inline-block;
+  background-color: #FF5722;
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Animaciones específicas */
+.card-pending:hover .homeIcon {
+  animation: hourglassFlip 1.5s ease-in-out infinite;
+}
+
+.card-approved:hover .homeIcon {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.card-rejected:hover .homeIcon {
+  animation: gentleShake 1.5s ease-in-out infinite;
+}
+
+@keyframes hourglassFlip {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes gentleShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content {
+    padding: 1rem;
+  }
+  
+  .hero-title {
+    font-size: 1.8rem;
+  }
+  
+  .cardsContainer {
+    grid-template-columns: 1fr;
+  }
+  
+  .card {
+    height: auto;
+    min-height: 280px;
+  }
+  
+  .homeIcon {
+    width: 80px;
+    height: 80px;
+  }
 }

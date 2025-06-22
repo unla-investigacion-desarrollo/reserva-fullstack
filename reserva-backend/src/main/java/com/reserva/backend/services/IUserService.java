@@ -16,5 +16,6 @@ public interface IUserService {
 	public Responses<UserResponseDto> restore(long id);
 	public ResponsePageable<UserResponseDto> getAll(String name, int page, int size, String orderBy, String sortBy);
 	public Responses<UserResponseDto> registerPublicUser(PublicRegisterRequestDto request);
+	UserResponseDto getByUsername(String username);
 
 }

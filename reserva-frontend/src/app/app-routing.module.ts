@@ -11,6 +11,7 @@ import { HeaderComponent } from './components/shared/header/header.component';
 import { DatePipe } from '@angular/common';
 import { RegistroUsuarioComponent } from './components/registro-usuario/registro-usuario.component';
 import { ResetPasswordComponent } from './components/reset-contraseña/reset-password.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistroUsuarioComponent },
   { path: 'forgot-password', component: ResetPasswordComponent },
+  { path: 'mi-perfil', component: UserProfileComponent}
 
 ];
 

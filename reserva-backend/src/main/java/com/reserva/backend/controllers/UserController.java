@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reserva.backend.dto.user.UserRequestDto;
+import com.reserva.backend.dto.user.UserResponseDto;
 import com.reserva.backend.dto.user.UserUpdateDto;
 import com.reserva.backend.dto.user.PublicRegisterRequestDto;
 import com.reserva.backend.services.IUserService;
@@ -118,5 +121,16 @@ public class UserController {
 			@RequestParam(value = "orderBy", defaultValue = "asc") String orderBy,
 			@RequestParam(value = "sortBy", defaultValue = "id") String soryBy) {
 		return ResponseEntity.ok(userService.getAll(name, page, size, orderBy, soryBy));
+	}
+
+	@GetMapping("/me")
+	@Operation(summary = "Obtiene el usuario actual autenticado", security = @SecurityRequirement(name = "bearerAuth"))
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Usuario obtenido correctamente"),
+			@ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+	})
+	public ResponseEntity<UserResponseDto> getCurrentUser(Authentication authentication) {
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		return ResponseEntity.ok(userService.getByUsername(userDetails.getUsername()));
 	}
 }

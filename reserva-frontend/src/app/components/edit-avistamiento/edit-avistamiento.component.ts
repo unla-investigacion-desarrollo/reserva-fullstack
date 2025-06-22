@@ -3,6 +3,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AvistamientoService } from '../../services/avistamiento.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponentComponent } from '../../components/dialog-component/dialog-component.component';
+import { ImageModalComponent } from '../../components/image-modal/image-modal.component';
+import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 
 @Component({
   selector: 'app-edit-avistamiento',
@@ -102,4 +104,34 @@ export class EditAvistamientoComponent {
       console.error('Error rejecting avistamiento:', error);
     }
   }
+
+  async viewImages() {
+  if (!this.avistamiento?.id) {
+    alert('No se ha cargado información del avistamiento');
+    return;
+  }
+
+  try {
+    const imageUrls = await lastValueFrom(
+      this.avistamientoService.getImageUrlsBySighting(this.avistamiento.id)
+    );
+
+    if (!imageUrls || imageUrls.length === 0) {
+      throw new Error('No hay imágenes disponibles para este avistamiento');
+    }
+
+    this.dialog.open(ImageModalComponent, {
+      width: '80vw',
+      maxWidth: '1200px',
+      panelClass: 'custom-image-modal',
+      data: { 
+        images: imageUrls.map(url => ({ url })),
+        sightingId: this.avistamiento.id
+      }
+    });
+  } catch (error: any) {
+    console.error('Error al cargar imágenes:', error);
+    alert('Error: ' + error.message);
+  }
+}
 }

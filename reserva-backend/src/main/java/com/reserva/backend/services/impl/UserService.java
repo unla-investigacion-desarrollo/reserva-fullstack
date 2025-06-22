@@ -19,6 +19,7 @@ import com.reserva.backend.dto.user.UserRequestDto;
 import com.reserva.backend.dto.user.UserResponseDto;
 import com.reserva.backend.dto.user.UserUpdateDto;
 import com.reserva.backend.dto.user.PublicRegisterRequestDto; // New DTO
+import com.reserva.backend.dto.user.RoleDto;
 import com.reserva.backend.repositorys.IRoleRepository;
 import com.reserva.backend.repositorys.IUserRepository;
 import com.reserva.backend.services.IUserService;
@@ -186,5 +187,31 @@ public class UserService implements IUserService {
 		} catch (Exception e) {
 			throw new ReservaException(UserConstants.USER_LIST_ERROR, HttpStatus.EXPECTATION_FAILED);
 		}
+	}
+
+	@Override
+	public UserResponseDto getByUsername(String username) {
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new ReservaException("Usuario no encontrado", HttpStatus.NOT_FOUND));
+
+		return mapToUserResponseDto(user);
+	}
+
+	private UserResponseDto mapToUserResponseDto(User user) {
+		UserResponseDto dto = new UserResponseDto();
+		dto.setId(user.getId());
+		dto.setName(user.getName());
+		dto.setUsername(user.getUsername());
+		dto.setEmail(user.getEmail());
+		dto.setActive(user.isActive());
+
+		if (user.getRole() != null) {
+			RoleDto roleDto = new RoleDto();
+			roleDto.setId(user.getRole().getId());
+			roleDto.setName(user.getRole().getName().replace("ROLE_", ""));
+			dto.setRole(roleDto);
+		}
+
+		return dto;
 	}
 }

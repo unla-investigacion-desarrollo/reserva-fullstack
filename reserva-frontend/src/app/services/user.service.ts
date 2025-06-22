@@ -1,7 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { lastValueFrom } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { lastValueFrom, Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CONFIG } from '../config';
+
+export interface UserResponseDto {
+  id: number;
+  name: string;
+  lastname: string;       // ← Nuevo
+  username: string;
+  email: string;
+  avatarUrl?: string;     // ← Opcional
+  role: {                 // ← Nuevo
+    id: number;
+    name: string;
+  };
+  createdAt: string;      // ← Nuevo
+}
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +37,18 @@ export class UserService {
       throw error;
     }
   }
+
+  getCurrentUser(): Observable<UserResponseDto> {
+    return this.http.get<UserResponseDto>(`${this.apiUrl}/users/me`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+      })
+    }).pipe(
+      catchError(error => {
+        console.error('Error al cargar usuario:', error);
+        throw error; // Opcional: Puedes devolver un objeto de usuario vacío como fallback
+      })
+    );
+  }
+
 }

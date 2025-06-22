@@ -1,56 +1,54 @@
-<ng-container>
+<!-- image-modal.component.html -->
+<div class="modern-modal">
   <div class="modal-header">
-    <h2 mat-dialog-title class="modal-title">
-      <span class="title-text">Galería de Avistamiento</span>
-    </h2>
+    <div class="header-content">
+      <h2 class="modal-title">
+        <i class="fas fa-camera modal-icon"></i>
+        Avistamiento #{{data.sightingId}}
+      </h2>
+      <button class="close-btn" (click)="dialogRef.close()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
   </div>
 
-  <div class="modal-content-wrapper">
-    <div class="image-container">
-      <div class="image-wrapper">
-        <div class="image-frame">
-          <img [src]="currentImage.url"
-               alt="Imagen del avistamiento"
-               class="image mat-elevation-z4"
-               [class.clickable]="hasMultipleImages"
-               (click)="hasMultipleImages && nextImage()" />
+  <div class="modal-body">
+    <div *ngIf="images.length === 0" class="empty-state">
+      <i class="fas fa-image empty-icon"></i>
+      <h3>No hay imágenes disponibles</h3>
+      <p>Este avistamiento no contiene imágenes</p>
+    </div>
+
+    <div *ngIf="images.length > 0" class="image-container">
+      <img [src]="images[currentIndex].url" 
+           alt="Imagen del avistamiento"
+           class="main-image"
+           (click)="nextImage()">
+
+      <div class="image-controls">
+        <button class="control-btn prev-btn" (click)="prevImage()" *ngIf="images.length > 1">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="image-counter">
+          {{currentIndex + 1}} / {{images.length}}
         </div>
         
-        <div *ngIf="hasMultipleImages" class="navigation-overlay">
-          <button mat-fab (click)="prevImage(); $event.stopPropagation()" 
-                  class="nav-button prev-button" aria-label="Imagen anterior">
-            <mat-icon>chevron_left</mat-icon>
-          </button>
-          <button mat-fab (click)="nextImage(); $event.stopPropagation()" 
-                  class="nav-button next-button" aria-label="Imagen siguiente">
-            <mat-icon>chevron_right</mat-icon>
-          </button>
-        </div>
-      </div>
-
-      <div *ngIf="hasMultipleImages" class="pagination-indicator">
-        <div class="pagination-dots">
-          <span *ngFor="let img of data.images; let i = index" 
-                [class.active]="i === activeImageIndex"
-                (click)="goToImage(i)"></span>
-        </div>
-        <span class="image-counter">{{activeImageIndex + 1}} / {{data.images.length}}</span>
-      </div>
-    </div>
-
-    <div *ngIf="!data.images || data.images.length === 0" class="no-images-placeholder">
-      <div class="empty-state">
-        <mat-icon class="empty-icon">image_not_supported</mat-icon>
-        <h3 class="empty-title">No hay imágenes disponibles</h3>
-        <p class="empty-description">Este avistamiento no contiene imágenes para mostrar</p>
+        <button class="control-btn next-btn" (click)="nextImage()" *ngIf="images.length > 1">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
     </div>
   </div>
 
-  <mat-dialog-actions class="modal-footer">
-    <button mat-stroked-button mat-dialog-close class="action-button">
-      <mat-icon>arrow_back</mat-icon>
-      Volver al listado
-    </button>
-  </mat-dialog-actions>
-</ng-container>
+  <div class="modal-footer" *ngIf="images.length > 0">
+    <div class="thumbnails">
+      <div *ngFor="let img of images; let i = index" 
+           class="thumbnail" 
+           [class.active]="i === currentIndex"
+           (click)="selectImage(i)">
+        <img [src]="img.url" alt="Miniatura">
+      </div>
+    </div>
+  </div>
+</div>

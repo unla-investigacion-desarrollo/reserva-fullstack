@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ImageModalComponent } from '../image-modal/image-modal.component';
+import { Router } from '@angular/router';
 
 interface Avistamiento {
   id: number;
@@ -24,37 +25,99 @@ interface Avistamiento {
   providers: [DatePipe],
 })
 export class AvistamientoAprobadoComponent implements OnInit {
-  avistamientos: Avistamiento[] = [];
-  pagedAvistamientos: Avistamiento[] = [];
-  isLoading: boolean = true;
-  errorMessage: string | null = null;
-  currentPage: number = 1;
-  itemsPerPage: number = 10;
-  totalPages: number = 1;
+    avistamientos: any[] = [];
+    pagedAvistamientos: any[] = [];
+    isLoading: boolean = true;
+    searchTerm: string = '';
+    sortField: string = 'createdAt';
+    itemsPerPage: number = 10;
+    currentPage: number = 1;
+    totalPages: number = 1;
+    errorMessage: string | null = null;
+    selectedAvistamiento: any = null;
+    imageModal: any;
 
-  constructor(
-    private avistamientoService: AvistamientoService,
-    private datePipe: DatePipe,
-    private dialog: MatDialog
-  ) {}
+    // Estadísticas
+    thisWeekCount: number = 0;
+    thisMonthCount: number = 0;
+    uniqueUsersCount: number = 0;
+
+    constructor(
+      private avistamientoService: AvistamientoService,
+      public datePipe: DatePipe,
+      private router: Router,
+      public dialog: MatDialog
+    ) {}
 
   ngOnInit(): void {
     this.cargarAvistamientosAprobados();
+    // Modal initialization is handled by Angular Material's MatDialog
   }
 
   async cargarAvistamientosAprobados(): Promise<void> {
     this.isLoading = true;
-    this.errorMessage = null;
-
     try {
-      this.avistamientos = await this.avistamientoService.getAvistamientosAprobados();
-      this.updatePagedAvistamientos();
+      const data = await this.avistamientoService.getAvistamientosAprobados();
+      this.avistamientos = data;
+      this.calculateStats();
+      this.applyFilters();
+      this.isLoading = false;
     } catch (error) {
-      console.error('Error al cargar avistamientos aprobados:', error);
-      this.errorMessage = 'No se pudieron cargar los avistamientos aprobados. Inténtelo de nuevo más tarde.';
-    } finally {
+      console.error('Error loading approved sightings:', error);
       this.isLoading = false;
     }
+  }
+
+  calculateStats(): void {
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+    
+    this.thisWeekCount = this.avistamientos.filter(avist => 
+      new Date(avist.createdAt) >= oneWeekAgo
+    ).length;
+    
+    this.thisMonthCount = this.avistamientos.filter(avist => 
+      new Date(avist.createdAt) >= oneMonthAgo
+    ).length;
+    
+    const uniqueUsers = new Set(this.avistamientos.map(avist => avist.createdBy.id));
+    this.uniqueUsersCount = uniqueUsers.size;
+  }
+
+  applyFilters(): void {
+    // Aplicar filtro de búsqueda
+    let filtered = this.avistamientos.filter(avist => 
+      avist.scientificName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      avist.createdBy.username.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+    
+    // Aplicar ordenamiento
+    filtered.sort((a, b) => {
+      if (a[this.sortField] < b[this.sortField]) return -1;
+      if (a[this.sortField] > b[this.sortField]) return 1;
+      return 0;
+    });
+    
+    if (this.sortField === 'createdAt') {
+      filtered.reverse(); // Más recientes primero
+    }
+    
+    // Calcular paginación
+    this.totalPages = Math.ceil(filtered.length / this.itemsPerPage);
+    this.currentPage = Math.min(this.currentPage, this.totalPages);
+    
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.pagedAvistamientos = filtered.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  viewDetails(avistamientoId: number): void {
+    this.router.navigate(['/avistamiento', avistamientoId]);
+  }
+
+  exportSighting(avistamiento: any): void {
+    // Lógica para exportar avistamiento
+    console.log('Exporting:', avistamiento);
   }
 
   updatePagedAvistamientos(): void {
@@ -98,24 +161,28 @@ export class AvistamientoAprobadoComponent implements OnInit {
 
   async viewImage(sightingId: number) {
     try {
-      const urls = await lastValueFrom(
+      const imageUrls = await lastValueFrom(
         this.avistamientoService.getImageUrlsBySighting(sightingId)
       );
 
-      if (!urls || urls.length === 0) {
+      if (!imageUrls || imageUrls.length === 0) {
         throw new Error('No hay imágenes disponibles para este avistamiento');
       }
 
       this.dialog.open(ImageModalComponent, {
-        width: '40vw',
-        maxWidth: 'none',
+        width: '80vw',
+        maxWidth: '1200px',
         panelClass: 'custom-image-modal',
-        data: { images: urls.map(url => ({ url })) }
+        data: { 
+          images: imageUrls.map(url => ({ url })),
+          sightingId: sightingId
+        }
       });
     } catch (error: any) {
+      console.error('Error al cargar imágenes:', error);
       alert(error.message);
     }
-  }
+ }
 
   async deleteAvistamiento(id: number): Promise<void> {
     if (confirm('¿Estás seguro de que deseas eliminar este avistamiento?')) {
@@ -129,4 +196,8 @@ export class AvistamientoAprobadoComponent implements OnInit {
       }
     }
   }
+
+  
+
+  
 }

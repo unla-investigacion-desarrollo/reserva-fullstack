@@ -1,31 +1,51 @@
-<div class="toolbar" role="banner">
+<header class="header" role="banner">
   <!-- Logo y título -->
-  <div class="logo-container">
+  <div class="header-brand" routerLink="/home">
     <img
-      width="80"
+      width="60"
       alt="Reserva Logo"
       src="assets/navbar/reserva_icon.png"
-      routerLink="/home" routerLinkActive="active"
+      class="header-logo"
     />
-    <p class="navbar-title" routerLink="/home" routerLinkActive="active">Reserva Santa Catalina</p>
+    <div class="header-titles">
+      <h1 class="header-title">Reserva Natural</h1>
+      <p class="header-subtitle">Santa Catalina</p>
+    </div>
   </div>
 
   <!-- Menú desplegable -->
-  <div class="offcanvas offcanvas-end" id="demo">
+  <div class="offcanvas offcanvas-end" id="mainMenu" tabindex="-1">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title">Menú</h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+      <div class="user-info">
+        <img src="assets/navbar/user_default.png" alt="Usuario" class="user-avatar">
+        <div>
+          <h5 class="user-name">Usuario Actual</h5>
+          <p class="user-role">Administrador</p>
+        </div>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <p routerLink="/home" routerLinkActive="active"><i class="fa fa-home"></i> Volver al inicio</p>
-      <p><i class="fa fa-user"></i> Mi usuario</p>
-      <p><i class="fa fa-cog"></i> Configuración</p>
-      <p (click)="logout()"><i class="fa fa-sign-out"></i> Salir de la plataforma</p>
+      <nav class="menu-nav">
+        <a routerLink="/home" routerLinkActive="active" class="menu-item" data-bs-dismiss="offcanvas">
+          <i class="fas fa-home menu-icon"></i>
+          <span>Inicio</span>
+        </a>
+        <a routerLink="/mi-perfil" class="menu-item" data-bs-dismiss="offcanvas">
+          <i class="fas fa-user menu-icon"></i>
+          <span>Mi perfil</span>
+        </a>
+        <div class="menu-divider"></div>
+        <a class="menu-item logout-item" (click)="logout()" data-bs-dismiss="offcanvas">
+          <i class="fas fa-sign-out-alt menu-icon"></i>
+          <span>Cerrar sesión</span>
+        </a>
+      </nav>
     </div>
   </div>
 
-  <!-- Íconos de cámara y menú -->
-  <div class="icons-container">
-    <span class="glyphicon glyphicon-align-justify" data-bs-toggle="offcanvas" data-bs-target="#demo"></span>
-  </div>
-</div>
+  <!-- Botón del menú -->
+  <button class="menu-toggle" data-bs-toggle="offcanvas" data-bs-target="#mainMenu">
+    <i class="fas fa-bars"></i>
+  </button>
+</header>
