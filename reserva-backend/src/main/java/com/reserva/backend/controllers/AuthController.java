@@ -60,6 +60,7 @@ public class AuthController {
 		return ResponseEntity.ok(authService.forgotPassword(request));
 	}
 	
+	
 	@Operation(summary = "realiza el cambio de contraseña mas la verificacion del token")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = AuthConstants.PASSWORD_HAS_BEEN_CHANGED, content = @Content),

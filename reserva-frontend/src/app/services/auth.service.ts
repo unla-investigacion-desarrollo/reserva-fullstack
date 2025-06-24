@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap, catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Observable, throwError, TimeoutError, of } from 'rxjs';
+import { timeout, retry } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = 'http://localhost:8000/api/auth';
+  private baseUrl = 'http://localhost:8000';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   // Login
   login(username: string, password: string): Observable<any> {
@@ -31,14 +33,56 @@ export class AuthService {
     });
   }
 
-   // Método para recuperación de contraseña
+  // Método para recuperación de contraseña
   sendPasswordResetEmail(email: string): Observable<boolean> {
-    return this.http.post<{success: boolean}>(`${this.apiUrl}/forgot-password`, { email })
-      .pipe(
-        catchError(() => of({success: false})),
-        map(response => response.success)
-      );
+    return this.http.post<{ success: boolean }>(
+      `${this.baseUrl}/account/recovery`, // ← Usa baseUrl para este endpoint
+      { email }
+    ).pipe(
+      catchError(() => of({ success: false })),
+      map(response => response.success)
+    );
   }
+
+  resetPassword(token: string, password: string, passwordRepeat: string): Observable<any> {
+    const body = {
+      token: token.trim(),
+      password: password,
+      passwordRepeat: passwordRepeat
+    };
+
+    // Usa baseUrl para mantener consistencia con otros métodos
+    return this.http.post(`${this.baseUrl}/account/reset-password`, body, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }).pipe(
+      catchError(error => {
+        console.error('Error en resetPassword:', {
+          status: error.status,
+          url: error.url,
+          error: error.error
+        });
+
+        let errorMsg = 'Error al restablecer contraseña';
+
+        if (error.status === 0) {
+          errorMsg = 'Error de conexión con el servidor';
+        } else if (error.status === 401) {
+          errorMsg = error.error?.message || 'Token inválido o expirado';
+        } else if (error.status === 404) {
+          errorMsg = 'Endpoint no encontrado. Verifica la configuración del backend';
+        }
+
+        return throwError(() => ({
+          message: errorMsg,
+          status: error.status,
+          serverError: error.error
+        }));
+      })
+    );
+  }
+
   // Verificar autenticación
   isAuthenticated(): boolean {
     return !!localStorage.getItem('auth_token');
@@ -59,3 +103,5 @@ export class AuthService {
     };
   }
 }
+
+

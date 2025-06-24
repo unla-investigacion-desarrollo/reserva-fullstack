@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { RegistroUsuarioComponent } from './components/registro-usuario/registro-usuario.component';
 import { ResetPasswordComponent } from './components/reset-contraseña/reset-password.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { ResetContraseñaFormComponent } from './components/reset-contraseña-form/reset-contraseña-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -23,7 +24,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistroUsuarioComponent },
   { path: 'forgot-password', component: ResetPasswordComponent },
-  { path: 'mi-perfil', component: UserProfileComponent}
+  { path: 'mi-perfil', component: UserProfileComponent},
+  { path: 'account/reset-password', component: ResetContraseñaFormComponent},
 
 ];
 

@@ -1,0 +1,62 @@
+<div class="reset-password-container">
+  <div class="reset-card">
+    <h2><i class="fas fa-key"></i> Restablecer Contraseña</h2>
+
+    <form (ngSubmit)="onSubmit()">
+      <!-- Campo Nueva Contraseña -->
+      <div class="form-group">
+        <label for="newPassword">Nueva Contraseña</label>
+        <input [type]="showPassword ? 'text' : 'password'" id="newPassword" [(ngModel)]="newPassword" name="newPassword"
+          required minlength="8" class="form-control" placeholder="Mínimo 8 caracteres" (input)="checkPasswords()">
+        <!-- Opcional para validación en tiempo real -->
+      </div>
+
+      <!-- Checkbox para mostrar contraseña -->
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="showPassword" [(ngModel)]="showPassword"
+          name="showPassword">
+        <label class="form-check-label" for="showPassword">Mostrar contraseña</label>
+      </div>
+
+      <!-- Campo Confirmar Contraseña -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Contraseña</label>
+        <input [type]="showPassword ? 'text' : 'password'" id="confirmPassword" [(ngModel)]="confirmPassword"
+          name="confirmPassword" required class="form-control" placeholder="Repite tu contraseña"
+          (input)="checkPasswords()"> <!-- Opcional para validación en tiempo real -->
+      </div>
+
+      <!-- Mensajes de Error -->
+      <div *ngIf="passwordMismatch" class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> Las contraseñas no coinciden
+      </div>
+
+      <div *ngIf="!token && errorMessage" class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+        <a routerLink="/request-password-reset" class="alert-link">
+          Solicitar nuevo enlace
+        </a>
+      </div>
+
+      <!-- Mensaje de Éxito -->
+      <div *ngIf="successMessage" class="alert alert-success">
+        <i class="fas fa-check-circle"></i> {{ successMessage }}
+      </div>
+
+      <!-- Botón de Envío -->
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="loading || !newPassword || !confirmPassword">
+        <span *ngIf="!loading">Actualizar Contraseña</span>
+        <span *ngIf="loading">
+          <i class="fas fa-spinner fa-spin"></i> Procesando...
+        </span>
+      </button>
+
+      <!-- Enlace de Regreso -->
+      <div class="text-center mt-3">
+        <a routerLink="/login" class="text-link">
+          <i class="fas fa-arrow-left"></i> Volver al Login
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -22,9 +22,16 @@ import { DialogService } from './services/dialog-service.service';
 import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/shared/header/header.component';
 import { HttpInterceptorInterceptor } from './http-interceptor.interceptor';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { ResetPasswordComponent } from './components/reset-contraseña/reset-password.component';
+import { ResetContraseñaFormComponent } from './components/reset-contraseña-form/reset-contraseña-form.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @NgModule({
   declarations: [
@@ -39,7 +46,8 @@ import { ResetPasswordComponent } from './components/reset-contraseña/reset-pas
     HeaderComponent,
     ImageModalComponent,
     RegistroUsuarioComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ResetContraseñaFormComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +59,11 @@ import { ResetPasswordComponent } from './components/reset-contraseña/reset-pas
     MatButtonModule,
     MatSnackBarModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     {

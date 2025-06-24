@@ -41,15 +41,15 @@ public class AuthService implements IAuthService {
 
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
-	
+
 	@Autowired
 	private ITokenVerificationRepository tokenVerificationRepository;
-	
+
 	@Autowired
 	private IEmailInfoService emailInfoService;
-	
+
 	private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
-	
+
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -63,7 +63,8 @@ public class AuthService implements IAuthService {
 			throw new ReservaException(AuthConstants.USERNAME_OR_PASSWORD_INCORRECT, HttpStatus.UNAUTHORIZED);
 		}
 		String token = jwtTokenProvider.generateToken(user);
-		JwtAuthResponse response = new JwtAuthResponse(user.getId(), user.getUsername(), user.getRole().getName(), token, "bearer");
+		JwtAuthResponse response = new JwtAuthResponse(user.getId(), user.getUsername(), user.getRole().getName(),
+				token, "bearer");
 		return Response.success(AuthConstants.SIGN_IN_SUCCESSFUL, response);
 	}
 
@@ -94,28 +95,80 @@ public class AuthService implements IAuthService {
 
 	@Override
 	public Responses<String> forgotPassword(ForgotPasswordDto request) {
-		User user = userRepository.findByEmail(request.getEmail())
-				.orElseThrow(() -> new ReservaException(AuthConstants.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
-		TokenVerification token = tokenVerificationRepository.findByUser(user);
-		if (token == null) {
-			token = new TokenVerification(user);
-		} else {
-			token.setToken(token.generateToken());
-			token.setCreatedAt(new Date());
-			token.setExpiratedAt(token.getEpirationTime(10));
-		}
-		tokenVerificationRepository.save(token);
-		String subjet = "Reserva - Cambiar Contraseña";
-		String link = "http://localhost:8000/api/auth/reset-password?token=" + token.getToken();
-		String body = "Hola, se solicito un cambio de contraseña:" + "<br><a href='" + link + "'>" + link + "</a>"
-				+ "<br><br>Recorda que el token es valido solamente por 10 minutos"
-				+ "<br><br><br>Saludos,<br>Reserva.";
 		try {
-			emailInfoService.send(request.getEmail(), subjet, body);
-			return Response.success(AuthConstants.EMAIL_SEND_OK, null);
-		} catch (MessagingException e) {
-			throw new ReservaException(AuthConstants.EMAIL_SEND_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}	
+			User user = userRepository.findByEmail(request.getEmail())
+					.orElseThrow(() -> new ReservaException(AuthConstants.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+			TokenVerification token = tokenVerificationRepository.findByUser(user);
+			if (token == null) {
+				token = new TokenVerification(user);
+			} else {
+				token.setToken(token.generateToken());
+				token.setCreatedAt(new Date());
+				token.setExpiratedAt(token.getEpirationTime(10));
+			}
+			tokenVerificationRepository.save(token);
+
+			String subject = "Reserva - Cambiar Contraseña";
+			String link = "http://localhost:4200/account/reset-password?token=" + token.getToken(); 
+			String body = buildEmailBody(link);
+
+			try {
+				emailInfoService.send(request.getEmail(), subject, body);
+				return Response.success(AuthConstants.EMAIL_SEND_OK, null);
+			} catch (MessagingException e) {
+				throw new ReservaException(AuthConstants.EMAIL_SEND_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+		} catch (ReservaException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ReservaException("Error interno del servidor", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	private String buildEmailBody(String link) {
+		return """
+				<!DOCTYPE html>
+				<html>
+				<head>
+				    <style>
+				        .button {
+				            background-color: #4CAF50;
+				            border: none;
+				            color: white;
+				            padding: 15px 32px;
+				            text-align: center;
+				            text-decoration: none;
+				            display: inline-block;
+				            font-size: 16px;
+				            margin: 20px 0;
+				            cursor: pointer;
+				            border-radius: 4px;
+				        }
+				        .container {
+				            font-family: Arial, sans-serif;
+				            max-width: 600px;
+				            margin: 0 auto;
+				            padding: 20px;
+				            border: 1px solid #ddd;
+				            border-radius: 5px;
+				        }
+				    </style>
+				</head>
+				<body>
+				    <div class="container">
+				        <h2>Recuperación de Contraseña</h2>
+				        <p>Hemos recibido una solicitud para restablecer tu contraseña.</p>
+				        <p>Por favor, haz clic en el siguiente botón para continuar:</p>
+				        <a href="%s" class="button">Restablecer Contraseña</a>
+				        <p>Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
+				        <p><strong>El enlace expirará en 10 minutos.</strong></p>
+				        <p>Saludos,<br>El equipo de Reserva</p>
+				    </div>
+				</body>
+				</html>
+				""".formatted(link);
 	}
 
 	@Override

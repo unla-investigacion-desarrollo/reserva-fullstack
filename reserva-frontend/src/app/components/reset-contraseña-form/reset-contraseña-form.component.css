@@ -1,0 +1,73 @@
+.reset-password-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+.reset-card {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
+
+.reset-card h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.reset-card i.fas {
+  margin-right: 8px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background-color: #4CAF50;
+  border: none;
+  padding: 12px;
+}
+
+.btn-primary:disabled {
+  background-color: #cccccc;
+}
+
+.alert {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.text-link {
+  color: #4CAF50;
+  text-decoration: none;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}

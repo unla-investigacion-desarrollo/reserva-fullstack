@@ -8,6 +8,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,12 +20,12 @@ import com.reserva.backend.services.IEmailInfoService;
 
 @Component
 public class EmailInfoService implements IEmailInfoService {
-	
+
 	@Autowired
 	private JavaMailSender javaMailSender;
-	
+
 	List<EmailInfoDto> lst = new ArrayList<>();
-	
+
 	/*
 	 * CON ESA CLASE MANDAMOS CORREOS AUTOMATICAMENTE O EN SU DEFECTO LOS EMAILS SE
 	 * ENCOLAN EN SEGUNDO PLANO PARA POSTERIORMENTE SER MANDADOS CON LA FUNCION
@@ -58,12 +60,18 @@ public class EmailInfoService implements IEmailInfoService {
 
 	@Override
 	public void send(String to, String subject, String body) throws MessagingException {
-		MimeMessage message = javaMailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo(to);
-		helper.setSubject(subject);
-		helper.setText(body, true);
-		javaMailSender.send(message);
+		try {
+			MimeMessage message = javaMailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
+			helper.setFrom("no-reply@reserva.com");
+			helper.setTo(to);
+			helper.setSubject(subject);
+			helper.setText(body, true);
+
+			javaMailSender.send(message);
+		} catch (MailAuthenticationException e) {
+			throw new MessagingException("ERROR_SMTP_AUTH - Verifica configuración SMTP", e);
+		}
 	}
 
 	@Override
