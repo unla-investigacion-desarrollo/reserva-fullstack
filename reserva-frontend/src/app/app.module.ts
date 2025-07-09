@@ -32,7 +32,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { StatisticsComponent } from './statistics/statistics.component';
-
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { SightingsChartComponent } from './sightings-chart/sightings-chart.component';
+import { SightingsPieComponent } from './sightings-pie/sightings-pie.component';
+import { SightingsOverTimeComponent } from './sightings-over-time/sightings-over-time.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +52,10 @@ import { StatisticsComponent } from './statistics/statistics.component';
     RegistroUsuarioComponent,
     ResetPasswordComponent,
     ResetContraseñaFormComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    SightingsChartComponent,
+    SightingsPieComponent,
+    SightingsOverTimeComponent
   ],
   imports: [
     BrowserModule,
@@ -66,6 +72,7 @@ import { StatisticsComponent } from './statistics/statistics.component';
     MatFormFieldModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    NgApexchartsModule
   ],
   providers: [
     {

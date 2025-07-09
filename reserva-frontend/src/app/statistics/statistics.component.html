@@ -1,5 +1,23 @@
 <div class="content">
     <div class="hero-section">
-        <p>statistics works!</p> 
+        <div
+  style="display: flex; gap: 1rem; justify-content: space-around; align-items: flex-start;"
+>
+  <!-- Grafico de avistamientos por usuario -->
+  <div style="flex: 1;">
+    <app-sightings-chart></app-sightings-chart>
+  </div>
+
+  <!-- Grafico de proporción por tipo (flora vs fauna) -->
+  <div style="flex: 1;">
+    <app-sightings-pie></app-sightings-pie>
+  </div>
+
+  <!-- Grafico de evolución en el tiempo -->
+  <div style="flex: 1;">
+    <app-sightings-over-time></app-sightings-over-time>
+  </div>
+</div>
+
     </div>
 </div>
