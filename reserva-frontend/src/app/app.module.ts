@@ -31,6 +31,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ImageModalComponent,
     RegistroUsuarioComponent,
     ResetPasswordComponent,
-    ResetContraseñaFormComponent
+    ResetContraseñaFormComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,

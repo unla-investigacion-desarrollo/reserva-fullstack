@@ -13,6 +13,7 @@ import { RegistroUsuarioComponent } from './components/registro-usuario/registro
 import { ResetPasswordComponent } from './components/reset-contraseña/reset-password.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { ResetContraseñaFormComponent } from './components/reset-contraseña-form/reset-contraseña-form.component';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'register', component: RegistroUsuarioComponent },
   { path: 'forgot-password', component: ResetPasswordComponent },
   { path: 'mi-perfil', component: UserProfileComponent},
+  { path: 'estadisticas', component: StatisticsComponent},
   { path: 'account/reset-password', component: ResetContraseñaFormComponent},
 
 ];
