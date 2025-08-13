@@ -139,7 +139,34 @@ export class AvistamientoAprobadoComponent implements OnInit {
   });
 }
 
-  async exportSighting(avistamiento: Avistamiento): Promise<void> {
+getStaticMapImageBase64(lat: number, lon: number): Promise<string> {
+  const apiKey = 'pk.251cf8998c686712c899f1d0082996a3'; // 🔒 Usa variable de entorno en producción
+  const url = `https://maps.locationiq.com/v3/staticmap?key=${apiKey}&center=${lat},${lon}&zoom=13&size=600x400&markers=icon:large-red-cutout|${lat},${lon}`;
+
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = url;
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return reject('No se pudo crear el contexto del canvas');
+      ctx.drawImage(img, 0, 0);
+      const base64 = canvas.toDataURL('image/png');
+      resolve(base64);
+    };
+
+    img.onerror = () => {
+      reject('No se pudo cargar el mapa desde LocationIQ');
+    };
+  });
+}
+
+
+async exportSighting(avistamiento: Avistamiento): Promise<void> {
   const doc = new jsPDF();
 
   doc.setFontSize(18);
@@ -161,26 +188,46 @@ export class AvistamientoAprobadoComponent implements OnInit {
     theme: 'grid',
   });
 
+  let y = (doc as any).lastAutoTable.finalY + 10;
+
   try {
     const imageUrls = await lastValueFrom(this.avistamientoService.getImageUrlsBySighting(avistamiento.id));
+    const imgBase64 = imageUrls && imageUrls.length > 0
+      ? await this.convertImageToBase64(imageUrls[0])
+      : null;
 
-    if (imageUrls && imageUrls.length > 0) {
-      const base64 = await this.convertImageToBase64(imageUrls[0]); // Primera imagen
-      const y = (doc as any).lastAutoTable.finalY + 10;
-      //doc.text('Imagen del avistamiento:', 14, y);
-      doc.addImage(base64, 'JPEG', 14, y + 5, 180, 100); // Ajusta tamaño según preferencia
+    const mapBase64 = await this.getStaticMapImageBase64(avistamiento.latitude, avistamiento.longitude);
+
+    // Titulos
+    doc.setFontSize(14);
+    doc.text('Imagen del avistamiento:', 14, y);
+    doc.text('Ubicación:', 110, y); // A la derecha
+
+    y += 5;
+
+    // Cuadrado 90x90
+    const imageSize = 90;
+
+    // Imagen a la izquierda
+    if (imgBase64) {
+      doc.addImage(imgBase64, 'JPEG', 14, y, imageSize, imageSize);
     } else {
-      const y = (doc as any).lastAutoTable.finalY + 10;
-      doc.text('No hay imagen disponible', 14, y);
+      doc.setFontSize(12);
+      doc.text('No disponible', 14, y + 10);
     }
 
+    // Mapa a la derecha
+    doc.addImage(mapBase64, 'PNG', 110, y, imageSize, imageSize);
+
+    // Guardar el PDF
     doc.save(`avistamiento_${avistamiento.id}.pdf`);
   } catch (error) {
-    console.error('Error al obtener la imagen para exportar:', error);
-    alert('Error al obtener la imagen. El PDF se generará sin ella.');
-    doc.save(`avistamiento_${avistamiento.id}.pdf`);
+    console.error('Error al exportar el PDF:', error);
+    alert('Error al generar el PDF completo. Se exportará sin mapa ni imagen.');
+    doc.save(`avistamiento_${avistamiento.id}_parcial.pdf`);
   }
 }
+
 
   updatePagedAvistamientos(): void {
     this.totalPages = Math.ceil(this.avistamientos.length / this.itemsPerPage);
