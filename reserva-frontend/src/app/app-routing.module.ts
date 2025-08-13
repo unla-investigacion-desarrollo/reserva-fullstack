@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AvistamientoPendienteComponent } from './components/avistamiento-pendiente/avistamiento-pendiente.component';
 import { AvistamientoAprobadoComponent } from './components/avistamiento-aprobado/avistamiento-aprobado.component';
 import { AvistamientoReprobadoComponent } from './components/avistamiento-reprobado/avistamiento-reprobado.component';
+import { AvistamientoDetalleComponent } from './components/avistamiento-detalle/avistamiento-detalle.component';
 import { EditAvistamientoComponent } from './components/edit-avistamiento/edit-avistamiento.component';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'avistamientos_aprobados', component: AvistamientoAprobadoComponent },
   { path: 'avistamientos_reprobados', component: AvistamientoReprobadoComponent },
   { path: 'edit_avistamiento/:id', component: EditAvistamientoComponent },
+  { path: 'avistamiento_detalle/:id', component: AvistamientoDetalleComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistroUsuarioComponent },
   { path: 'forgot-password', component: ResetPasswordComponent },

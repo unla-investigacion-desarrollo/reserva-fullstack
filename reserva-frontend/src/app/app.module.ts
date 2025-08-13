@@ -36,6 +36,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { SightingsChartComponent } from './sightings-chart/sightings-chart.component';
 import { SightingsPieComponent } from './sightings-pie/sightings-pie.component';
 import { SightingsOverTimeComponent } from './sightings-over-time/sightings-over-time.component';
+import { AvistamientoDetalleComponent } from './components/avistamiento-detalle/avistamiento-detalle.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { SightingsOverTimeComponent } from './sightings-over-time/sightings-over
     HomeComponent,
     AvistamientoAprobadoComponent,
     AvistamientoReprobadoComponent,
+    AvistamientoDetalleComponent,
     EditAvistamientoComponent,
     DialogComponentComponent,
     LoginComponent,

@@ -110,9 +110,11 @@
               <button class="action-btn view-btn" (click)="viewImage(avist.id)" title="Ver imagen">
                 <i class="fas fa-camera"></i> Imagen
               </button>
-              <button class="action-btn view-btn" (click)="viewDetails(avist.id)" title="Ver detalles">
+              <button class="action-btn view-btn" [routerLink]="['/avistamiento_detalle', avist.id]" title="Ver detalles">
                 <i class="fas fa-eye"></i> Detalles
               </button>
+
+
               <button class="action-btn export-btn" (click)="exportSighting(avist)" title="Exportar">
                 <i class="fas fa-file-export"></i> Exportar
               </button>

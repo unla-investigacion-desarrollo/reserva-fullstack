@@ -90,7 +90,7 @@
 
 .filter-group label i {
   margin-right: 8px;
-  color: #4CAF50;
+  color: #FF9800;
 }
 
 .filter-group input,
@@ -106,7 +106,7 @@
 .filter-group input:focus,
 .filter-group select:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #FF9800;
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
@@ -130,7 +130,7 @@
   width: 50px;
   height: 50px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #4CAF50;
+  border-top: 4px solid #FF9800;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
@@ -226,7 +226,7 @@
 .sighting-user i,
 .sighting-location i {
   margin-right: 8px;
-  color: #4CAF50;
+  color: #FF9800;
 }
 
 .sighting-actions {
