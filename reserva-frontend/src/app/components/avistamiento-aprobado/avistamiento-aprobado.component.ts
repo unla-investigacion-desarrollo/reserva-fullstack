@@ -116,27 +116,70 @@ export class AvistamientoAprobadoComponent implements OnInit {
     this.router.navigate(['/avistamiento', avistamientoId]);
   }
 
-  exportSighting(avistamiento: any): void {
+  convertImageToBase64(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = url;
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return reject('No se pudo crear contexto de canvas');
+      ctx.drawImage(img, 0, 0);
+      const base64 = canvas.toDataURL('image/jpeg');
+      resolve(base64);
+    };
+
+    img.onerror = (err) => {
+      reject('No se pudo cargar la imagen');
+    };
+  });
+}
+
+  async exportSighting(avistamiento: Avistamiento): Promise<void> {
   const doc = new jsPDF();
 
-  doc.text('Detalles del Avistamiento', 14, 20);
+  doc.setFontSize(18);
+  doc.text('Detalles del Avistamiento', 14, 22);
 
   const details = [
-    ['ID', avistamiento.id],
-    ['Nombre Científico', avistamiento.scientificName],
-    ['Usuario', avistamiento.createdBy.username],
-    ['Fecha', this.datePipe.transform(avistamiento.createdAt, 'dd/MM/yyyy') ?? ''],
-    ['Latitud', avistamiento.latitude],
-    ['Longitud', avistamiento.longitude]
+    ['ID:', avistamiento.id.toString()],
+    ['Nombre Científico:', avistamiento.scientificName],
+    ['Usuario:', avistamiento.createdBy.username],
+    ['Fecha:', this.datePipe.transform(avistamiento.createdAt, 'dd/MM/yyyy HH:mm') || ''],
+    ['Latitud:', avistamiento.latitude.toString()],
+    ['Longitud:', avistamiento.longitude.toString()],
   ];
 
   autoTable(doc, {
+    startY: 30,
     head: [['Campo', 'Valor']],
     body: details,
-    startY: 30
+    theme: 'grid',
   });
 
-  doc.save(`avistamiento_${avistamiento.id}.pdf`);
+  try {
+    const imageUrls = await lastValueFrom(this.avistamientoService.getImageUrlsBySighting(avistamiento.id));
+
+    if (imageUrls && imageUrls.length > 0) {
+      const base64 = await this.convertImageToBase64(imageUrls[0]); // Primera imagen
+      const y = (doc as any).lastAutoTable.finalY + 10;
+      //doc.text('Imagen del avistamiento:', 14, y);
+      doc.addImage(base64, 'JPEG', 14, y + 5, 180, 100); // Ajusta tamaño según preferencia
+    } else {
+      const y = (doc as any).lastAutoTable.finalY + 10;
+      doc.text('No hay imagen disponible', 14, y);
+    }
+
+    doc.save(`avistamiento_${avistamiento.id}.pdf`);
+  } catch (error) {
+    console.error('Error al obtener la imagen para exportar:', error);
+    alert('Error al obtener la imagen. El PDF se generará sin ella.');
+    doc.save(`avistamiento_${avistamiento.id}.pdf`);
+  }
 }
 
   updatePagedAvistamientos(): void {
