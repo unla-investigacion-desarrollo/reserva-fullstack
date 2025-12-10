@@ -15,20 +15,21 @@ import { ResetPasswordComponent } from './components/reset-contraseña/reset-pas
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { ResetContraseñaFormComponent } from './components/reset-contraseña-form/reset-contraseña-form.component';
 import { StatisticsComponent } from './statistics/statistics.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'avistamientos_pendientes', component: AvistamientoPendienteComponent },
-  { path: 'avistamientos_aprobados', component: AvistamientoAprobadoComponent },
-  { path: 'avistamientos_reprobados', component: AvistamientoReprobadoComponent },
-  { path: 'edit_avistamiento/:id', component: EditAvistamientoComponent },
-  { path: 'avistamiento_detalle/:id', component: AvistamientoDetalleComponent },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'avistamientos_pendientes', component: AvistamientoPendienteComponent, canActivate: [AuthGuard] },
+  { path: 'avistamientos_aprobados', component: AvistamientoAprobadoComponent, canActivate: [AuthGuard] },
+  { path: 'avistamientos_reprobados', component: AvistamientoReprobadoComponent, canActivate: [AuthGuard] },
+  { path: 'edit_avistamiento/:id', component: EditAvistamientoComponent, canActivate: [AuthGuard] },
+  { path: 'avistamiento_detalle/:id', component: AvistamientoDetalleComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistroUsuarioComponent },
   { path: 'forgot-password', component: ResetPasswordComponent },
-  { path: 'mi-perfil', component: UserProfileComponent},
-  { path: 'estadisticas', component: StatisticsComponent},
+  { path: 'mi-perfil', component: UserProfileComponent, canActivate: [AuthGuard] },
+  { path: 'estadisticas', component: StatisticsComponent, canActivate: [AuthGuard] },
   { path: 'account/reset-password', component: ResetContraseñaFormComponent},
 
 ];
